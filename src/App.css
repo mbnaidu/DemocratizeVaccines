@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway:300,400,500,700&display=swap');
+:root{
+  --sidebar-flex:1.5;
+  --condiv-flex:6;
+  --fontsize-p:1.2rem;
+  --fontsize-nav:1.2rem;
+  --typing-font:1.8rem;
+}
+*
+{
+  margin:0;
+  padding: 0;
+}
+body{
+  font-family: 'Raleway';
+  background: linear-gradient(#ff758c,#764ba2);
+}
+.App
+{
+  display: flex;
+  width: 100vw;
+  min-height: 100vh;
+}
+.glass{
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0px 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-radius: 10px;
+}
+nav
+{
+  width: 25%;
+	height: 90%;
+	position: absolute;
+	top: 4%;
+	left: 37%; 
+	padding: 0;
+  line-height: 1;
+  text-align: center;
+}
+.condiv
+{
+  width: 60%;
+	height: 90%;
+	position: absolute;
+	top: 4%;
+	left: 28%; 
+  line-height: 1;
+  padding-left: 10px;
+  padding-right: 10px;
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0px 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-radius: 10px;
+}
+
+.home
+{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  
+}
+.profilepic
+{
+  border-radius: 50%;
+  width: 160px;
+  margin: 30px;
+  opacity: 90%;
+}
+.typingeffect
+{
+  font-size: var(--typing-font);
+  margin-bottom: 30px;
+  color: #ffffffbf;
+}
+
+nav ul{
+  position: absolute;
+  bottom: 2%;
+  left: 5%;
+  width: 90%;
+  font-size:var(--fontsize-nav) ;
+  text-align: center;
+  list-style-type: none;
+  text-decoration: none;
+}
+nav ul li
+{
+  margin:15px;
+  padding: 11px;
+  border-radius: 10px;
+  color: white;
+}
+nav ul li:hover{
+  background-color: #ffffff80;
+}
+a
+{
+  text-decoration: none;
+}
