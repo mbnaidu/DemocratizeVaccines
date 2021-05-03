@@ -301,6 +301,7 @@ class PatientLocation extends React.Component {
 		return (
 			<nav className="glass">
 				<div>
+                    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
                     <label>Choose State : </label>
 					<Select placeholder="State" value={this.state.selectedCountry} onChange={this.changeCountry}>
 						{this.state.countries.map((e, key) => {
@@ -308,7 +309,6 @@ class PatientLocation extends React.Component {
 						})}
 					</Select>
 				</div>
-
 				<div>
                     <label>Choose District : </label>
 					<Select placeholder="District" value={this.state.selectedState} onChange={this.changeState}>
@@ -317,7 +317,6 @@ class PatientLocation extends React.Component {
 						})}
 					</Select>
 				</div>
-				
 				<div>
                     <label>Choose Mandal : </label>
 					<Select placeholder="City">
@@ -326,7 +325,8 @@ class PatientLocation extends React.Component {
 						})}
 					</Select>
 				</div>
-                <NavLink to="/"><Button variant="contained" color="primary">HOME</Button></NavLink>
+                <br/><br/><br/><br/><br/><br/><br/>
+                <NavLink to="/"><Button variant="contained" color="primary">HOME</Button></NavLink>{" "}
                 <NavLink to="/patient-requirements"><Button variant="contained" color="primary">NEXT</Button></NavLink>
 			</nav>
 		)

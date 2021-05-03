@@ -5,6 +5,7 @@ import { NavLink } from 'react-router-dom'
 function DonorRequirements() {
     return (
         <nav className="glass">
+            <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
             <FormControl component="fieldset">
                 <FormLabel component="legend">What Do You Need..?</FormLabel>
                 <FormGroup>
@@ -33,6 +34,7 @@ function DonorRequirements() {
                     label="Plasma"
                 />
                 </FormGroup>
+                <br/><br/><br/>
                 <NavLink to="/donor-availability"><Button variant="contained" color="primary">NEXT</Button></NavLink>
             </FormControl>
         </nav>

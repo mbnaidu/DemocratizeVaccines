@@ -28,6 +28,9 @@ body{
   -webkit-backdrop-filter: blur(4px);
   border-radius: 10px;
 }
+.accordian{
+  margin: 15px;
+}
 nav
 {
   width: 25%;
