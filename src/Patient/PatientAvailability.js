@@ -308,7 +308,6 @@ export default function PatientAvailability() {
     setDense(event.target.checked);
 	};
 	const isSelected = (name) => selected.indexOf(name) !== -1;
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 	const oxygen = () =>{
     return(
         <div>

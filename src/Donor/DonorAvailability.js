@@ -1,4 +1,4 @@
-import { Accordion, AccordionDetails, AccordionSummary, Button, makeStyles, Typography } from '@material-ui/core'
+import { Accordion, AccordionDetails, AccordionSummary, Button, Grid, Icon, makeStyles, TextareaAutosize, TextField, Typography } from '@material-ui/core'
 import React from 'react'
 import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import LocalTaxiSharpIcon from '@material-ui/icons/LocalTaxiSharp';
@@ -7,7 +7,13 @@ import HotelSharpIcon from '@material-ui/icons/HotelSharp';
 import VerifiedUserSharpIcon from '@material-ui/icons/VerifiedUserSharp';
 import InvertColorsSharpIcon from '@material-ui/icons/InvertColorsSharp';
 import { NavLink } from 'react-router-dom';
-
+import '../main.css'
+import '../styles.css'
+import { AccountCircle } from '@material-ui/icons';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
+import LocalOfferIcon from '@material-ui/icons/LocalOffer';
+import AddAPhotoIcon from '@material-ui/icons/AddAPhoto';
+import CallMadeIcon from '@material-ui/icons/CallMade';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -31,18 +37,111 @@ export default function DonorAvailability() {
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
+    const oxygen = () => {
+        console.log("hi")
+        return(
+            <div>
+                <div class="contentarea">
+                    <div class="camera">
+                        <video id="video">Video stream not available.</video>
+                    </div>
+                        <Button id="startbutton" endIcon={<AddAPhotoIcon></AddAPhotoIcon>}>Capture</Button>
+                    <br/>
+                    <canvas id="canvas"></canvas>
+                    <div class="output">
+                        <img id="photo" alt="The screen capture will appear in this box." />
+                    </div>
+                    <Button variant="contained" color="primary" endIcon={<Icon>send</Icon>}>Submit</Button>
+                </div>
+            <script src="../js/FileSaver.min.js"></script>
+            <script src="../js/script.js"></script>
+            </div>
+        )
+    }
     return (
         <div>
+            {/* MODELS */}
+                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Oxygen Cylinders</h5>
+                                <Button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </Button>
+                            </div>
+                            <div class="modal-body">
+                                <div className="row">
+                                    <div className="column">
+                                        <Grid container spacing={1} alignItems="flex-end">
+                                            <Grid item>
+                                                <AccountCircle />
+                                            </Grid>
+                                            <Grid item>
+                                                <TextField id="input-with-icon-grid" label="madhu1213" disabled/>
+                                            </Grid>
+                                        </Grid>
+                                    </div>
+                                    <div className="column">
+                                        <Button onClick={()=>{oxygen()}}  data-toggle="modal" data-target="#picturecapture" endIcon={<CallMadeIcon></CallMadeIcon>}>Send Pictures</Button>
+                                    </div>
+                                </div>
+                                <Grid container spacing={1} alignItems="flex-end">
+                                    <Grid item>
+                                        <BatteryStdSharpIcon />
+                                    </Grid>
+                                    <Grid item>
+                                        <TextField id="input-with-icon-grid" label="Quantity" type="number"/>
+                                    </Grid>
+                                </Grid>
+                                <Grid container spacing={1} alignItems="flex-end">
+                                    <Grid item>
+                                        <LocalOfferIcon />
+                                    </Grid>
+                                    <Grid item>
+                                        <TextField id="input-with-icon-grid" label="Price for each" type="number"/>
+                                    </Grid>
+                                </Grid>
+                                <Grid container spacing={1} alignItems="flex-end">
+                                    <Grid item>
+                                        <LocationOnIcon />
+                                    </Grid>
+                                    <Grid item>
+                                        <TextField id="input-with-icon-grid" label="Address" type="text"/>
+                                    </Grid>
+                                </Grid>
+                            </div>
+                            <div class="modal-footer">
+                                <Button type="button" class="btn btn-secondary" data-dismiss="modal">Close</Button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="picturecapture" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Oxygen Cylinders</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            </div>
+                            <div class="modal-body">
+                                {oxygen()}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             <nav className="glass">
                 <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-                <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} className="accordian">
+                <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} className="accordian" data-toggle="modal" data-target="#exampleModalCenter">
                     <AccordionSummary expandIcon={<BatteryStdSharpIcon style={{ color: "blue" ,fontSize: 30 }} />} aria-controls="panel1bh-content"id="panel1bh-header">
                         <Typography className={classes.heading}>Oxygen Cylinders</Typography>
                         <Typography className={classes.secondaryHeading}>Available</Typography>
                     </AccordionSummary>
-                    <AccordionDetails>
-                        <Typography className={classes.secondaryHeading}>ADDRESS : </Typography>
-                    </AccordionDetails>
                 </Accordion>
                 <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')} className="accordian">
                     <AccordionSummary expandIcon={<HotelSharpIcon style={{ color: "brown" ,fontSize: 30 }} />} aria-controls="panel2bh-content"id="panel2bh-header" >
