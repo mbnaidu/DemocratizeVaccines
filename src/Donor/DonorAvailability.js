@@ -33,12 +33,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 export default function DonorAvailability() {
     const classes = useStyles();
+    const [add,setAdd] = React.useState(true);
+    const [edit,setEdit] = React.useState(true);
     const [expanded, setExpanded] = React.useState(false);
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
     const oxygen = () => {
-        console.log("hi")
         return(
             <div>
                 <div class="contentarea">
@@ -137,16 +138,17 @@ export default function DonorAvailability() {
                 </div>
             <nav className="glass">
                 <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-                <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} className="accordian" data-toggle="modal" data-target="#exampleModalCenter">
+                <Button variant="contained" color={add ? "primary" : "default"} onClick={()=>{setAdd(false);setEdit(true)}} >ADD</Button>{' '}
+                <Button variant="contained" color={edit ? "primary" : "default"}  onClick={()=>{setEdit(false);setAdd(true)}} >EDIT</Button>
+                {add ? (<div></div>) : (<div>
+                    <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} className="accordian" data-toggle="modal" data-target="#exampleModalCenter">
                     <AccordionSummary expandIcon={<BatteryStdSharpIcon style={{ color: "blue" ,fontSize: 30 }} />} aria-controls="panel1bh-content"id="panel1bh-header">
                         <Typography className={classes.heading}>Oxygen Cylinders</Typography>
-                        <Typography className={classes.secondaryHeading}>Available</Typography>
                     </AccordionSummary>
                 </Accordion>
                 <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')} className="accordian">
                     <AccordionSummary expandIcon={<HotelSharpIcon style={{ color: "brown" ,fontSize: 30 }} />} aria-controls="panel2bh-content"id="panel2bh-header" >
                         <Typography className={classes.heading}>ICU BEDS</Typography>
-                        <Typography className={classes.secondaryHeading}>Not Available</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
                         <Typography className={classes.secondaryHeading}>ADDRESS : </Typography>
@@ -155,7 +157,6 @@ export default function DonorAvailability() {
                 <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')} className="accordian">
                     <AccordionSummary expandIcon={<LocalHospitalIcon style={{ color: "green" ,fontSize: 30 }} />} aria-controls="panel3bh-content" id="panel3bh-header" >
                         <Typography className={classes.heading}>AMBULANCE</Typography>
-                        <Typography className={classes.secondaryHeading}>Available</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
                         <Typography className={classes.secondaryHeading}>ADDRESS : </Typography>
@@ -164,7 +165,6 @@ export default function DonorAvailability() {
                 <Accordion expanded={expanded === 'panel4'} onChange={handleChange('panel4')} className="accordian">
                     <AccordionSummary expandIcon={<LocalTaxiSharpIcon style={{ color: "gold" ,fontSize: 30}} />} aria-controls="panel4bh-content" id="panel4bh-header" >
                         <Typography className={classes.heading}>PRIVATE TRANSPORT</Typography>
-                        <Typography className={classes.secondaryHeading}>Not Available</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
                         <Typography className={classes.secondaryHeading}>ADDRESS : </Typography>
@@ -173,7 +173,6 @@ export default function DonorAvailability() {
                 <Accordion expanded={expanded === 'panel5'} onChange={handleChange('panel5')} className="accordian">
                     <AccordionSummary expandIcon={<VerifiedUserSharpIcon   style={{ color: "green" ,fontSize: 30}} />} aria-controls="panel5bh-content" id="panel5bh-header" >
                         <Typography className={classes.heading}>VACCINE</Typography>
-                        <Typography className={classes.secondaryHeading}>Available</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
                         <Typography className={classes.secondaryHeading}>ADDRESS : </Typography>
@@ -182,12 +181,65 @@ export default function DonorAvailability() {
                 <Accordion expanded={expanded === 'panel6'} onChange={handleChange('panel6')} className="accordian">
                     <AccordionSummary expandIcon={<InvertColorsSharpIcon  style={{ color: "red" ,fontSize: 30}} />} aria-controls="panel4bh-content" id="panel4bh-header" >
                         <Typography className={classes.heading}>PLASMA</Typography>
-                        <Typography className={classes.secondaryHeading}>Not Available</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
                         <Typography className={classes.secondaryHeading}>ADDRESS : </Typography>
                     </AccordionDetails>
                 </Accordion>
+                </div>)}
+                {edit ? (<div></div>) : (<div>
+                    <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} className="accordian" data-toggle="modal" data-target="#exampleModalCenter">
+                    <AccordionSummary expandIcon={<BatteryStdSharpIcon style={{ color: "blue" ,fontSize: 30 }} />} aria-controls="panel1bh-content"id="panel1bh-header">
+                        <Typography className={classes.heading}>Oxygen Cylinders</Typography>
+                        <Typography className={classes.secondaryHeading}>Qt : 1</Typography>
+                    </AccordionSummary>
+                </Accordion>
+                <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')} className="accordian">
+                    <AccordionSummary expandIcon={<HotelSharpIcon style={{ color: "brown" ,fontSize: 30 }} />} aria-controls="panel2bh-content"id="panel2bh-header" >
+                        <Typography className={classes.heading}>ICU BEDS</Typography>
+                        <Typography className={classes.secondaryHeading}>Qt : 1</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <Typography className={classes.secondaryHeading}>ADDRESS : </Typography>
+                    </AccordionDetails>
+                </Accordion>
+                <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')} className="accordian">
+                    <AccordionSummary expandIcon={<LocalHospitalIcon style={{ color: "green" ,fontSize: 30 }} />} aria-controls="panel3bh-content" id="panel3bh-header" >
+                        <Typography className={classes.heading}>AMBULANCE</Typography>
+                        <Typography className={classes.secondaryHeading}>Qt : 1</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <Typography className={classes.secondaryHeading}>ADDRESS : </Typography>
+                    </AccordionDetails>
+                </Accordion>
+                <Accordion expanded={expanded === 'panel4'} onChange={handleChange('panel4')} className="accordian">
+                    <AccordionSummary expandIcon={<LocalTaxiSharpIcon style={{ color: "gold" ,fontSize: 30}} />} aria-controls="panel4bh-content" id="panel4bh-header" >
+                        <Typography className={classes.heading}>PRIVATE TRANSPORT</Typography>
+                        <Typography className={classes.secondaryHeading}>Qt : 1</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <Typography className={classes.secondaryHeading}>ADDRESS : </Typography>
+                    </AccordionDetails>
+                </Accordion>
+                <Accordion expanded={expanded === 'panel5'} onChange={handleChange('panel5')} className="accordian">
+                    <AccordionSummary expandIcon={<VerifiedUserSharpIcon   style={{ color: "green" ,fontSize: 30}} />} aria-controls="panel5bh-content" id="panel5bh-header" >
+                        <Typography className={classes.heading}>VACCINE</Typography>
+                        <Typography className={classes.secondaryHeading}>Qt : 1</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <Typography className={classes.secondaryHeading}>ADDRESS : </Typography>
+                    </AccordionDetails>
+                </Accordion>
+                <Accordion expanded={expanded === 'panel6'} onChange={handleChange('panel6')} className="accordian">
+                    <AccordionSummary expandIcon={<InvertColorsSharpIcon  style={{ color: "red" ,fontSize: 30}} />} aria-controls="panel4bh-content" id="panel4bh-header" >
+                        <Typography className={classes.heading}>PLASMA</Typography>
+                        <Typography className={classes.secondaryHeading}>Qt : 1</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <Typography className={classes.secondaryHeading}>ADDRESS : </Typography>
+                    </AccordionDetails>
+                </Accordion>
+                </div>)}
                 <NavLink to="/"><Button variant="contained" color="primary">HOME</Button></NavLink>{" "}
             </nav>
         </div>
