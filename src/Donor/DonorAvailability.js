@@ -1,4 +1,4 @@
-import { Accordion, AccordionDetails, AccordionSummary, makeStyles, Typography } from '@material-ui/core'
+import { Accordion, AccordionDetails, AccordionSummary, Button, makeStyles, Typography } from '@material-ui/core'
 import React from 'react'
 import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import LocalTaxiSharpIcon from '@material-ui/icons/LocalTaxiSharp';
@@ -6,6 +6,7 @@ import BatteryStdSharpIcon from '@material-ui/icons/BatteryStdSharp';
 import HotelSharpIcon from '@material-ui/icons/HotelSharp';
 import VerifiedUserSharpIcon from '@material-ui/icons/VerifiedUserSharp';
 import InvertColorsSharpIcon from '@material-ui/icons/InvertColorsSharp';
+import { NavLink } from 'react-router-dom';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -88,6 +89,7 @@ export default function DonorAvailability() {
                         <Typography className={classes.secondaryHeading}>ADDRESS : </Typography>
                     </AccordionDetails>
                 </Accordion>
+                <NavLink to="/"><Button variant="contained" color="primary">HOME</Button></NavLink>{" "}
             </nav>
         </div>
     )

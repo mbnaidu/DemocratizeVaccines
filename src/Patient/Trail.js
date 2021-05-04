@@ -61,24 +61,24 @@ function stableSort(array, comparator) {
 	}
 
 const rows = [
-	createData('Madhu1213', 1,42 , 6700, 'Ravuri vari Street,Gunipudi'),
-	createData('Satish1214', 10,113 , 5100, 'Ravuri vari Street,Gunipudi'),
-	createData('Gopi1215', 11,165 , 2400, 'Ravuri vari Street,Gunipudi'),
-	createData('Sasi1244', 12,164, 2400, 'Ravuri vari Street,Gunipudi'),
-	createData('Kiran1240', 13, 190, 4900, 'Ravuri vari Street,Gunipudi'),
-	createData('Sai1233', 14,255 , 8700, 'Ravuri vari Street,Gunipudi'),
-	createData('Vinay1266', 15,425, 3700, 'Ravuri vari Street,Gunipudi'),
-	createData('Manoj1211', 16,640, 9400, 'Ravuri vari Street,Gunipudi'),
-	createData('Srinu1216', 17,1738, 6500, 'Ravuri vari Street,Gunipudi'),
-	createData('Srinivas1217', 18,3465, 9800, 'Ravuri vari Street,Gunipudi'),
-	createData('Vbk1218', 19, 7080, 8100, 'Ravuri vari Street,Gunipudi'),
-	createData('Sunil1219', 20,10, 900, 'Ravuri vari Street,Gunipudi'),
-	createData('Vamsi1210', 21, 30, 6300, 'Ravuri vari Street,Gunipudi'),
+	createData('Madhu1213', 'B-Type',42 , 6700, 'Ravuri vari Street,Gunipudi'),
+	createData('Satish1214', 'B-Type',113 , 5100, 'Ravuri vari Street,Gunipudi'),
+	createData('Gopi1215', 'D-Type',165 , 2400, 'Ravuri vari Street,Gunipudi'),
+	createData('Sasi1244', 'D-Type',164, 2400, 'Ravuri vari Street,Gunipudi'),
+	createData('Kiran1240', 'B-Type', 190, 4900, 'Ravuri vari Street,Gunipudi'),
+	createData('Sai1233', 'B-Type',255 , 8700, 'Ravuri vari Street,Gunipudi'),
+	createData('Vinay1266', 'D-Type',425, 3700, 'Ravuri vari Street,Gunipudi'),
+	createData('Manoj1211', 'D-Type',640, 9400, 'Ravuri vari Street,Gunipudi'),
+	createData('Srinu1216', 'B-Type',1738, 6500, 'Ravuri vari Street,Gunipudi'),
+	createData('Srinivas1217', 'B-Type',3465, 9800, 'Ravuri vari Street,Gunipudi'),
+	createData('Vbk1218', 'D-Type', 7080, 8100, 'Ravuri vari Street,Gunipudi'),
+	createData('Sunil1219', 'D-Type',10, 900, 'Ravuri vari Street,Gunipudi'),
+	createData('Vamsi1210', 'B-Type', 30, 6300, 'Ravuri vari Street,Gunipudi'),
 ];
 
 const headCells = [
 	{ id: 'userId', numeric: false, disablePadding: true, label: 'UserID' },
-	{ id: 'quantity', numeric: true, disablePadding: true, label: 'Quantity' },
+	{ id: 'type', numeric: false, disablePadding: false, label: 'Type' },
 	{ id: 'liters', numeric: true, disablePadding: true, label: 'Liters' },
 	{ id: 'price', numeric: true, disablePadding: false, label: 'Price' },
 	{ id: 'address', numeric: false, disablePadding: false, label: 'Address' },
@@ -237,7 +237,7 @@ const ueStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function PatientAvailability() {
+export default function Trail() {
 	const classes = useStyles();
 	const classe = ueStyles();
 	const [expanded, setExpanded] = React.useState(false);

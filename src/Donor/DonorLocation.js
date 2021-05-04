@@ -328,7 +328,7 @@ class DonorLocation extends React.Component {
 					</Select>
 				</div>
                 <br/><br/><br/><br/><br/><br/><br/>
-                <NavLink to="/"><Button variant="contained" color="primary">HOME</Button></NavLink>
+                <NavLink to="/"><Button variant="contained" color="primary">HOME</Button></NavLink>{' '}
                 <NavLink to="/donor-requirements"><Button variant="contained" color="primary">NEXT</Button></NavLink>
 			</nav>
 		)
