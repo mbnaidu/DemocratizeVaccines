@@ -7,8 +7,8 @@ class Home extends Component {
         return (
             <nav className="glass">
                 <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-                <NavLink to="/patient-location"><Button variant="contained" color="primary">NEED - HELP</Button></NavLink>{' '}
-                <NavLink to="/donor-location"><Button variant="contained" color="primary">HELP - NEED</Button></NavLink>
+                <NavLink to="/patient-location"><Button variant="contained" color="primary">PATIENT</Button></NavLink>{' '}
+                <NavLink to="/donor-location"><Button variant="contained" color="primary">DONOR</Button></NavLink>
             </nav>
             )
         }

@@ -327,7 +327,7 @@ class PatientLocation extends React.Component {
 				</div>
                 <br/><br/><br/><br/><br/><br/><br/>
                 <NavLink to="/"><Button variant="contained" color="primary">HOME</Button></NavLink>{" "}
-                <NavLink to="/patient-requirements"><Button variant="contained" color="primary">NEXT</Button></NavLink>
+                <NavLink to="/patient-requirements"><Button variant="contained" color="primary">Search</Button></NavLink>
 			</nav>
 		)
 	}
