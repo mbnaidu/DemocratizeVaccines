@@ -334,8 +334,8 @@ class PatientLocation extends React.Component {
 				</div>
                 <br/><br/><br/><br/><br/><br/><br/>
                 <NavLink to="/"><Button variant="contained" color="primary">HOME</Button></NavLink>{" "}
-                {/* <NavLink to="/patient-requirements"><Button variant="contained" color="primary" onClick={()=>{console.log()}}>Search</Button></NavLink> */}
-                <Button variant="contained" color="primary" onClick={()=>{console.log(this.state.selectedCountry,this.state.selectedState,this.state.selectedCity)}}>Search</Button>
+                <NavLink to="/patient-requirements"><Button variant="contained" color="primary" onClick={()=>{console.log()}}>Search</Button></NavLink>
+                {/* <Button variant="contained" color="primary" onClick={()=>{console.log(this.state.selectedCountry,this.state.selectedState,this.state.selectedCity)}}>Search</Button> */}
 			</nav>
 		)
 	}
