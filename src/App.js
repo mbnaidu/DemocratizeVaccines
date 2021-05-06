@@ -21,7 +21,7 @@ export class App extends Component {
         <Router>
           <div className="App">
             <Route exact path="/">
-              <Home />
+              <Trail />
             </Route>
             <Route exact path="/donor-location">
               <DonorLocation />
