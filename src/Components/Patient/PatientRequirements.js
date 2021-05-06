@@ -4,15 +4,37 @@ import React, { useState } from 'react'
 import { ModalBody, ModalFooter, ModalTitle, Modal} from 'react-bootstrap';
 import ModalHeader from 'react-bootstrap/esm/ModalHeader';
 import { NavLink, useLocation } from 'react-router-dom'
+import '../../Styles/Patient.css'
+
+
+
 
 function PatientRequirements() {
     const location = useLocation();
     const [show, setShow] = useState(false);
     const [expanded, setExpanded] = React.useState(false);
-
-  const handleChange = (panel) => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : false);
-  };
+    const handleChange = (panel) => (event, isExpanded) => {
+        setExpanded(isExpanded ? panel : false);
+    };
+    // 
+        const names = [
+            {id : '1' , value : 'Oxygen Cylinder' },
+            {id : '2' , value : 'ICU Bed' },
+            {id : '3' , value : 'Ambulance' },
+            {id : '4' , value : 'Private Transport' },
+            {id : '5' , value : 'Vaccine' },
+            {id : '6' , value : 'Plasma' },
+        ];
+        var finalList = [];
+        const handleInput = (option) =>{
+            let index = finalList.indexOf(option)
+            if(index > -1){
+                finalList.splice(index, 1);
+            }
+            else{
+                finalList.push(option)
+            }
+        }
     return (
         <nav className="glass">
             {/* MODELS */}
@@ -81,52 +103,41 @@ function PatientRequirements() {
                         </Button>
                     </ModalFooter>
                 </Modal>
-            <br/><br/><br/><br/>
-            <Badge color="primary" badgeContent={13}>
-                <Button variant="outlined" color="primary" onClick={()=>{setShow(true)}}>HOSPITALS</Button>
-            </Badge>
-            <br/><br/><br/><br/><br/><br/><br/>
-            <FormControl component="fieldset">
-                <FormLabel component="legend">What Do You Need..?</FormLabel>
-                <FormGroup>
-                <FormControlLabel
-                    control={<Checkbox name="Oxygen Cylinders" color="primary"/>}
-                    label="Oxygen Cylinders"
-                />
-                <FormControlLabel
-                    control={<Checkbox name="ICU Bed" color="primary"/>}
-                    label="ICU Bed"
-                />
-                <FormControlLabel
-                    control={<Checkbox name="Ambulance" color="primary"/>}
-                    label="Ambulance"
-                />
-                <FormControlLabel
-                    control={<Checkbox name="Private Transport" color="primary"/>}
-                    label="Private Transport"
-                />
-                <FormControlLabel
-                    control={<Checkbox name="Vaccine" color="primary"/>}
-                    label="Vaccine"
-                />
-                <FormControlLabel
-                    control={<Checkbox name="Plasma" color="primary"/>}
-                    label="Plasma"
-                />
-                </FormGroup>
-                <br/><br/>
-                <NavLink
-                    to={{
-                                pathname:'/patient-availability',
+            <div>
+                <Badge color="primary" badgeContent={13}>
+                    <Button variant="outlined" color="primary" onClick={()=>{setShow(true)}}>HOSPITALS</Button>
+                </Badge>
+            </div>
+            <div className="alignList">
+                <FormControl>
+                    <FormLabel>What Do You Need..?</FormLabel>
+                    <FormGroup>
+                        {names.map((n,key=n.id)=>{
+                            return(
+                                <div>
+                                    <FormControlLabel
+                                        control={<Checkbox name={n.value} color="primary"  onChange={()=>{handleInput(n.value)}}/>}
+                                        label={n.value}
+                                    />
+                                </div>
+                            )
+                        })}
+                    </FormGroup>
+                    <br/><br/>
+                    <NavLink
+                        to={{
+                            pathname:'/patient-availability',
                                 state: {
                                     State:location.state.State,
                                     District:location.state.District,
-                                    Mandal:location.state.Mandal
+                                    Mandal:location.state.Mandal,
                                 } 
                             }}
                             exact
-                ><Button variant="contained" color="primary">SEARCH</Button></NavLink>
-            </FormControl>
+                    >
+                    <Button variant="contained" color="primary" onClick={()=>{console.log(location.state.State,location.state.District,location.state.Mandal,finalList)}}>SEARCH</Button></NavLink>
+                </FormControl>
+            </div>
         </nav>
     )
 }

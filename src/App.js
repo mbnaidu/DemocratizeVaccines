@@ -12,8 +12,7 @@ import PatientAvailability from './Components/Patient/PatientAvailability'
 import DonorLocation from './Components/Donor/DonorLocation';
 import DonorRequirements from './Components/Donor/DonorRequirements';
 import DonorAvailability from './Components/Donor/DonorAvailability'
-import { UserProvider } from './Components/UserContext';
-const user = { name: 'Tania', loggedIn: true };
+import Trail from './Components/Trail';
 
 export class App extends Component {
   render() {
@@ -40,9 +39,7 @@ export class App extends Component {
               <DonorAvailability />
             </Route>
             <Route exact path="/patient-availability">
-              <UserProvider value={user}>
-            <PatientAvailability />
-        </UserProvider>
+              <PatientAvailability />
             </Route>
           </div>
         </Router>
