@@ -3,6 +3,9 @@ import { Label } from '@material-ui/icons';
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 
+
+
+
 class PatientLocation extends React.Component {
 	constructor(props) {
 		super(props);
@@ -10,11 +13,13 @@ class PatientLocation extends React.Component {
 			countries : [],
 			states : [],
 			cities : [],
-			selectedCountry : '--Choose Country--',
-			selectedState : '--Choose State--'
+			selectedCountry : '--Choose State--',
+			selectedState : '--Choose District--',
+            selectedCity:'--Choose Mandal--'
 		};
 		this.changeCountry = this.changeCountry.bind(this);
 		this.changeState = this.changeState.bind(this);
+        this.changeCity = this.changeCity.bind(this);
 	}
   
 	componentDidMount() {
@@ -296,7 +301,9 @@ class PatientLocation extends React.Component {
 		const stats = this.state.countries.find(cntry => cntry.State === this.state.selectedCountry).states;
 		this.setState({cities : stats.find(stat => stat.State === event.target.value).cities});
 	}
-	
+	changeCity(event){
+        this.setState({selectedCity: event.target.value});
+    }
 	render() {
 		return (
 			<nav className="glass">
@@ -319,7 +326,7 @@ class PatientLocation extends React.Component {
 				</div>
 				<div>
                     <label>Choose Mandal : </label>
-					<Select placeholder="City">
+					<Select placeholder="City" value={this.state.selectedCity} onChange={this.changeCity}>
 						{this.state.cities.map((e, key) => {
 							return <MenuItem value={e} key={key}>{e}</MenuItem>;
 						})}
@@ -327,7 +334,8 @@ class PatientLocation extends React.Component {
 				</div>
                 <br/><br/><br/><br/><br/><br/><br/>
                 <NavLink to="/"><Button variant="contained" color="primary">HOME</Button></NavLink>{" "}
-                <NavLink to="/patient-requirements"><Button variant="contained" color="primary">Search</Button></NavLink>
+                {/* <NavLink to="/patient-requirements"><Button variant="contained" color="primary" onClick={()=>{console.log()}}>Search</Button></NavLink> */}
+                <Button variant="contained" color="primary" onClick={()=>{console.log(this.state.selectedCountry,this.state.selectedState,this.state.selectedCity)}}>Search</Button>
 			</nav>
 		)
 	}
