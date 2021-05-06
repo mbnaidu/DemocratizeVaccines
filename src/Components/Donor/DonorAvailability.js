@@ -7,8 +7,8 @@ import HotelSharpIcon from '@material-ui/icons/HotelSharp';
 import VerifiedUserSharpIcon from '@material-ui/icons/VerifiedUserSharp';
 import InvertColorsSharpIcon from '@material-ui/icons/InvertColorsSharp';
 import { NavLink } from 'react-router-dom';
-import '../main.css'
-import '../styles.css'
+import '../../main.css'
+import '../../styles.css'
 import { AccountCircle } from '@material-ui/icons';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';

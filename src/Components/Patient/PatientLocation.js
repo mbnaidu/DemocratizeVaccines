@@ -307,35 +307,36 @@ class PatientLocation extends React.Component {
 	render() {
 		return (
 			<nav className="glass">
-				<div>
-                    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-                    <label>Choose State : </label>
-					<Select placeholder="State" value={this.state.selectedCountry} onChange={this.changeCountry}>
-						{this.state.countries.map((e, key) => {
-							return <MenuItem value={e.State} key={key}>{e.State}</MenuItem>;
-						})}
-					</Select>
-				</div>
-				<div>
-                    <label>Choose District : </label>
-					<Select placeholder="District" value={this.state.selectedState} onChange={this.changeState}>
-						{this.state.states.map((e, key) => {
-							return <MenuItem value={e.State} key={key}>{e.State}</MenuItem>;
-						})}
-					</Select>
-				</div>
-				<div>
-                    <label>Choose Mandal : </label>
-					<Select placeholder="City" value={this.state.selectedCity} onChange={this.changeCity}>
-						{this.state.cities.map((e, key) => {
-							return <MenuItem value={e} key={key}>{e}</MenuItem>;
-						})}
-					</Select>
-				</div>
-                <br/><br/><br/><br/><br/><br/><br/>
-                <NavLink to="/"><Button variant="contained" color="primary">HOME</Button></NavLink>{" "}
-                <NavLink to="/patient-requirements"><Button variant="contained" color="primary" onClick={()=>{console.log()}}>Search</Button></NavLink>
-                {/* <Button variant="contained" color="primary" onClick={()=>{console.log(this.state.selectedCountry,this.state.selectedState,this.state.selectedCity)}}>Search</Button> */}
+				<div className="patienlocation">
+                    <div>
+                        <label>Choose State : </label>
+                        <Select placeholder="State" value={this.state.selectedCountry} onChange={this.changeCountry}>
+                            {this.state.countries.map((e, key) => {
+                                return <MenuItem value={e.State} key={key}>{e.State}</MenuItem>;
+                            })}
+                        </Select>
+                    </div>
+                    <div>
+                        <label>Choose District : </label>
+                        <Select placeholder="District" value={this.state.selectedState} onChange={this.changeState}>
+                            {this.state.states.map((e, key) => {
+                                return <MenuItem value={e.State} key={key}>{e.State}</MenuItem>;
+                            })}
+                        </Select>
+                    </div>
+                    <div>
+                        <label>Choose Mandal : </label>
+                        <Select placeholder="City" value={this.state.selectedCity} onChange={this.changeCity}>
+                            {this.state.cities.map((e, key) => {
+                                return <MenuItem value={e} key={key}>{e}</MenuItem>;
+                            })}
+                        </Select>
+                    </div>
+                    <br/><br/><br/><br/><br/><br/><br/>
+                    <NavLink to="/"><Button variant="contained" color="primary">HOME</Button></NavLink>{" "}
+                    <NavLink to="/patient-requirements"><Button variant="contained" color="primary" onClick={()=>{console.log()}}>Search</Button></NavLink>
+                    {/* <Button variant="contained" color="primary" onClick={()=>{console.log(this.state.selectedCountry,this.state.selectedState,this.state.selectedCity)}}>Search</Button> */}
+                </div>
 			</nav>
 		)
 	}

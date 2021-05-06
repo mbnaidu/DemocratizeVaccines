@@ -3,14 +3,16 @@ import './App.css';
 import {BrowserRouter as Router,Route,} from "react-router-dom";
 import Home from './Home';
 import { Component } from 'react';
-// DONOR
-import DonorLocation from './Donor/DonorLocation';
-import DonorRequirements from './Donor/DonorRequirements';
-import DonorAvailability from './Donor/DonorAvailability';
 // PATIENT
-import PatientLocation from './Patient/PatientLocation';
-import PatientRequirements from './Patient/PatientRequirements';
-import PatientAvailability from './Patient/PatientAvailability';
+import PatientLocation from './Components/Patient/PatientLocation';
+import PatientRequirements from './Components/Patient/PatientRequirements';
+import PatientAvailability from './Components/Patient/PatientAvailability'
+
+// DONOR
+import DonorLocation from './Components/Donor/DonorLocation';
+import DonorRequirements from './Components/Donor/DonorRequirements';
+import DonorAvailability from './Components/Donor/DonorAvailability'
+
 
 export class App extends Component {
   render() {
