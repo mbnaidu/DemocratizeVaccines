@@ -1,11 +1,19 @@
-import { Button, FormControl, InputLabel, MenuItem, NativeSelect, Select } from '@material-ui/core'
-import { Label } from '@material-ui/icons';
+import { Button, MenuItem, Select } from '@material-ui/core'
+import { Home } from '@material-ui/icons'
 import React from 'react'
 import { NavLink } from 'react-router-dom'
+import '../../Styles/Patient.css'
+import { UserProvider } from '../UserContext'
+import PatientAvailability from './PatientAvailability'
 
-
-
-
+const madhu = () => {
+    const user = { name: 'Tania', loggedIn: true }
+    return(
+        <UserProvider value={user}>
+            <PatientAvailability />
+        </UserProvider>
+    )
+}
 class PatientLocation extends React.Component {
 	constructor(props) {
 		super(props);
@@ -13,15 +21,14 @@ class PatientLocation extends React.Component {
 			countries : [],
 			states : [],
 			cities : [],
-			selectedCountry : '--Choose State--',
-			selectedState : '--Choose District--',
-            selectedCity:'--Choose Mandal--'
+			selectedCountry : '',
+			selectedState : '',
+            selectedCity:''
 		};
 		this.changeCountry = this.changeCountry.bind(this);
 		this.changeState = this.changeState.bind(this);
         this.changeCity = this.changeCity.bind(this);
 	}
-  
 	componentDidMount() {
 		this.setState({
 			countries : [
@@ -290,7 +297,6 @@ class PatientLocation extends React.Component {
 			]
 		});
 	}
-  
 	changeCountry(event) {
 		this.setState({selectedCountry: event.target.value});
 		this.setState({states : this.state.countries.find(cntry => cntry.State === event.target.value).states});
@@ -307,7 +313,7 @@ class PatientLocation extends React.Component {
 	render() {
 		return (
 			<nav className="glass">
-				<div className="patienlocation">
+				<div className="patientlocation">
                     <div>
                         <label>Choose State : </label>
                         <Select placeholder="State" value={this.state.selectedCountry} onChange={this.changeCountry}>
@@ -334,7 +340,22 @@ class PatientLocation extends React.Component {
                     </div>
                     <br/><br/><br/><br/><br/><br/><br/>
                     <NavLink to="/"><Button variant="contained" color="primary">HOME</Button></NavLink>{" "}
-                    <NavLink to="/patient-requirements"><Button variant="contained" color="primary" onClick={()=>{console.log()}}>Search</Button></NavLink>
+                    {/* {this.state.selectedCity.length>1 ? 
+                        <NavLink to="/patient-requirements"><Button variant="contained" color="primary" onClick={()=>{madhu()}}>Search</Button></NavLink> : 
+                        <Button variant="contained" color="primary" onClick={()=>{madhu()}}>Search</Button>
+                        } */}
+                    <NavLink
+                        to={{
+                                pathname:'/patient-requirements',
+                                state: {
+                                    State:this.state.selectedCountry,
+                                    District:this.state.selectedState,
+                                    Mandal:this.state.selectedCity
+                                } 
+                            }}
+                            exact
+                        ><Button variant="contained" color="primary">Search</Button>
+                    </NavLink>
                     {/* <Button variant="contained" color="primary" onClick={()=>{console.log(this.state.selectedCountry,this.state.selectedState,this.state.selectedCity)}}>Search</Button> */}
                 </div>
 			</nav>

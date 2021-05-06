@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
@@ -32,10 +32,11 @@ import BatteryStdSharpIcon from '@material-ui/icons/BatteryStdSharp';
 import HotelSharpIcon from '@material-ui/icons/HotelSharp';
 import VerifiedUserSharpIcon from '@material-ui/icons/VerifiedUserSharp';
 import InvertColorsSharpIcon from '@material-ui/icons/InvertColorsSharp';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { ModalBody, ModalFooter, ModalTitle, Modal} from 'react-bootstrap';
 import ModalHeader from 'react-bootstrap/esm/ModalHeader';
 import { ExpandLess, ExpandMore, StarBorder, Twitter } from '@material-ui/icons';
+import UserContext from '../UserContext';
 
 function createData(name, calories, fat, carbs, protein) {
 	return { name, calories, fat, carbs, protein };
@@ -244,7 +245,11 @@ const ueStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function PatientAvailability() {
+export default function PatientAvailability(props) {
+	const location = useLocation();
+	console.log(location)
+	// USERCONTEXT
+		const user = useContext(UserContext)
 	const [show, setShow] = useState(false);
 	const [openCylinder, setCylinder] = React.useState(false);
 	const [openBeds, setBeds] = React.useState(false);
@@ -364,6 +369,7 @@ export default function PatientAvailability() {
 	}
 return (
     <div>
+		{console.log(user)}
 		<div>
 			<Modal size="sm" show={show} >
 				<ModalHeader closeButton onClick={()=>{setShow(false)}}>

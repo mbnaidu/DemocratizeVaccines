@@ -3,9 +3,10 @@ import { ExpandMoreSharp } from '@material-ui/icons';
 import React, { useState } from 'react'
 import { ModalBody, ModalFooter, ModalTitle, Modal} from 'react-bootstrap';
 import ModalHeader from 'react-bootstrap/esm/ModalHeader';
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 
 function PatientRequirements() {
+    const location = useLocation();
     const [show, setShow] = useState(false);
     const [expanded, setExpanded] = React.useState(false);
 
@@ -114,7 +115,17 @@ function PatientRequirements() {
                 />
                 </FormGroup>
                 <br/><br/>
-                <NavLink to="/patient-availability"><Button variant="contained" color="primary">SEARCH</Button></NavLink>
+                <NavLink
+                    to={{
+                                pathname:'/patient-availability',
+                                state: {
+                                    State:location.state.State,
+                                    District:location.state.District,
+                                    Mandal:location.state.Mandal
+                                } 
+                            }}
+                            exact
+                ><Button variant="contained" color="primary">SEARCH</Button></NavLink>
             </FormControl>
         </nav>
     )
