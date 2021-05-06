@@ -20,7 +20,15 @@ body{
   width: 50%;
   padding: 10px;
 }
+.wrapper {
+    text-align: center;
+}
 
+.patientbutton {
+    position: absolute;
+    top: 50%;
+    left:33%;
+}
 /* Clear floats after the columns */
 .row:after {
   content: "";

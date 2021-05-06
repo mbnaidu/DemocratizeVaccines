@@ -6,9 +6,10 @@ class Home extends Component {
     render() {
         return (
             <nav className="glass">
-                <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-                <NavLink to="/patient-location"><Button variant="contained" color="primary">PATIENT</Button></NavLink>{' '}
-                <NavLink to="/donor-location"><Button variant="contained" color="primary">DONOR</Button></NavLink>
+                <div className="wrapper patientbutton">
+                    <NavLink to="/patient-location"><Button variant="contained" color="primary">PATIENT</Button></NavLink>{' '}
+                    <NavLink to="/donor-location"><Button variant="contained" color="primary">DONOR</Button></NavLink>
+                </div>
             </nav>
             )
         }
