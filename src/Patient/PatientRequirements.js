@@ -16,7 +16,7 @@ function PatientRequirements() {
         <nav className="glass">
             {/* MODELS */}
                 <Modal size="sm" show={show}>
-                    <ModalHeader closeButton>
+                    <ModalHeader closeButton onClick={()=>{setShow(false)}}>
                         <ModalTitle>BHIMAVARM</ModalTitle>
                     </ModalHeader>
                     <ModalBody>
@@ -72,7 +72,6 @@ function PatientRequirements() {
                                 </Typography>
                                 </AccordionDetails>
                             </Accordion>
-
                         </div>
                     </ModalBody>
                     <ModalFooter>
@@ -85,7 +84,7 @@ function PatientRequirements() {
             <Badge color="primary" badgeContent={13}>
                 <Button variant="outlined" color="primary" onClick={()=>{setShow(true)}}>HOSPITALS</Button>
             </Badge>
-            <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+            <br/><br/><br/><br/><br/><br/><br/>
             <FormControl component="fieldset">
                 <FormLabel component="legend">What Do You Need..?</FormLabel>
                 <FormGroup>
@@ -114,8 +113,8 @@ function PatientRequirements() {
                     label="Plasma"
                 />
                 </FormGroup>
-                <br/><br/><br/>
-                <NavLink to="/patient-availability"><Button variant="contained" color="primary">NEXT</Button></NavLink>
+                <br/><br/>
+                <NavLink to="/patient-availability"><Button variant="contained" color="primary">SEARCH</Button></NavLink>
             </FormControl>
         </nav>
     )

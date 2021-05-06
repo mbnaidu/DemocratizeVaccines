@@ -27,6 +27,10 @@ body{
   display: table;
   clear: both;
 }
+.center {
+  margin: auto;
+  width: 50%;
+}
 .App
 {
   display: flex;

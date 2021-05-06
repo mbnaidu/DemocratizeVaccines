@@ -16,10 +16,10 @@ function DonorRequirements() {
     const [generate,setGenerate] = useState("Generate")
     return (
         <nav className="glass">
-            <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
             {signup ? (<div>
                 {generate === "Generate" ? (
 							<div>
+                                <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
 								<Input placeholder="10-digit-phone-number" type="number" id="phonenumber"/>{' '}
 								<Button variant="contained" color="primary" endIcon={<Icon>send</Icon>} onClick={()=>{setGenerate('Submit');}}>
 									{generate}
@@ -27,13 +27,15 @@ function DonorRequirements() {
 							</div>
 						) : (
 							<div>
+                                <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
 								<Input placeholder="6-digit-code" id="6digitcode"/>{' '}<Button variant="contained" color="primary" endIcon={<Icon>send</Icon>} onClick={()=>{setSignup(false);setLogin(true)}}>
 									{generate}
 								</Button>
 							</div>
 						)}
             </div>) : ( login ? (<div>
-                                <div>
+                            <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                                <div className="center"> 
                                     <Grid container spacing={1} alignItems="flex-end">
                                         <Grid item>
                                             <AccountCircle />
@@ -49,13 +51,14 @@ function DonorRequirements() {
                                         <Grid item>
                                             <TextField id="input-with-icon-grid" label="Password" type="password"/>
                                         </Grid>
-                                    </Grid>
-                                    <Button color="primary" variant="outlined" onClick={()=>{setLogin(false);}}>Login</Button>
+                                    </Grid><br/><br/>
+                                    <Button color="primary" variant="outlined" onClick={()=>{setLogin(false);}}>Login</Button>{' '}
                                     <Button color="secondary" variant="contained" onClick={()=>{setSignup(true);}}>Sign Up</Button>
                                 </div>
             </div>) : (<div>
+                            <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
                         <FormControl component="fieldset">
-                        <FormLabel component="legend">What Do You Need..?</FormLabel>
+                        <FormLabel component="legend">What Do You Have..?</FormLabel>
                         <FormGroup>
                         <FormControlLabel
                             control={<Checkbox name="Oxygen Cylinders" color="primary"/>}
@@ -82,7 +85,7 @@ function DonorRequirements() {
                             label="Plasma"
                         />
                         </FormGroup>
-                        <br/><br/><br/>
+                        <br/><br/>
                         <NavLink to="/donor-availability"><Button variant="contained" color="primary">NEXT</Button></NavLink>
                     </FormControl>
             </div>))}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
@@ -20,7 +20,11 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
-import { Accordion, AccordionDetails, AccordionSummary, Button, Icon, Input, Slide, Snackbar } from '@material-ui/core'
+import { Accordion, AccordionDetails, AccordionSummary, Button, Collapse, Icon, Input, List, ListItem, ListItemIcon, ListItemText, Slide, Snackbar } from '@material-ui/core'
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+
+
+
 
 import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import LocalTaxiSharpIcon from '@material-ui/icons/LocalTaxiSharp';
@@ -29,6 +33,9 @@ import HotelSharpIcon from '@material-ui/icons/HotelSharp';
 import VerifiedUserSharpIcon from '@material-ui/icons/VerifiedUserSharp';
 import InvertColorsSharpIcon from '@material-ui/icons/InvertColorsSharp';
 import { NavLink } from 'react-router-dom';
+import { ModalBody, ModalFooter, ModalTitle, Modal} from 'react-bootstrap';
+import ModalHeader from 'react-bootstrap/esm/ModalHeader';
+import { ExpandLess, ExpandMore, StarBorder, Twitter } from '@material-ui/icons';
 
 function createData(name, calories, fat, carbs, protein) {
 	return { name, calories, fat, carbs, protein };
@@ -238,6 +245,14 @@ const ueStyles = makeStyles((theme) => ({
 }));
 
 export default function PatientAvailability() {
+	const [show, setShow] = useState(false);
+	const [openCylinder, setCylinder] = React.useState(false);
+	const [openBeds, setBeds] = React.useState(false);
+	const [openAmbulance, setAmbulance] = React.useState(false);
+	const [openPrivate, setPrivate] = React.useState(false);
+	const [openVaccine, setVaccine] = React.useState(false);
+	const [openPlasma, setPlasma] = React.useState(false);
+
 	const classes = useStyles();
 	const classe = ueStyles();
 	const [expanded, setExpanded] = React.useState(false);
@@ -349,6 +364,48 @@ export default function PatientAvailability() {
 	}
 return (
     <div>
+		<div>
+			<Modal size="sm" show={show} >
+				<ModalHeader closeButton onClick={()=>{setShow(false)}}>
+                    <ModalTitle>Tweets</ModalTitle>
+                </ModalHeader>
+				<ModalBody>
+					<List>
+						<ListItem button onClick={()=>{setCylinder(!openCylinder)}}>
+							<ListItemIcon>
+								{!openCylinder ? <Twitter color="primary"/> : <ExpandLess />}
+							</ListItemIcon>
+							<ListItemText primary="O2 Cylinder" />
+							{openCylinder ? (<div>01-05-2021</div>) : (<div>01-05-2021</div>)}
+						</ListItem>
+						<Collapse in={openCylinder} timeout="auto" unmountOnExit>
+							<List component="div" disablePadding>
+							<ListItem >
+								<ListItemText primary="Details" />
+							</ListItem>
+							</List>
+						</Collapse>
+						<ListItem button onClick={()=>{setBeds(!openBeds)}}>
+							<ListItemIcon>
+								{!openBeds ? <Twitter color="primary"/> : <ExpandLess />}
+							</ListItemIcon>
+							<ListItemText primary="ICU Beds" />
+							{openBeds ? (<div>21-02-2021</div>) : (<div>21-02-2021</div>)}
+						</ListItem>
+						<Collapse in={openBeds} timeout="auto" unmountOnExit>
+							<List component="div" disablePadding>
+							<ListItem  >
+								<ListItemText primary="Details" />
+							</ListItem>
+							</List>
+						</Collapse>
+					</List>
+				</ModalBody>
+				<ModalFooter>
+					<Button color="primary" onClick={()=>{setShow(false)}}>Close</Button>{' '}
+				</ModalFooter>
+			</Modal>
+		</div>
 		<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered" role="document">
 				<div class="modal-content">
@@ -399,7 +456,7 @@ return (
 			</div>
 		</div>
 		<nav className="glass">
-			<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+			<br/><br/><br/><br/><br/><br/><br/><br/>
 			<Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} className="accordian" data-toggle="modal" data-target="#exampleModalCenter">
 				<AccordionSummary expandIcon={<BatteryStdSharpIcon style={{ color: "blue" ,fontSize: 30 }} />} aria-controls="panel1bh-content"id="panel1bh-header">
 					<Typography className={classe.heading}>Oxygen Cylinders</Typography>
@@ -436,7 +493,8 @@ return (
                         <Typography className={classe.heading1}>Not Available</Typography>
                     </AccordionSummary>
                 </Accordion>
-				<NavLink to="/"><Button variant="contained" color="primary">HOME</Button></NavLink>{" "}
+				<NavLink to="/"><Button variant="contained" color="primary">HOME</Button></NavLink><br/><br/>
+				<Button variant="contained" color="primary" onClick={()=>{setShow(true)}}>Show From Twitter</Button>
 		</nav>
     </div>
 	);
