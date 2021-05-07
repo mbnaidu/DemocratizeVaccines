@@ -6,7 +6,7 @@ import BatteryStdSharpIcon from '@material-ui/icons/BatteryStdSharp';
 import HotelSharpIcon from '@material-ui/icons/HotelSharp';
 import VerifiedUserSharpIcon from '@material-ui/icons/VerifiedUserSharp';
 import InvertColorsSharpIcon from '@material-ui/icons/InvertColorsSharp';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import '../../main.css'
 import '../../styles.css'
 import { AccountCircle } from '@material-ui/icons';
@@ -32,6 +32,8 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 export default function DonorAvailability() {
+    const location = useLocation();
+    console.log(location)
     const classes = useStyles();
     const [add,setAdd] = React.useState(true);
     const [edit,setEdit] = React.useState(true);
