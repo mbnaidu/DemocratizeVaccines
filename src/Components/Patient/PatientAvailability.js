@@ -1,229 +1,100 @@
-import React, { useContext, useState } from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import { lighten, makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import Checkbox from '@material-ui/core/Checkbox';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
-import DeleteIcon from '@material-ui/icons/Delete';
-import FilterListIcon from '@material-ui/icons/FilterList';
-import { Accordion, AccordionDetails, AccordionSummary, Button, Collapse, Icon, Input, List, ListItem, ListItemIcon, ListItemText, Slide, Snackbar } from '@material-ui/core'
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
-
-
-
-
-import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
-import LocalTaxiSharpIcon from '@material-ui/icons/LocalTaxiSharp';
-import BatteryStdSharpIcon from '@material-ui/icons/BatteryStdSharp';
-import HotelSharpIcon from '@material-ui/icons/HotelSharp';
-import VerifiedUserSharpIcon from '@material-ui/icons/VerifiedUserSharp';
-import InvertColorsSharpIcon from '@material-ui/icons/InvertColorsSharp';
-import { NavLink, useLocation } from 'react-router-dom';
+import { Accordion, AccordionDetails, AccordionSummary, Button, Checkbox, Icon, Input, makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography } from '@material-ui/core'
+import React, { useState } from 'react';
+import { NavLink } from 'react-router-dom';
+import '../../Styles/Patient.css';
 import { ModalBody, ModalFooter, ModalTitle, Modal} from 'react-bootstrap';
 import ModalHeader from 'react-bootstrap/esm/ModalHeader';
-import { ExpandLess, ExpandMore, StarBorder, Twitter } from '@material-ui/icons';
-import UserContext from '../UserContext';
 
-function createData(name, calories, fat, carbs, protein) {
-	return { name, calories, fat, carbs, protein };
-}
 
-function descendingComparator(a, b, orderBy){
-	if (b[orderBy] < a[orderBy]){
-		return -1;
-	}
-	if (b[orderBy] > a[orderBy]) {
-		return 1;
-	}
-	return 0;
-}
-
-function getComparator(order, orderBy) {
-	return order === 'desc'
-		? (a, b) => descendingComparator(a, b, orderBy)
-		: (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function stableSort(array, comparator) {
-		const stabilizedThis = array.map((el, index) => [el, index]);
-		stabilizedThis.sort((a, b) => {
-			const order = comparator(a[0], b[0]);
-			if (order !== 0) return order;
-				return a[1] - b[1];
-		});
-		return stabilizedThis.map((el) => el[0]);
-	}
-
-const rows = [
-	createData('Madhu1213', 1,42 , 6700, 'Ravuri vari Street,Gunipudi'),
-	createData('Satish1214', 10,113 , 5100, 'Ravuri vari Street,Gunipudi'),
-	createData('Gopi1215', 11,165 , 2400, 'Ravuri vari Street,Gunipudi'),
-	createData('Sasi1244', 12,164, 2400, 'Ravuri vari Street,Gunipudi'),
-	createData('Kiran1240', 13, 190, 4900, 'Ravuri vari Street,Gunipudi'),
-	createData('Sai1233', 14,255 , 8700, 'Ravuri vari Street,Gunipudi'),
-	createData('Vinay1266', 15,425, 3700, 'Ravuri vari Street,Gunipudi'),
-	createData('Manoj1211', 16,640, 9400, 'Ravuri vari Street,Gunipudi'),
-	createData('Srinu1216', 17,1738, 6500, 'Ravuri vari Street,Gunipudi'),
-	createData('Srinivas1217', 18,3465, 9800, 'Ravuri vari Street,Gunipudi'),
-	createData('Vbk1218', 19, 7080, 8100, 'Ravuri vari Street,Gunipudi'),
-	createData('Sunil1219', 20,10, 900, 'Ravuri vari Street,Gunipudi'),
-	createData('Vamsi1210', 21, 30, 6300, 'Ravuri vari Street,Gunipudi'),
-];
-
-const headCells = [
-	{ id: 'userId', numeric: false, disablePadding: true, label: 'UserID' },
-	{ id: 'quantity', numeric: true, disablePadding: true, label: 'Quantity' },
-	{ id: 'liters', numeric: true, disablePadding: true, label: 'Liters' },
-	{ id: 'price', numeric: true, disablePadding: false, label: 'Price' },
-	{ id: 'address', numeric: false, disablePadding: false, label: 'Address' },
-];
-
-function EnhancedTableHead(props) {
-	const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
-	const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property);
-};
-return (
-    <TableHead>
-    <TableRow>
-        <TableCell padding="checkbox">
-			<Checkbox
-				indeterminate={numSelected > 0 && numSelected < rowCount}
-				checked={rowCount > 0 && numSelected === rowCount}
-				onChange={onSelectAllClick}
-				inputProps={{ 'aria-label': 'select all desserts' }}
-			/>
-        </TableCell>
-        {headCells.map((headCell) => (
-			<TableCell
-				key={headCell.id}
-				align={headCell.numeric ? 'right' : 'left'}
-				padding={headCell.disablePadding ? 'none' : 'default'}
-				sortDirection={orderBy === headCell.id ? order : false}
-			>
-				<TableSortLabel
-				active={orderBy === headCell.id}
-				direction={orderBy === headCell.id ? order : 'asc'}
-				onClick={createSortHandler(headCell.id)}
-				>
-				{headCell.label}
-				{orderBy === headCell.id ? (
-					<span className={classes.visuallyHidden}>
-					{order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-					</span>
-				) : null}
-				</TableSortLabel>
-			</TableCell>
-        ))}
-    </TableRow>
-    </TableHead>
-);
-}
-
-EnhancedTableHead.propTypes = {
-	classes: PropTypes.object.isRequired,
-	numSelected: PropTypes.number.isRequired,
-	onRequestSort: PropTypes.func.isRequired,
-	onSelectAllClick: PropTypes.func.isRequired,
-	order: PropTypes.oneOf(['asc', 'desc']).isRequired,
-	orderBy: PropTypes.string.isRequired,
-	rowCount: PropTypes.number.isRequired,
-};
-
-const useToolbarStyles = makeStyles((theme) => ({
-	root: {
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(1),
-},
-	highlight:
-    theme.palette.type === 'light'
-	? {
-	color: theme.palette.secondary.main,
-	backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-        }
-	: {
-	color: theme.palette.text.primary,
-	backgroundColor: theme.palette.secondary.dark,
+function PatientAvailability() {
+    const [expanded, setExpanded] = React.useState(false);
+    const handleChange = (panel) => (event, isExpanded) => {
+        setExpanded(isExpanded ? panel : false);
+    };
+    const accordian = [
+        {
+            id:'panel1',panelName:'',panelControl:'panel1bh-content',panelColor:'blue',panelText1:'Oxygen Cylinders',
+            panelText2:'Available',panelId:'panel1bh-header',panelIcon:'🔋',panelData : [
+                {
+                    Id:'madhu1213',Quantity:1,Liters:12,Price:13,Address:'1st street,Gunipudi'
+                },
+                {
+                    Id:'abhinav1211',Quantity:2,Liters:122,Price:121,Address:'2nd street,Gunipudi'
+                },
+                {
+                    Id:'sai1222',Quantity:3,Liters:112,Price:213,Address:'3rd street,Gunipudi'
+                },
+                {
+                    Id:'dinesh34',Quantity:4,Liters:212,Price:113,Address:'4th street,Gunipudi'
+                },
+                {
+                    Id:'shivam11',Quantity:5,Liters:2,Price:123,Address:'5th street,Gunipudi'
+                },
+            ]
         },
-	title: {
-    flex: '1 1 100%',
-	},
-}));
-
-const EnhancedTableToolbar = (props) => {
-	const classes = useToolbarStyles();
-	const { numSelected } = props;
-		return (
-			<Toolbar className={clsx(classes.root, {[classes.highlight]: numSelected > 0,})}>
-				{numSelected > 0 ? (
-					<Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
-						{numSelected} selected
-					</Typography>
-				) : (
-					<Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-						Available
-					</Typography>
-				)}
-				{numSelected > 0 ? (
-					<Tooltip title="Delete">
-						<IconButton aria-label="delete">
-								<Button color="primary" data-toggle="modal" data-target="#checkpatient">Send Request</Button>
-						</IconButton>
-					</Tooltip>
-				) : (
-					<Tooltip title="Filter list">
-						<IconButton aria-label="filter list">
-								<FilterListIcon />
-						</IconButton>
-					</Tooltip>
-				)}
-			</Toolbar>
-	);
-};
-
-EnhancedTableToolbar.propTypes = {
-	numSelected: PropTypes.number.isRequired,
-};
-
-const useStyles = makeStyles((theme) => ({
-	root: {
-    width: '100%',
-	},
-	paper: {
-    width: '100%',
-    marginBottom: theme.spacing(2),
-	},
-	table: {
-    minWidth: 750,
-	},
-	visuallyHidden: {
-    border: 0,
-    clip: 'rect(0 0 0 0)',
-    height: 1,
-    margin: -1,
-    overflow: 'hidden',
-    padding: 0,
-    position: 'absolute',
-    top: 20,
-    width: 1,
-	},
-}));
-
-const ueStyles = makeStyles((theme) => ({
+        {
+            id:'panel2',panelName:'',panelControl:'panel2bh-content',panelColor:'brown',panelText1:'ICU Beds',
+            panelText2:'Available',panelId:'panel2bh-header',panelIcon:'🛏️',panelData : [
+                {
+                    Id:'abhinav1211',Quantity:2,Liters:122,Price:121,Address:'2nd street,Gunipudi'
+                },
+                {
+                    Id:'sai1222',Quantity:3,Liters:112,Price:213,Address:'3rd street,Gunipudi'
+                },
+            ]
+        },
+        {
+            id:'panel3',panelName:'',panelControl:'panel3bh-content',panelColor:'green',panelText1:'Ambulance',
+            panelText2:'Available',panelId:'panel3bh-header',panelIcon:'🚑',panelData : [
+                {
+                    Id:'madhu1213',Quantity:1,Liters:1212,Price:1213,Address:'Ravuri vari street,Gunipudi'
+                },
+            ]
+        },
+        {
+            id:'panel4',panelName:'',panelControl:'panel4bh-content',panelColor:'gold',panelText1:'Private Transport',
+            panelText2:'Available',panelId:'panel4bh-header',panelIcon:'🚖',panelData : [
+                {
+                    Id:'madhu1213',Quantity:1,Liters:1212,Price:1213,Address:'Ravuri vari street,Gunipudi'
+                },
+                {
+                    Id:'abhinav1211',Quantity:2,Liters:122,Price:121,Address:'2nd street,Gunipudi'
+                },
+            ]
+        },
+        {
+            id:'panel5',panelName:'',panelControl:'panel5bh-content',panelColor:'green',panelText1:'Vaccine',
+            panelText2:'Available',panelId:'panel5bh-header',panelIcon:'💉',panelData : [
+                {
+                    Id:'madhu1213',Quantity:1,Liters:1212,Price:1213,Address:'Ravuri vari street,Gunipudi'
+                },
+                {
+                    Id:'abhinav1211',Quantity:2,Liters:122,Price:121,Address:'2nd street,Gunipudi'
+                },
+                {
+                    Id:'sai1222',Quantity:3,Liters:112,Price:213,Address:'3rd street,Gunipudi'
+                },
+            ]
+        },
+        {
+            id:'panel6',panelName:'',panelControl:'panel6bh-content',panelColor:'red',panelText1:'Plasma',
+            panelText2:'Available',panelId:'panel6bh-header',panelIcon:'🩸',panelData : [
+                {
+                    Id:'madhu1213',Quantity:1,Liters:1212,Price:1213,Address:'Ravuri vari street,Gunipudi'
+                },
+                {
+                    Id:'abhinav1211',Quantity:2,Liters:122,Price:121,Address:'2nd street,Gunipudi'
+                },
+                {
+                    Id:'dinesh34',Quantity:4,Liters:212,Price:113,Address:'4th street,Gunipudi'
+                },
+                {
+                    Id:'shivam11',Quantity:5,Liters:2,Price:123,Address:'5th street,Gunipudi'
+                },
+            ]
+        },
+    ]
+    const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
     },
@@ -231,277 +102,133 @@ const ueStyles = makeStyles((theme) => ({
         fontSize: theme.typography.pxToRem(23),
         flexBasis: '73%',
         flexShrink: 0,
-        color: theme.palette.text.primary    ,
-    },
-    secondaryHeading: {
-        fontSize: theme.typography.pxToRem(15),
-        flexBasis: '33.33%',
-        color: theme.palette.text.disabled,
-    },
-    secondaryHeading1: {
-        fontSize: theme.typography.pxToRem(15),
-        flexBasis: '33.33%',
         color: theme.palette.text.primary,
-    },
+    }
 }));
-
-export default function PatientAvailability(props) {
-	const location = useLocation();
-	console.log(location)
-	// USERCONTEXT
-		const user = useContext(UserContext)
-	const [show, setShow] = useState(false);
-	const [openCylinder, setCylinder] = React.useState(false);
-	const [openBeds, setBeds] = React.useState(false);
-	const [openAmbulance, setAmbulance] = React.useState(false);
-	const [openPrivate, setPrivate] = React.useState(false);
-	const [openVaccine, setVaccine] = React.useState(false);
-	const [openPlasma, setPlasma] = React.useState(false);
-
-	const classes = useStyles();
-	const classe = ueStyles();
-	const [expanded, setExpanded] = React.useState(false);
-    const handleChange = (panel) => (event, isExpanded) => {
-        setExpanded(isExpanded ? panel : false);
-    };
-    // SEND REQUEST
-        function TransitionDown(props) {
-            return <Slide {...props} direction="down" />;
-            }
-        const [open, setOpen] = React.useState(false);
-        const [transition, setTransition] = React.useState(undefined);
-        const handleClic = (Transition) => () => {
-            setTransition(() => Transition);
-            setOpen(true);
-        };
-        const handleClose = () => {
-            setOpen(false);
-        };
-	const [generate,setGenerate] = React.useState('Generate')
-	const [order, setOrder] = React.useState('asc');
-	const [orderBy, setOrderBy] = React.useState('calories');
-	const [selected, setSelected] = React.useState([]);
-	const [page, setPage] = React.useState(0);
-	const [dense, setDense] = React.useState(false);
-	const [rowsPerPage, setRowsPerPage] = React.useState(5);		
-	const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
-		};
-
-		const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-		const newSelecteds = rows.map((n) => n.name);
-	setSelected(newSelecteds);
-	return;
+        const [finalList,setFinalList] = useState([])
+        const handleInput = (key,value, index) => {
+        var key1 = {};
+        
+        switch(key) {
+            case 'Oxygen Cylinders':
+                key1.OxygenCylinders = value;
+                break;
+            case 'ICU Beds':
+                key1.aadharNumber = value;
+                break;
+            case 'Ambulance':
+                key1.gender = value;
+                break;
+            case 'Private Transport':
+                key1.age = value;
+                break;
+            case 'Vaccine':
+                key1.age1 = value;
+                break;
+            case 'Address':
+                key1.age2 = value;
+                break;
+            default:
+                break;
+        }
+            let s = "";
+                s += key;
+                s += " : "
+                s += value;
+                let e = finalList.indexOf(s)
+                if(e > -1){
+                    finalList.splice(e, 1);
+                }
+                else{
+                    finalList.push(s)
+                }
     }
-    setSelected([]);
-	};
-
-	const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected = [];
-
-    if (selectedIndex === -1) {
-	newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-	newSelected = newSelected.concat(selected.slice(1));
-	} else if (selectedIndex === selected.length - 1) {
-	newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-	newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-	);
-    }
-    setSelected(newSelected);
-	};
-	const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-	};
-	const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-	};
-	const handleChangeDense = (event) => {
-    setDense(event.target.checked);
-	};
-	const isSelected = (name) => selected.indexOf(name) !== -1;
-	const oxygen = () =>{
-    return(
+    const classes = useStyles();
+    const [show,setShow] = useState(false);
+    const [generate,setGenerate] = useState('Generate');
+    const [code,setCode] = useState("");
+    const [phoneNumber,setPhoneNumber] = useState("");
+    return (
         <div>
-			<div className={classes.root}>
-				<Paper className={classes.paper}>
-					<EnhancedTableToolbar numSelected={selected.length} />
-					<TableContainer>
-						<Table className={classes.table} aria-labelledby="tableTitle" size={dense ? 'small' : 'medium'} aria-label="enhanced table">
-							<EnhancedTableHead classes={classes} numSelected={selected.length} order={order} orderBy={orderBy} onSelectAllClick={handleSelectAllClick} onRequestSort={handleRequestSort} rowCount={rows.length}/>
-							<TableBody>
-								{stableSort(rows, getComparator(order, orderBy))
-								.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-								.map((row, index) => {
-									const isItemSelected = isSelected(row.name);
-									const labelId = `enhanced-table-checkbox-${index}`;
-										return (
-											<TableRow hover onClick={(event) => handleClick(event, row.name)} role="checkbox" aria-checked={isItemSelected} tabIndex={-1} key={row.name} selected={isItemSelected} >
-											<TableCell padding="checkbox">
-												<Checkbox checked={isItemSelected} inputProps={{ 'aria-labelledby': labelId }} />
-											</TableCell>
-											<TableCell component="th" id={labelId} scope="row" padding="none">
-												{row.name}
-											</TableCell>
-											<TableCell align="right">{row.calories}</TableCell>
-											<TableCell align="right">{row.fat}</TableCell>
-											<TableCell align="right">{row.carbs}</TableCell>
-											<TableCell align="right">{row.protein}</TableCell>
-											</TableRow>
-										);
-								})}
-							</TableBody>
-						</Table>
-					</TableContainer>
-					<TablePagination rowsPerPageOptions={[1, 10, 25]} component="div" count={rows.length} rowsPerPage={rowsPerPage} page={page} onChangePage={handleChangePage} onChangeRowsPerPage={handleChangeRowsPerPage} />
-				</Paper>
-			</div>
+            <nav className="glass">
+                <div>
+                    <Modal size="sm" show={show} >
+                        <ModalHeader closeButton onClick={()=>{setShow(false);setGenerate('Generate');setPhoneNumber("");setCode("")}}>
+                            <ModalTitle>Verification</ModalTitle>
+                        </ModalHeader>
+                        <ModalBody>
+                            {generate === "Generate" ? (
+                                    <div>
+                                        <Input placeholder="10-digit-phone-number" type="number" value={phoneNumber} onChange={event => setPhoneNumber(event.target.value)}/>{' '}
+                                        <Button variant="contained" color="primary" endIcon={<Icon>send</Icon>} onClick={()=>{phoneNumber.length === 10 ? setGenerate('Submit') : alert('10-digit-phone-number')}}>
+                                            {generate}
+                                        </Button>
+                                    </div>
+                                ) : (
+                                    <div>
+                                        <Input placeholder="6-digit-code" id="6digitcode" value={code} onChange={event => setCode(event.target.value)}/>{' '}
+                                        <Button variant="contained" color="primary" endIcon={<Icon>send</Icon>} onClick={()=>{code.length === 6 ? setShow(false) : alert("Invalid Verification Code");}}>
+                                            {generate}
+                                        </Button>
+                                    </div>
+                                )}	
+                        </ModalBody>
+                        <ModalFooter>
+                            <Button color="primary" onClick={()=>{setShow(false);setGenerate('Generate');setPhoneNumber("");setCode("")}}>Close</Button>{' '}
+                        </ModalFooter>
+                    </Modal>
+                </div>
+                <br/><br/><br/><br/><br/><br/><br/><br/>
+                    <div className="trail"> 
+                    <Button variant="contained" color="primary" endIcon={<Icon>send</Icon>} onClick={()=>{setShow(true)}}>Send Request</Button>
+                        {accordian.map((m)=>{
+                    return(
+                        <div>
+                            <Accordion expanded={expanded === m.id} onChange={handleChange(m.id)}  className="patientable accordian">
+                                <AccordionSummary expandIcon={m.panelIcon} aria-controls={m.panelControl} id={m.panelId}>
+                                    <Typography className={classes.heading}>{m.panelText1}</Typography>
+                                    <Typography>{m.panelText2} </Typography>
+                                </AccordionSummary>
+                                    <AccordionDetails >
+                                        <TableContainer >
+                                                <Table aria-labelledby="tableTitle" size='small' aria-label="enhanced table">
+                                                    <TableHead>
+                                                        <TableCell>Select</TableCell>
+                                                        <TableCell>UserName</TableCell>
+                                                        <TableCell>Quantity</TableCell>
+                                                        <TableCell>Liters</TableCell>
+                                                        <TableCell>Price</TableCell>
+                                                        <TableCell>Address</TableCell>
+                                                    </TableHead>
+                                                    <TableBody >
+                                                        {m.panelData.map((p, index)=>{
+                                                            return(
+                                                                    <TableRow hover role="checkbox">
+                                                                        <TableCell padding="checkbox">
+                                                                            <Checkbox aria-label="ji"  onChange={()=>{handleInput(p.Id,m.panelText1,index)}}/>
+                                                                        </TableCell>
+                                                                        <TableCell component="th" scope="row" padding="none">{p.Id}</TableCell>
+                                                                        <TableCell align="right">{p.Quantity}</TableCell>
+                                                                        <TableCell align="right">{p.Liters}</TableCell>
+                                                                        <TableCell align="right">{p.Price}</TableCell>
+                                                                        <TableCell align="right">{p.Address}</TableCell>
+                                                                    </TableRow>
+                                                            )
+                                                        })}
+                                                    </TableBody>
+                                                </Table>
+                                            </TableContainer>
+                                    </AccordionDetails>
+                            </Accordion>
+                        </div>
+                    )
+                })}
+                    <NavLink to="/"><Button variant="contained" color="primary">HOME</Button></NavLink><br/><br/>
+                    <Button  variant="contained" color="primary" onClick={()=>{console.log(phoneNumber,code,finalList)}}>Show From Twitter</Button>
+                    </div>
+            </nav>
         </div>
     )
-	}
-return (
-    <div>
-		{console.log(user)}
-		<div>
-			<Modal size="sm" show={show} >
-				<ModalHeader closeButton onClick={()=>{setShow(false)}}>
-                    <ModalTitle>Tweets</ModalTitle>
-                </ModalHeader>
-				<ModalBody>
-					<List>
-						<ListItem button onClick={()=>{setCylinder(!openCylinder)}}>
-							<ListItemIcon>
-								{!openCylinder ? <Twitter color="primary"/> : <ExpandLess />}
-							</ListItemIcon>
-							<ListItemText primary="O2 Cylinder" />
-							{openCylinder ? (<div>01-05-2021</div>) : (<div>01-05-2021</div>)}
-						</ListItem>
-						<Collapse in={openCylinder} timeout="auto" unmountOnExit>
-							<List component="div" disablePadding>
-							<ListItem >
-								<ListItemText primary="Details" />
-							</ListItem>
-							</List>
-						</Collapse>
-						<ListItem button onClick={()=>{setBeds(!openBeds)}}>
-							<ListItemIcon>
-								{!openBeds ? <Twitter color="primary"/> : <ExpandLess />}
-							</ListItemIcon>
-							<ListItemText primary="ICU Beds" />
-							{openBeds ? (<div>21-02-2021</div>) : (<div>21-02-2021</div>)}
-						</ListItem>
-						<Collapse in={openBeds} timeout="auto" unmountOnExit>
-							<List component="div" disablePadding>
-							<ListItem  >
-								<ListItemText primary="Details" />
-							</ListItem>
-							</List>
-						</Collapse>
-					</List>
-				</ModalBody>
-				<ModalFooter>
-					<Button color="primary" onClick={()=>{setShow(false)}}>Close</Button>{' '}
-				</ModalFooter>
-			</Modal>
-		</div>
-		<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="exampleModalLongTitle">Oxygen Cylinders</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-					</div>
-					<div class="modal-body">
-						{oxygen()}
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="modal fade" id="checkpatient" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="exampleModalLongTitle">Checking User...</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-					</div>
-					<div class="modal-body">
-						{generate === "Generate" ? (
-							<div>
-								<Input placeholder="10-digit-phone-number" type="number" id="phonenumber"/>{' '}
-								<Button variant="contained" color="primary" endIcon={<Icon>send</Icon>} onClick={()=>{setGenerate('Submit');}}>
-									{generate}
-								</Button>
-							</div>
-						) : (
-							<div>
-								<Input placeholder="6-digit-code" id="6digitcode"/>{' '}<Button variant="contained" color="primary" endIcon={<Icon>send</Icon>} onClick={()=>{setGenerate('Submit');}}>
-									{generate}
-								</Button>
-							</div>
-						)}						
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		<nav className="glass">
-			<br/><br/><br/><br/><br/><br/><br/><br/>
-			<Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} className="accordian" data-toggle="modal" data-target="#exampleModalCenter">
-				<AccordionSummary expandIcon={<BatteryStdSharpIcon style={{ color: "blue" ,fontSize: 30 }} />} aria-controls="panel1bh-content"id="panel1bh-header">
-					<Typography className={classe.heading}>Oxygen Cylinders</Typography>
-					<Typography className={classe.heading1}>Available </Typography>
-				</AccordionSummary>
-			</Accordion>
-			<Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')} className="accordian">
-                    <AccordionSummary expandIcon={<HotelSharpIcon style={{ color: "brown" ,fontSize: 30 }} />} aria-controls="panel2bh-content"id="panel2bh-header" >
-                        <Typography className={classe.heading}>ICU Beds</Typography>
-                        <Typography className={classe.heading1}>Not Available</Typography>
-                    </AccordionSummary>
-                </Accordion>
-				<Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')} className="accordian">
-                    <AccordionSummary expandIcon={<LocalHospitalIcon style={{ color: "green" ,fontSize: 30 }} />} aria-controls="panel3bh-content" id="panel3bh-header" >
-                        <Typography className={classe.heading}>Ambulance</Typography>
-                        <Typography className={classe.heading1}>Available</Typography>
-                    </AccordionSummary>
-                </Accordion>
-                <Accordion expanded={expanded === 'panel4'} onChange={handleChange('panel4')} className="accordian">
-                    <AccordionSummary expandIcon={<LocalTaxiSharpIcon style={{ color: "gold" ,fontSize: 30}} />} aria-controls="panel4bh-content" id="panel4bh-header" >
-                        <Typography className={classe.heading}>Private Transport</Typography>
-                        <Typography className={classe.heading1}>Not Available</Typography>
-                    </AccordionSummary>
-                </Accordion>
-                <Accordion expanded={expanded === 'panel5'} onChange={handleChange('panel5')} className="accordian">
-                    <AccordionSummary expandIcon={<VerifiedUserSharpIcon   style={{ color: "green" ,fontSize: 30}} />} aria-controls="panel5bh-content" id="panel5bh-header" >
-                        <Typography className={classe.heading}>Vaccine</Typography>
-                        <Typography className={classe.heading1}>Available</Typography>
-                    </AccordionSummary>
-                </Accordion>
-                <Accordion expanded={expanded === 'panel6'} onChange={handleChange('panel6')} className="accordian">
-                    <AccordionSummary expandIcon={<InvertColorsSharpIcon  style={{ color: "red" ,fontSize: 30}} />} aria-controls="panel4bh-content" id="panel4bh-header" >
-                        <Typography className={classe.heading}>Plasma</Typography>
-                        <Typography className={classe.heading1}>Not Available</Typography>
-                    </AccordionSummary>
-                </Accordion>
-				<NavLink to="/"><Button variant="contained" color="primary">HOME</Button></NavLink><br/><br/>
-				<Button variant="contained" color="primary" onClick={()=>{setShow(true)}}>Show From Twitter</Button>
-		</nav>
-    </div>
-	);
 }
+
+export default PatientAvailability

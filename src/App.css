@@ -51,6 +51,7 @@ body{
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   border-radius: 10px;
+  overflow: auto;
 }
 .accordian{
   margin: 15px;
