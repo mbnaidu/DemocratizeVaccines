@@ -135,7 +135,7 @@ function PatientRequirements() {
                             }}
                             exact
                     >
-                    <Button variant="contained" color="primary" onClick={()=>{console.log(location.state.State,location.state.District,location.state.Mandal,finalList)}}>SEARCH</Button></NavLink>
+                    <Button variant="contained" color="primary" >SEARCH</Button></NavLink>
                 </FormControl>
             </div>
         </nav>

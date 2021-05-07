@@ -1,6 +1,6 @@
 import { Accordion, AccordionDetails, AccordionSummary, Button, Checkbox, Icon, Input, makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography } from '@material-ui/core'
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import '../../Styles/Patient.css';
 import { ModalBody, ModalFooter, ModalTitle, Modal} from 'react-bootstrap';
 import ModalHeader from 'react-bootstrap/esm/ModalHeader';
@@ -8,6 +8,7 @@ import ModalHeader from 'react-bootstrap/esm/ModalHeader';
 
 function PatientAvailability() {
     const [expanded, setExpanded] = React.useState(false);
+	const location = useLocation();
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
@@ -224,7 +225,7 @@ function PatientAvailability() {
                     )
                 })}
                     <NavLink to="/"><Button variant="contained" color="primary">HOME</Button></NavLink><br/><br/>
-                    <Button  variant="contained" color="primary" onClick={()=>{console.log(phoneNumber,code,finalList)}}>Show From Twitter</Button>
+                    <Button  variant="contained" color="primary" onClick={()=>{console.log(phoneNumber,code,finalList,location.state.State,location.state.District,location.state.Mandal,finalList)}}>Show From Twitter</Button>
                     </div>
             </nav>
         </div>
