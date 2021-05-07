@@ -10,11 +10,13 @@ class DonorLocation extends React.Component {
 			countries : [],
 			states : [],
 			cities : [],
-			selectedCountry : '--Choose Country--',
-			selectedState : '--Choose State--'
+			selectedCountry : '',
+			selectedState : '',
+            selectedCity:''
 		};
 		this.changeCountry = this.changeCountry.bind(this);
 		this.changeState = this.changeState.bind(this);
+        this.changeCity = this.changeCity.bind(this);
 	}
   
 	componentDidMount() {
@@ -296,7 +298,9 @@ class DonorLocation extends React.Component {
 		const stats = this.state.countries.find(cntry => cntry.State === this.state.selectedCountry).states;
 		this.setState({cities : stats.find(stat => stat.State === event.target.value).cities});
 	}
-	
+	changeCity(event){
+        this.setState({selectedCity: event.target.value});
+    }
 	render() {
 		return (
 			<nav className="glass">
@@ -321,7 +325,7 @@ class DonorLocation extends React.Component {
 				
 				<div>
                     <label>Choose Mandal : </label>
-					<Select placeholder="City">
+					<Select placeholder="City" value={this.state.selectedCity} onChange={this.changeCity}>
 						{this.state.cities.map((e, key) => {
 							return <MenuItem value={e} key={key}>{e}</MenuItem>;
 						})}
@@ -329,7 +333,18 @@ class DonorLocation extends React.Component {
 				</div>
                 <br/><br/><br/><br/><br/><br/><br/>
                 <NavLink to="/"><Button variant="contained" color="primary">HOME</Button></NavLink>{' '}
-                <NavLink to="/donor-requirements"><Button variant="contained" color="primary">NEXT</Button></NavLink>
+                {/* <NavLink to="/donor-requirements"><Button variant="contained" color="primary">NEXT</Button></NavLink> */}
+                <NavLink
+                        to={{
+                                pathname:'/donor-requirements',
+                                state: {
+                                    State:this.state.selectedCountry,
+                                    District:this.state.selectedState,
+                                    Mandal:this.state.selectedCity
+                                } 
+                            }}
+                            exact
+                ><Button variant="contained" color="primary">NEXT</Button></NavLink>
 			</nav>
 		)
 	}

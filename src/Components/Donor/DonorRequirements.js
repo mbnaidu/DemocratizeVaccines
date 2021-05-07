@@ -1,7 +1,7 @@
 import { Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormHelperText, FormLabel, Grid, Icon, Input, TextField } from '@material-ui/core'
 import { AccountCircle } from '@material-ui/icons'
 import React, { useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 
 
@@ -11,6 +11,8 @@ import VpnKeyIcon from '@material-ui/icons/VpnKey';
 
 
 function DonorRequirements() {
+    const location = useLocation();
+    console.log(location.state);
     const [login,setLogin] = useState(true);
     const [signup,setSignup] = useState(false);
     const [generate,setGenerate] = useState("Generate")
