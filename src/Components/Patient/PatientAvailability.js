@@ -1,9 +1,10 @@
-import { Accordion, AccordionDetails, AccordionSummary, Button, Checkbox, Icon, Input, makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography } from '@material-ui/core'
+import { Accordion, AccordionDetails, AccordionSummary, Button, Checkbox, Collapse, Icon, Input, List, ListItem, ListItemIcon, ListItemText, makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography } from '@material-ui/core'
 import React, { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import '../../Styles/Patient.css';
 import { ModalBody, ModalFooter, ModalTitle, Modal} from 'react-bootstrap';
 import ModalHeader from 'react-bootstrap/esm/ModalHeader';
+import { ExpandLess, ExpandMore, Twitter } from '@material-ui/icons';
 
 
 function PatientAvailability() {
@@ -149,6 +150,9 @@ function PatientAvailability() {
     const [generate,setGenerate] = useState('Generate');
     const [code,setCode] = useState("");
     const [phoneNumber,setPhoneNumber] = useState("");
+    const [twitter,setTwitter] = useState(false);
+    const [openCylinder,setCylinder] = useState(false);
+    const [openBeds,setBeds] = useState(false);
     return (
         <div>
             <nav className="glass">
@@ -176,6 +180,48 @@ function PatientAvailability() {
                         </ModalBody>
                         <ModalFooter>
                             <Button color="primary" onClick={()=>{setShow(false);setGenerate('Generate');setPhoneNumber("");setCode("")}}>Close</Button>{' '}
+                        </ModalFooter>
+                    </Modal>
+                </div>
+                <div>
+                    <Modal size="sm" show={twitter} >
+                        <ModalHeader closeButton onClick={()=>{setTwitter(false)}}>
+                            <ModalTitle>Tweets</ModalTitle>
+                        </ModalHeader>
+                        <ModalBody>
+                            <List>
+                                <ListItem button onClick={()=>{setCylinder(!openCylinder)}}>
+                                    <ListItemIcon>
+                                        {!openCylinder ? <ExpandMore color="action" /> : <Twitter color="primary"/>}
+                                    </ListItemIcon>
+                                    <ListItemText primary="O2 Cylinder" />
+                                    {openCylinder ? (<div>01-05-2021</div>) : (<div>01-05-2021</div>)}
+                                </ListItem>
+                                <Collapse in={openCylinder} timeout="auto" unmountOnExit>
+                                    <List component="div" disablePadding>
+                                    <ListItem >
+                                        <ListItemText primary="Details" />
+                                    </ListItem>
+                                    </List>
+                                </Collapse>
+                                <ListItem button onClick={()=>{setBeds(!openBeds)}}>
+                                    <ListItemIcon>
+                                        {!openBeds ? <ExpandMore color="action"/> : <Twitter color="primary"/>}
+                                    </ListItemIcon>
+                                    <ListItemText primary="ICU Beds" />
+                                    {openBeds ? (<div>21-02-2021</div>) : (<div>21-02-2021</div>)}
+                                </ListItem>
+                                <Collapse in={openBeds} timeout="auto" unmountOnExit>
+                                    <List component="div" disablePadding>
+                                    <ListItem  >
+                                        <ListItemText primary="Details" />
+                                    </ListItem>
+                                    </List>
+                                </Collapse>
+                            </List>
+                        </ModalBody>
+                        <ModalFooter>
+                            <Button color="primary" onClick={()=>{setTwitter(false)}}>Close</Button>{' '}
                         </ModalFooter>
                     </Modal>
                 </div>
@@ -225,7 +271,7 @@ function PatientAvailability() {
                     )
                 })}
                     <NavLink to="/"><Button variant="contained" color="primary">HOME</Button></NavLink><br/><br/>
-                    <Button  variant="contained" color="primary" onClick={()=>{console.log(phoneNumber,code,finalList,location.state.State,location.state.District,location.state.Mandal,finalList)}}>Show From Twitter</Button>
+                    <Button  variant="contained" color="primary" onClick={()=>{console.log(phoneNumber,code,finalList,location.state.State,location.state.District,location.state.Mandal,finalList);setTwitter(true)}}>Show From Twitter</Button>
                     </div>
             </nav>
         </div>
