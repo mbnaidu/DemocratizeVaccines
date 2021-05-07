@@ -156,7 +156,7 @@ export default function DonorAvailability() {
                                 </Grid>
                             </div>
                             <div class="modal-footer">
-                                <Button type="button" class="btn btn-secondary">Close</Button>
+                                <Button type="button" class="btn btn-secondary" data-dismiss="modal" onClick={() => { console.log(JSON.stringify(result));}}>Close</Button>
                             </div>
                         </div>
                     </div>
@@ -174,14 +174,13 @@ export default function DonorAvailability() {
                                 {oxygen()}
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <Button type="button" class="btn btn-secondary" data-dismiss="modal" >Close</Button>
                             </div>
                         </div>
                     </div>
                 </div>
                 
             <nav className="glass">
-                <Button variant="contained" onCLick={()=>{console.log("HI")}}>hi</Button>
                 <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
                 <Button variant="contained" color={add ? "primary" : "default"} onClick={()=>{setAdd(false);setEdit(true)}} >ADD</Button>{' '}
                 <Button variant="contained" color={edit ? "primary" : "default"}  onClick={()=>{setEdit(false);setAdd(true)}} >EDIT</Button>
