@@ -1,234 +1,249 @@
-import { Accordion, AccordionDetails, AccordionSummary, Button, Checkbox, Icon, Input, makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography } from '@material-ui/core'
-import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import '../Styles/Patient.css';
-import { ModalBody, ModalFooter, ModalTitle, Modal} from 'react-bootstrap';
-import ModalHeader from 'react-bootstrap/esm/ModalHeader';
+import { Accordion, AccordionDetails, AccordionSummary, Button, Grid, Icon, makeStyles, TextareaAutosize, TextField, Typography } from '@material-ui/core'
+import React from 'react'
+import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
+import LocalTaxiSharpIcon from '@material-ui/icons/LocalTaxiSharp';
+import BatteryStdSharpIcon from '@material-ui/icons/BatteryStdSharp';
+import HotelSharpIcon from '@material-ui/icons/HotelSharp';
+import VerifiedUserSharpIcon from '@material-ui/icons/VerifiedUserSharp';
+import InvertColorsSharpIcon from '@material-ui/icons/InvertColorsSharp';
+import { NavLink, useLocation } from 'react-router-dom';
+import '../main.css'
+import '../styles.css'
+import { AccountCircle } from '@material-ui/icons';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
+import LocalOfferIcon from '@material-ui/icons/LocalOffer';
+import AddAPhotoIcon from '@material-ui/icons/AddAPhoto';
+import CallMadeIcon from '@material-ui/icons/CallMade';
 
-
-function Trail() {
-    const [expanded, setExpanded] = React.useState(false);
-    const handleChange = (panel) => (event, isExpanded) => {
-        setExpanded(isExpanded ? panel : false);
-    };
-    const accordian = [
-        {
-            id:'panel1',panelName:'',panelControl:'panel1bh-content',panelColor:'blue',panelText1:'Oxygen Cylinders',
-            panelText2:'Available',panelId:'panel1bh-header',panelIcon:'🔋',panelData : [
-                {
-                    Id:'madhu1213',Quantity:1,Liters:12,Price:13,Address:'1st street,Gunipudi'
-                },
-                {
-                    Id:'abhinav1211',Quantity:2,Liters:122,Price:121,Address:'2nd street,Gunipudi'
-                },
-                {
-                    Id:'sai1222',Quantity:3,Liters:112,Price:213,Address:'3rd street,Gunipudi'
-                },
-                {
-                    Id:'dinesh34',Quantity:4,Liters:212,Price:113,Address:'4th street,Gunipudi'
-                },
-                {
-                    Id:'shivam11',Quantity:5,Liters:2,Price:123,Address:'5th street,Gunipudi'
-                },
-            ]
-        },
-        {
-            id:'panel2',panelName:'',panelControl:'panel2bh-content',panelColor:'brown',panelText1:'ICU Beds',
-            panelText2:'Available',panelId:'panel2bh-header',panelIcon:'🛏️',panelData : [
-                {
-                    Id:'abhinav1211',Quantity:2,Liters:122,Price:121,Address:'2nd street,Gunipudi'
-                },
-                {
-                    Id:'sai1222',Quantity:3,Liters:112,Price:213,Address:'3rd street,Gunipudi'
-                },
-            ]
-        },
-        {
-            id:'panel3',panelName:'',panelControl:'panel3bh-content',panelColor:'green',panelText1:'Ambulance',
-            panelText2:'Available',panelId:'panel3bh-header',panelIcon:'🚑',panelData : [
-                {
-                    Id:'madhu1213',Quantity:1,Liters:1212,Price:1213,Address:'Ravuri vari street,Gunipudi'
-                },
-            ]
-        },
-        {
-            id:'panel4',panelName:'',panelControl:'panel4bh-content',panelColor:'gold',panelText1:'Private Transport',
-            panelText2:'Available',panelId:'panel4bh-header',panelIcon:'🚖',panelData : [
-                {
-                    Id:'madhu1213',Quantity:1,Liters:1212,Price:1213,Address:'Ravuri vari street,Gunipudi'
-                },
-                {
-                    Id:'abhinav1211',Quantity:2,Liters:122,Price:121,Address:'2nd street,Gunipudi'
-                },
-            ]
-        },
-        {
-            id:'panel5',panelName:'',panelControl:'panel5bh-content',panelColor:'green',panelText1:'Vaccine',
-            panelText2:'Available',panelId:'panel5bh-header',panelIcon:'💉',panelData : [
-                {
-                    Id:'madhu1213',Quantity:1,Liters:1212,Price:1213,Address:'Ravuri vari street,Gunipudi'
-                },
-                {
-                    Id:'abhinav1211',Quantity:2,Liters:122,Price:121,Address:'2nd street,Gunipudi'
-                },
-                {
-                    Id:'sai1222',Quantity:3,Liters:112,Price:213,Address:'3rd street,Gunipudi'
-                },
-            ]
-        },
-        {
-            id:'panel6',panelName:'',panelControl:'panel6bh-content',panelColor:'red',panelText1:'Plasma',
-            panelText2:'Available',panelId:'panel6bh-header',panelIcon:'🩸',panelData : [
-                {
-                    Id:'madhu1213',Quantity:1,Liters:1212,Price:1213,Address:'Ravuri vari street,Gunipudi'
-                },
-                {
-                    Id:'abhinav1211',Quantity:2,Liters:122,Price:121,Address:'2nd street,Gunipudi'
-                },
-                {
-                    Id:'dinesh34',Quantity:4,Liters:212,Price:113,Address:'4th street,Gunipudi'
-                },
-                {
-                    Id:'shivam11',Quantity:5,Liters:2,Price:123,Address:'5th street,Gunipudi'
-                },
-            ]
-        },
-    ]
-    const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
     },
     heading: {
         fontSize: theme.typography.pxToRem(23),
-        flexBasis: '73%',
+        flexBasis: '63.33%',
         flexShrink: 0,
-        color: theme.palette.text.primary,
-    }
+        color: theme.palette.text.primary    ,
+    },
+    secondaryHeading: {
+        fontSize: theme.typography.pxToRem(15),
+        flexBasis: '33.33%',
+        color: theme.palette.text.disabled,
+    },
 }));
-        const [finalList,setFinalList] = useState([])
-        const handleInput = (key,value, index) => {
-        var key1 = {};
-        
-        switch(key) {
-            case 'Oxygen Cylinders':
-                key1.OxygenCylinders = value;
-                break;
-            case 'ICU Beds':
-                key1.aadharNumber = value;
-                break;
-            case 'Ambulance':
-                key1.gender = value;
-                break;
-            case 'Private Transport':
-                key1.age = value;
-                break;
-            case 'Vaccine':
-                key1.age1 = value;
-                break;
-            case 'Address':
-                key1.age2 = value;
-                break;
-            default:
-                break;
-        }
-            let s = "";
-                s += key;
-                s += " : "
-                s += value;
-                let e = finalList.indexOf(s)
-                if(e > -1){
-                    finalList.splice(e, 1);
-                }
-                else{
-                    finalList.push(s)
-                }
-    }
+export default function Trail() {
+    const location = useLocation();
+    console.log(location.state.list)
     const classes = useStyles();
-    const [show,setShow] = useState(false);
-    const [generate,setGenerate] = useState('Generate');
-    const [code,setCode] = useState("");
-    const [phoneNumber,setPhoneNumber] = useState("");
+    const [add,setAdd] = React.useState(true);
+    const [edit,setEdit] = React.useState(true);
+    const [expanded, setExpanded] = React.useState(false);
+    const handleChange = (panel) => (event, isExpanded) => {
+        setExpanded(isExpanded ? panel : false);
+    };
+    const oxygen = () => {
+        return(
+            <div>
+                <div class="contentarea">
+                    <div class="camera">
+                        <video id="video">Video stream not available.</video>
+                    </div>
+                        <Button id="startbutton" endIcon={<AddAPhotoIcon></AddAPhotoIcon>}>Capture</Button>
+                    <br/>
+                    <canvas id="canvas"></canvas>
+                    <div class="output">
+                        <img id="photo" alt="The screen capture will appear in this box." />
+                    </div>
+                    <Button variant="contained" color="primary" endIcon={<Icon>send</Icon>}>Submit</Button>
+                </div>
+            <script src="../js/FileSaver.min.js"></script>
+            <script src="../js/script.js"></script>
+            </div>
+        )
+    }
     return (
         <div>
-            <nav className="glass">
-                <div>
-                    <Modal size="sm" show={show} >
-                        <ModalHeader closeButton onClick={()=>{setShow(false);setGenerate('Generate');setPhoneNumber("");setCode("")}}>
-                            <ModalTitle>Verification</ModalTitle>
-                        </ModalHeader>
-                        <ModalBody>
-                            {generate === "Generate" ? (
-                                    <div>
-                                        <Input placeholder="10-digit-phone-number" type="number" value={phoneNumber} onChange={event => setPhoneNumber(event.target.value)}/>{' '}
-                                        <Button variant="contained" color="primary" endIcon={<Icon>send</Icon>} onClick={()=>{phoneNumber.length === 10 ? setGenerate('Submit') : alert('10-digit-phone-number')}}>
-                                            {generate}
-                                        </Button>
+            {/* MODELS */}
+                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Oxygen Cylinders</h5>
+                                <Button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </Button>
+                            </div>
+                            <div class="modal-body">
+                                <div className="row">
+                                    <div className="column">
+                                        <Grid container spacing={1} alignItems="flex-end">
+                                            <Grid item>
+                                                <AccountCircle />
+                                            </Grid>
+                                            <Grid item>
+                                                <TextField id="input-with-icon-grid" label="madhu1213" disabled/>
+                                            </Grid>
+                                        </Grid>
                                     </div>
-                                ) : (
-                                    <div>
-                                        <Input placeholder="6-digit-code" id="6digitcode" value={code} onChange={event => setCode(event.target.value)}/>{' '}
-                                        <Button variant="contained" color="primary" endIcon={<Icon>send</Icon>} onClick={()=>{code.length === 6 ? setShow(false) : alert("Invalid Verification Code");}}>
-                                            {generate}
-                                        </Button>
+                                    <div className="column">
+                                        <Button onClick={()=>{oxygen()}}  data-toggle="modal" data-target="#picturecapture" endIcon={<CallMadeIcon></CallMadeIcon>}>Send Pictures</Button>
                                     </div>
-                                )}	
-                        </ModalBody>
-                        <ModalFooter>
-                            <Button color="primary" onClick={()=>{setShow(false);setGenerate('Generate');setPhoneNumber("");setCode("")}}>Close</Button>{' '}
-                        </ModalFooter>
-                    </Modal>
-                </div>
-                <br/><br/><br/><br/><br/><br/><br/><br/>
-                    <div className="trail"> 
-                    <Button variant="contained" color="primary" endIcon={<Icon>send</Icon>} onClick={()=>{setShow(true)}}>Send Request</Button>
-                        {accordian.map((m)=>{
-                    return(
-                        <div>
-                            <Accordion expanded={expanded === m.id} onChange={handleChange(m.id)}  className="patientable accordian">
-                                <AccordionSummary expandIcon={m.panelIcon} aria-controls={m.panelControl} id={m.panelId}>
-                                    <Typography className={classes.heading}>{m.panelText1}</Typography>
-                                    <Typography>{m.panelText2} </Typography>
-                                </AccordionSummary>
-                                    <AccordionDetails >
-                                        <TableContainer >
-                                                <Table aria-labelledby="tableTitle" size='small' aria-label="enhanced table">
-                                                    <TableHead>
-                                                        <TableCell>Select</TableCell>
-                                                        <TableCell>UserName</TableCell>
-                                                        <TableCell>Quantity</TableCell>
-                                                        <TableCell>Liters</TableCell>
-                                                        <TableCell>Price</TableCell>
-                                                        <TableCell>Address</TableCell>
-                                                    </TableHead>
-                                                    <TableBody >
-                                                        {m.panelData.map((p, index)=>{
-                                                            return(
-                                                                    <TableRow hover role="checkbox">
-                                                                        <TableCell padding="checkbox">
-                                                                            <Checkbox aria-label="ji"  onChange={()=>{handleInput(p.Id,m.panelText1,index)}}/>
-                                                                        </TableCell>
-                                                                        <TableCell component="th" scope="row" padding="none">{p.Id}</TableCell>
-                                                                        <TableCell align="right">{p.Quantity}</TableCell>
-                                                                        <TableCell align="right">{p.Liters}</TableCell>
-                                                                        <TableCell align="right">{p.Price}</TableCell>
-                                                                        <TableCell align="right">{p.Address}</TableCell>
-                                                                    </TableRow>
-                                                            )
-                                                        })}
-                                                    </TableBody>
-                                                </Table>
-                                            </TableContainer>
-                                    </AccordionDetails>
-                            </Accordion>
+                                </div>
+                                <Grid container spacing={1} alignItems="flex-end">
+                                    <Grid item>
+                                        <BatteryStdSharpIcon />
+                                    </Grid>
+                                    <Grid item>
+                                        <TextField id="input-with-icon-grid" label="Quantity" type="number"/>
+                                    </Grid>
+                                </Grid>
+                                <Grid container spacing={1} alignItems="flex-end">
+                                    <Grid item>
+                                        <LocalOfferIcon />
+                                    </Grid>
+                                    <Grid item>
+                                        <TextField id="input-with-icon-grid" label="Price for each" type="number"/>
+                                    </Grid>
+                                </Grid>
+                                <Grid container spacing={1} alignItems="flex-end">
+                                    <Grid item>
+                                        <LocationOnIcon />
+                                    </Grid>
+                                    <Grid item>
+                                        <TextField id="input-with-icon-grid" label="Address" type="text"/>
+                                    </Grid>
+                                </Grid>
+                            </div>
+                            <div class="modal-footer">
+                                <Button type="button" class="btn btn-secondary" data-dismiss="modal">Close</Button>
+                            </div>
                         </div>
-                    )
-                })}
-                    <NavLink to="/"><Button variant="contained" color="primary">HOME</Button></NavLink><br/><br/>
-                    <Button  variant="contained" color="primary" onClick={()=>{console.log(phoneNumber,code,finalList)}}>Show From Twitter</Button>
                     </div>
+                </div>
+                <div class="modal fade" id="picturecapture" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Oxygen Cylinders</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            </div>
+                            <div class="modal-body">
+                                {oxygen()}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <nav className="glass">
+                <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                <Button variant="contained" color={add ? "primary" : "default"} onClick={()=>{setAdd(false);setEdit(true)}} >ADD</Button>{' '}
+                <Button variant="contained" color={edit ? "primary" : "default"}  onClick={()=>{setEdit(false);setAdd(true)}} >EDIT</Button>
+                {add ? (<div></div>) : (<div>
+                    <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} className="accordian" data-toggle="modal" data-target="#exampleModalCenter">
+                    <AccordionSummary expandIcon={<BatteryStdSharpIcon style={{ color: "blue" ,fontSize: 30 }} />} aria-controls="panel1bh-content"id="panel1bh-header">
+                        <Typography className={classes.heading}>Oxygen Cylinders</Typography>
+                    </AccordionSummary>
+                </Accordion>
+                <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')} className="accordian">
+                    <AccordionSummary expandIcon={<HotelSharpIcon style={{ color: "brown" ,fontSize: 30 }} />} aria-controls="panel2bh-content"id="panel2bh-header" >
+                        <Typography className={classes.heading}>ICU BEDS</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <Typography className={classes.secondaryHeading}>ADDRESS : </Typography>
+                    </AccordionDetails>
+                </Accordion>
+                <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')} className="accordian">
+                    <AccordionSummary expandIcon={<LocalHospitalIcon style={{ color: "green" ,fontSize: 30 }} />} aria-controls="panel3bh-content" id="panel3bh-header" >
+                        <Typography className={classes.heading}>AMBULANCE</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <Typography className={classes.secondaryHeading}>ADDRESS : </Typography>
+                    </AccordionDetails>
+                </Accordion>
+                <Accordion expanded={expanded === 'panel4'} onChange={handleChange('panel4')} className="accordian">
+                    <AccordionSummary expandIcon={<LocalTaxiSharpIcon style={{ color: "gold" ,fontSize: 30}} />} aria-controls="panel4bh-content" id="panel4bh-header" >
+                        <Typography className={classes.heading}>PRIVATE TRANSPORT</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <Typography className={classes.secondaryHeading}>ADDRESS : </Typography>
+                    </AccordionDetails>
+                </Accordion>
+                <Accordion expanded={expanded === 'panel5'} onChange={handleChange('panel5')} className="accordian">
+                    <AccordionSummary expandIcon={<VerifiedUserSharpIcon   style={{ color: "green" ,fontSize: 30}} />} aria-controls="panel5bh-content" id="panel5bh-header" >
+                        <Typography className={classes.heading}>VACCINE</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <Typography className={classes.secondaryHeading}>ADDRESS : </Typography>
+                    </AccordionDetails>
+                </Accordion>
+                <Accordion expanded={expanded === 'panel6'} onChange={handleChange('panel6')} className="accordian">
+                    <AccordionSummary expandIcon={<InvertColorsSharpIcon  style={{ color: "red" ,fontSize: 30}} />} aria-controls="panel4bh-content" id="panel4bh-header" >
+                        <Typography className={classes.heading}>PLASMA</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <Typography className={classes.secondaryHeading}>ADDRESS : </Typography>
+                    </AccordionDetails>
+                </Accordion>
+                </div>)}
+                {edit ? (<div></div>) : (<div>
+                    <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} className="accordian" data-toggle="modal" data-target="#exampleModalCenter">
+                    <AccordionSummary expandIcon={<BatteryStdSharpIcon style={{ color: "blue" ,fontSize: 30 }} />} aria-controls="panel1bh-content"id="panel1bh-header">
+                        <Typography className={classes.heading}>Oxygen Cylinders</Typography>
+                        <Typography className={classes.secondaryHeading}>Qt : 1</Typography>
+                    </AccordionSummary>
+                </Accordion>
+                <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')} className="accordian">
+                    <AccordionSummary expandIcon={<HotelSharpIcon style={{ color: "brown" ,fontSize: 30 }} />} aria-controls="panel2bh-content"id="panel2bh-header" >
+                        <Typography className={classes.heading}>ICU BEDS</Typography>
+                        <Typography className={classes.secondaryHeading}>Qt : 1</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <Typography className={classes.secondaryHeading}>ADDRESS : </Typography>
+                    </AccordionDetails>
+                </Accordion>
+                <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')} className="accordian">
+                    <AccordionSummary expandIcon={<LocalHospitalIcon style={{ color: "green" ,fontSize: 30 }} />} aria-controls="panel3bh-content" id="panel3bh-header" >
+                        <Typography className={classes.heading}>AMBULANCE</Typography>
+                        <Typography className={classes.secondaryHeading}>Qt : 1</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <Typography className={classes.secondaryHeading}>ADDRESS : </Typography>
+                    </AccordionDetails>
+                </Accordion>
+                <Accordion expanded={expanded === 'panel4'} onChange={handleChange('panel4')} className="accordian">
+                    <AccordionSummary expandIcon={<LocalTaxiSharpIcon style={{ color: "gold" ,fontSize: 30}} />} aria-controls="panel4bh-content" id="panel4bh-header" >
+                        <Typography className={classes.heading}>PRIVATE TRANSPORT</Typography>
+                        <Typography className={classes.secondaryHeading}>Qt : 1</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <Typography className={classes.secondaryHeading}>ADDRESS : </Typography>
+                    </AccordionDetails>
+                </Accordion>
+                <Accordion expanded={expanded === 'panel5'} onChange={handleChange('panel5')} className="accordian">
+                    <AccordionSummary expandIcon={<VerifiedUserSharpIcon   style={{ color: "green" ,fontSize: 30}} />} aria-controls="panel5bh-content" id="panel5bh-header" >
+                        <Typography className={classes.heading}>VACCINE</Typography>
+                        <Typography className={classes.secondaryHeading}>Qt : 1</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <Typography className={classes.secondaryHeading}>ADDRESS : </Typography>
+                    </AccordionDetails>
+                </Accordion>
+                <Accordion expanded={expanded === 'panel6'} onChange={handleChange('panel6')} className="accordian">
+                    <AccordionSummary expandIcon={<InvertColorsSharpIcon  style={{ color: "red" ,fontSize: 30}} />} aria-controls="panel4bh-content" id="panel4bh-header" >
+                        <Typography className={classes.heading}>PLASMA</Typography>
+                        <Typography className={classes.secondaryHeading}>Qt : 1</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <Typography className={classes.secondaryHeading}>ADDRESS : </Typography>
+                    </AccordionDetails>
+                </Accordion>
+                </div>)}
+                <NavLink to="/"><Button variant="contained" color="primary">HOME</Button></NavLink>{" "}
             </nav>
         </div>
     )
 }
-
-export default Trail
