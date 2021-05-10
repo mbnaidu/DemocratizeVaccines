@@ -18,8 +18,8 @@ function PatientRequirements() {
     };
     // 
         const names = [
-            {id : '1' , value : 'Oxygen Cylinder' },
-            {id : '2' , value : 'ICU Bed' },
+            {id : '1' , value : 'Oxygen Cylinders' },
+            {id : '2' , value : 'ICU Beds' },
             {id : '3' , value : 'Ambulance' },
             {id : '4' , value : 'Private Transport' },
             {id : '5' , value : 'Vaccine' },
@@ -131,6 +131,7 @@ function PatientRequirements() {
                                     State:location.state.State,
                                     District:location.state.District,
                                     Mandal:location.state.Mandal,
+                                    finallist:finalList,
                                 } 
                             }}
                             exact

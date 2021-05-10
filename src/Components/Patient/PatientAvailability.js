@@ -10,6 +10,7 @@ import { ExpandLess, ExpandMore, Twitter } from '@material-ui/icons';
 function PatientAvailability() {
     const [expanded, setExpanded] = React.useState(false);
 	const location = useLocation();
+    const [list,setList] = useState(location.state.finallist)
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
@@ -155,6 +156,7 @@ function PatientAvailability() {
     const [openBeds,setBeds] = useState(false);
     return (
         <div>
+            {console.log(list)}
             <nav className="glass">
                 <div>
                     <Modal size="sm" show={show} >
@@ -228,10 +230,14 @@ function PatientAvailability() {
                 <br/><br/><br/><br/><br/><br/><br/><br/>
                     <div className="trail"> 
                     <Button variant="contained" color="primary" endIcon={<Icon>send</Icon>} onClick={()=>{setShow(true)}}>Send Request</Button>
-                        {accordian.map((m)=>{
-                    return(
-                        <div>
-                            <Accordion expanded={expanded === m.id} onChange={handleChange(m.id)}  className="patientable accordian">
+                        {accordian.map((m,key)=>{
+                                return(
+                                    <div>
+                                        {list.map((l)=>{
+                                            return(
+                                                <div>
+                                                    {l === m.panelText1 ? (<div>
+                                                        <Accordion expanded={expanded === m.id} onChange={handleChange(m.id)}  className="patientable accordian">
                                 <AccordionSummary expandIcon={m.panelIcon} aria-controls={m.panelControl} id={m.panelId}>
                                     <Typography className={classes.heading}>{m.panelText1}</Typography>
                                     <Typography>{m.panelText2} </Typography>
@@ -267,9 +273,13 @@ function PatientAvailability() {
                                             </TableContainer>
                                     </AccordionDetails>
                             </Accordion>
-                        </div>
+                                                    </div>) : ''}
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
                     )
-                })}
+                        })}
                     <NavLink to="/"><Button variant="contained" color="primary">HOME</Button></NavLink><br/><br/>
                     <Button  variant="contained" color="primary" onClick={()=>{console.log(phoneNumber,code,finalList,location.state.State,location.state.District,location.state.Mandal,finalList);setTwitter(true)}}>Show From Twitter</Button>
                     </div>

@@ -12,7 +12,6 @@ import PatientAvailability from './Components/Patient/PatientAvailability'
 import DonorLocation from './Components/Donor/DonorLocation';
 import DonorRequirements from './Components/Donor/DonorRequirements';
 import DonorAvailability from './Components/Donor/DonorAvailability'
-import Trail from './Components/Trail';
 
 export class App extends Component {
   render() {
@@ -44,7 +43,7 @@ export class App extends Component {
           </div>
         </Router>
       </div>
-    )
+    );
   }
 }
 
