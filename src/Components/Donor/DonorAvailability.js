@@ -9,6 +9,7 @@ import LocationOnIcon from '@material-ui/icons/LocationOn';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import AddAPhotoIcon from '@material-ui/icons/AddAPhoto';
 import CallMadeIcon from '@material-ui/icons/CallMade';
+import axios from 'axios';
 
 
 
@@ -90,6 +91,7 @@ export default function DonorAvailability() {
     var state = location.state.State;
     var district = location.state.District;
     var mandal = location.state.Mandal;
+    var username = location.state.user;
     const[list,setList] = useState(location.state.list);
     const classes = useStyles();
     var icons = ["🔋", "🛏️", "🚑", "🚖", "💉", "🩸"];
@@ -272,7 +274,7 @@ export default function DonorAvailability() {
         return(
             <div>
             {   
-                sendData === 'Oxygen Cylinder' ? (console.log(dataType,{'Oxygen Quantity':oxygenQuantity},{'Oxygen Price':oxygenPrice},{'Oxygen Address':oxygenaddress})) : 
+                sendData === 'Oxygen Cylinder' ? (sendOxygenCylinders(dataType,{'Oxygen Quantity':oxygenQuantity},{'Oxygen Price':oxygenPrice},{'Oxygen Address':oxygenaddress})) : 
                 sendData === 'ICU Bed' ? (console.log(dataType,{'beds':beds},{'bedPrice':bedPrice},{'bedAddress':bedAddress})) : 
                 sendData === 'Private Transport' ? (console.log(dataType,{'km':km},{'privateTransportPrice':privateTransportPrice},{'privateTransportAddress':privateTransportAddress})) : 
                 sendData === 'Ambulance' ? (console.log(dataType,{'hospital':hospital},{'contactNumber':contactNumber},{'AmbulanceAddress':AmbulanceAddress})) : 
@@ -282,6 +284,26 @@ export default function DonorAvailability() {
             </div>
         )
     }
+    const sendOxygenCylinders= () => {
+            const data = {
+            "Username":username,
+            "State":state,
+            "District":district,
+            "Mandal":mandal,
+            "OxygenQuantity": oxygenQuantity,
+            "OxygenPrice":oxygenPrice,
+            "OxygenAddress":oxygenaddress
+            }
+            axios.post('http://localhost:3010/oxygencylinder', {data}).then(
+            function(res) {
+                if(res.data.msg) {
+                    alert(res.data.msg);
+                } else {
+                    console.log(res.data.msg)
+                }
+            }
+        )
+        }
     return (
         <div>
             <div class="modal fade" id="picturecapture" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">

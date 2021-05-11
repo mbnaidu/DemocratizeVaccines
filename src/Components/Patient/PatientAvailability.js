@@ -1,100 +1,65 @@
 import { Accordion, AccordionDetails, AccordionSummary, Button, Checkbox, Collapse, Icon, Input, List, ListItem, ListItemIcon, ListItemText, makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography } from '@material-ui/core'
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import '../../Styles/Patient.css';
 import { ModalBody, ModalFooter, ModalTitle, Modal} from 'react-bootstrap';
 import ModalHeader from 'react-bootstrap/esm/ModalHeader';
 import { ExpandLess, ExpandMore, Twitter } from '@material-ui/icons';
+import axios from 'axios';
 
 
 function PatientAvailability() {
     const [expanded, setExpanded] = React.useState(false);
+    const [oxygens,setOxygens] = useState([])
 	const location = useLocation();
+    var State = location.state.State;
+    var District = location.state.District;
+    var Mandal = location.state.Mandal;
+    
     const [list,setList] = useState(location.state.finallist)
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
+    useEffect(() => {
+        axios.post('http://localhost:3010/getalloxygencylinders').then(
+            function(res) {
+                if(res.data.msg) {
+                    alert(res.data.msg);
+                } else {
+                    {res.data.map((m)=>{
+                        if(m.Mandal === Mandal){
+                            oxygens.push(m);
+                        }
+                    })}
+                }
+            }
+        )
+    },[])
+    // console.log(oxygens)
     const accordian = [
         {
             id:'panel1',panelName:'',panelControl:'panel1bh-content',panelColor:'blue',panelText1:'Oxygen Cylinders',
-            panelText2:'Available',panelId:'panel1bh-header',panelIcon:'🔋',panelData : [
-                {
-                    Id:'madhu1213',Quantity:1,Liters:12,Price:13,Address:'1st street,Gunipudi'
-                },
-                {
-                    Id:'abhinav1211',Quantity:2,Liters:122,Price:121,Address:'2nd street,Gunipudi'
-                },
-                {
-                    Id:'sai1222',Quantity:3,Liters:112,Price:213,Address:'3rd street,Gunipudi'
-                },
-                {
-                    Id:'dinesh34',Quantity:4,Liters:212,Price:113,Address:'4th street,Gunipudi'
-                },
-                {
-                    Id:'shivam11',Quantity:5,Liters:2,Price:123,Address:'5th street,Gunipudi'
-                },
-            ]
+            panelText2:'Available',panelId:'panel1bh-header',panelIcon:'🔋'
         },
         {
             id:'panel2',panelName:'',panelControl:'panel2bh-content',panelColor:'brown',panelText1:'ICU Beds',
-            panelText2:'Available',panelId:'panel2bh-header',panelIcon:'🛏️',panelData : [
-                {
-                    Id:'abhinav1211',Quantity:2,Liters:122,Price:121,Address:'2nd street,Gunipudi'
-                },
-                {
-                    Id:'sai1222',Quantity:3,Liters:112,Price:213,Address:'3rd street,Gunipudi'
-                },
-            ]
+            panelText2:'Available',panelId:'panel2bh-header',panelIcon:'🛏️'
         },
         {
             id:'panel3',panelName:'',panelControl:'panel3bh-content',panelColor:'green',panelText1:'Ambulance',
-            panelText2:'Available',panelId:'panel3bh-header',panelIcon:'🚑',panelData : [
-                {
-                    Id:'madhu1213',Quantity:1,Liters:1212,Price:1213,Address:'Ravuri vari street,Gunipudi'
-                },
-            ]
+            panelText2:'Available',panelId:'panel3bh-header',panelIcon:'🚑'
         },
         {
             id:'panel4',panelName:'',panelControl:'panel4bh-content',panelColor:'gold',panelText1:'Private Transport',
-            panelText2:'Available',panelId:'panel4bh-header',panelIcon:'🚖',panelData : [
-                {
-                    Id:'madhu1213',Quantity:1,Liters:1212,Price:1213,Address:'Ravuri vari street,Gunipudi'
-                },
-                {
-                    Id:'abhinav1211',Quantity:2,Liters:122,Price:121,Address:'2nd street,Gunipudi'
-                },
-            ]
+            panelText2:'Available',panelId:'panel4bh-header',panelIcon:'🚖'
         },
         {
             id:'panel5',panelName:'',panelControl:'panel5bh-content',panelColor:'green',panelText1:'Vaccine',
-            panelText2:'Available',panelId:'panel5bh-header',panelIcon:'💉',panelData : [
-                {
-                    Id:'madhu1213',Quantity:1,Liters:1212,Price:1213,Address:'Ravuri vari street,Gunipudi'
-                },
-                {
-                    Id:'abhinav1211',Quantity:2,Liters:122,Price:121,Address:'2nd street,Gunipudi'
-                },
-                {
-                    Id:'sai1222',Quantity:3,Liters:112,Price:213,Address:'3rd street,Gunipudi'
-                },
-            ]
+            panelText2:'Available',panelId:'panel5bh-header',panelIcon:'💉',
         },
         {
             id:'panel6',panelName:'',panelControl:'panel6bh-content',panelColor:'red',panelText1:'Plasma',
-            panelText2:'Available',panelId:'panel6bh-header',panelIcon:'🩸',panelData : [
-                {
-                    Id:'madhu1213',Quantity:1,Liters:1212,Price:1213,Address:'Ravuri vari street,Gunipudi'
-                },
-                {
-                    Id:'abhinav1211',Quantity:2,Liters:122,Price:121,Address:'2nd street,Gunipudi'
-                },
-                {
-                    Id:'dinesh34',Quantity:4,Liters:212,Price:113,Address:'4th street,Gunipudi'
-                },
-                {
-                    Id:'shivam11',Quantity:5,Liters:2,Price:123,Address:'5th street,Gunipudi'
-                },
-            ]
+            panelText2:'Available',panelId:'panel6bh-header',panelIcon:'🩸'
         },
     ]
     const useStyles = makeStyles((theme) => ({
@@ -156,7 +121,6 @@ function PatientAvailability() {
     const [openBeds,setBeds] = useState(false);
     return (
         <div>
-            {console.log(list)}
             <nav className="glass">
                 <div>
                     <Modal size="sm" show={show} >
@@ -238,41 +202,40 @@ function PatientAvailability() {
                                                 <div>
                                                     {l === m.panelText1 ? (<div>
                                                         <Accordion expanded={expanded === m.id} onChange={handleChange(m.id)}  className="patientable accordian">
-                                <AccordionSummary expandIcon={m.panelIcon} aria-controls={m.panelControl} id={m.panelId}>
-                                    <Typography className={classes.heading}>{m.panelText1}</Typography>
-                                    <Typography>{m.panelText2} </Typography>
-                                </AccordionSummary>
-                                    <AccordionDetails >
-                                        <TableContainer >
-                                                <Table aria-labelledby="tableTitle" size='small' aria-label="enhanced table">
-                                                    <TableHead>
-                                                        <TableCell>Select</TableCell>
-                                                        <TableCell>UserName</TableCell>
-                                                        <TableCell>Quantity</TableCell>
-                                                        <TableCell>Liters</TableCell>
-                                                        <TableCell>Price</TableCell>
-                                                        <TableCell>Address</TableCell>
-                                                    </TableHead>
-                                                    <TableBody >
-                                                        {m.panelData.map((p, index)=>{
-                                                            return(
-                                                                    <TableRow hover role="checkbox">
-                                                                        <TableCell padding="checkbox">
-                                                                            <Checkbox aria-label="ji"  onChange={()=>{handleInput(p.Id,m.panelText1,index)}}/>
-                                                                        </TableCell>
-                                                                        <TableCell component="th" scope="row" padding="none">{p.Id}</TableCell>
-                                                                        <TableCell align="right">{p.Quantity}</TableCell>
-                                                                        <TableCell align="right">{p.Liters}</TableCell>
-                                                                        <TableCell align="right">{p.Price}</TableCell>
-                                                                        <TableCell align="right">{p.Address}</TableCell>
-                                                                    </TableRow>
-                                                            )
-                                                        })}
-                                                    </TableBody>
-                                                </Table>
-                                            </TableContainer>
-                                    </AccordionDetails>
-                            </Accordion>
+                                                            <AccordionSummary expandIcon={m.panelIcon} aria-controls={m.panelControl} id={m.panelId}>
+                                                                <Typography className={classes.heading}>{m.panelText1}</Typography>
+                                                                <Typography>{m.panelText2} </Typography>
+                                                            </AccordionSummary>
+                                                                <AccordionDetails >
+                                                                    <TableContainer >
+                                                                            <Table aria-labelledby="tableTitle" size='small' aria-label="enhanced table">
+                                                                                <TableHead>
+                                                                                    <TableCell>Select</TableCell>
+                                                                                    <TableCell>UserName</TableCell>
+                                                                                    <TableCell>Quantity</TableCell>
+                                                                                    <TableCell>Price</TableCell>
+                                                                                    <TableCell>Address</TableCell>
+                                                                                </TableHead>
+                                                                                <TableBody >
+                                                                                        {oxygens.map((o,index)=>{
+                                                                                            return(
+                                                                                                <TableRow hover role="checkbox">
+                                                                                                    <TableCell padding="checkbox">
+                                                                                                        {/* <Checkbox aria-label="ji"  onChange={()=>{handleInput(p.Id,m.panelText1,index)}}/> */}
+                                                                                                        <Checkbox />
+                                                                                                    </TableCell>
+                                                                                                    <TableCell component="th" scope="row" padding="none">{o.Username}</TableCell>
+                                                                                                    <TableCell align="right">{o.OxygenQuantity}</TableCell>
+                                                                                                    <TableCell align="right">{o.OxygenPrice}</TableCell>
+                                                                                                    <TableCell align="right">{o.OxygenAddress}</TableCell>
+                                                                                                </TableRow>
+                                                                                            )
+                                                                                        })}
+                                                                                </TableBody>
+                                                                            </Table>
+                                                                        </TableContainer>
+                                                                </AccordionDetails>
+                                                        </Accordion>
                                                     </div>) : ''}
                                                 </div>
                                             )
