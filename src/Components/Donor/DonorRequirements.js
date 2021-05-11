@@ -3,6 +3,7 @@ import { AccountCircle } from '@material-ui/icons'
 import React, { useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
+import axios from 'axios';
 
 
 
@@ -36,6 +37,21 @@ function DonorRequirements() {
             else{
                 finalList.push(option)
             }
+        }
+        const sendDetails= () => {
+            const data = {
+            username: userId,
+            password:pass,
+            }
+            axios.post('http://localhost:3010/login', {data}).then(
+            function(res) {
+                if(res.data.msg) {
+                    alert(res.data.msg);
+                } else {
+                    setLogin(false)
+                }
+            }
+        )
         }
     return (
         <nav className="glass">
@@ -76,7 +92,7 @@ function DonorRequirements() {
                                             <TextField id="input-with-icon-grid" label="Password" type="password" value={pass} onChange={event => setPass(event.target.value)}/>
                                         </Grid>
                                     </Grid><br/><br/>
-                                    <Button color="primary" variant="outlined" onClick={()=>{setLogin(false);}}>Login</Button>{' '}
+                                    <Button color="primary" variant="outlined" onClick={()=>{sendDetails();}}>Login</Button>{' '}
                                     <Button color="secondary" variant="contained" onClick={()=>{setSignup(true);}}>Sign Up</Button>
                                 </div>
             </div>) : (<div>
@@ -104,7 +120,9 @@ function DonorRequirements() {
                                                 State:location.state.State,
                                                 District:location.state.District,
                                                 Mandal:location.state.Mandal,
-                                                list:finalList
+                                                list:finalList,
+                                                user:userId,
+                                                password:pass,
                                             } 
                                         }}
                                         exact

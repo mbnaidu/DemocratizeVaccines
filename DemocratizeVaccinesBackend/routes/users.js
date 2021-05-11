@@ -6,7 +6,23 @@ router.route('/').get((req, res) => {
     .then(users => res.json(users))
     .catch(err => res.status(400).json('Error: ' + err));
 });
-
+router.get('/usercheck', function(req, res) {
+    User.findOne({username: req.query.username}, function(err, user){
+        if(err) {
+          console.log(err);
+        }
+        var message;
+        if(user) {
+          console.log(user)
+            message = "user exists";
+            console.log(message)
+        } else {
+            message= "user doesn't exist";
+            console.log(message)
+        }
+        res.json({message: message});
+    });
+});
 router.route('/add').post((req, res) => {
   const username = req.body.username;
 
