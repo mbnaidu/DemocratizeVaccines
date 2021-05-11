@@ -87,6 +87,8 @@ export default function DonorAvailability() {
             const [plasmaAddress,setplasmaAddress] = useState('');
 
     const [modal,setModal] = useState('');
+    const [enable,setEnable] = useState('true');
+    const [disable,setDisable] = useState('true')
     const location = useLocation();
     var state = location.state.State;
     var district = location.state.District;
@@ -120,13 +122,13 @@ export default function DonorAvailability() {
                     <div class="camera">
                         <video id="video">Video stream not available.</video>
                     </div>
-                        <Button id="startbutton" endIcon={<AddAPhotoIcon></AddAPhotoIcon>}>Capture</Button>
+                        <Button id="startbutton" endIcon={<AddAPhotoIcon></AddAPhotoIcon>} onClick={()=>{setDisable('false')}}>Capture</Button>
                     <br/>
                     <canvas id="canvas"></canvas>
                     <div class="output">
                         <img id="photo" alt="The screen capture will appear in this box." />
                     </div>
-                    <Button variant="contained" color="primary" endIcon={<Icon>send</Icon>}>Submit</Button>
+                    <Button variant="contained" color="primary" disabled={disable === 'true'? true : false} endIcon={<Icon>send</Icon>} onClick={()=>{setEnable('true')}}>Submit</Button>
                 </div>
             <script src="../js/FileSaver.min.js"></script>
             <script src="../js/script.js"></script>
@@ -150,7 +152,7 @@ export default function DonorAvailability() {
                         </Grid>
                     </div>
                     <div className="column">
-                        <Button  data-toggle="modal" data-target="#picturecapture" onClick={()=>{console.log(oxygenQuantity)}} endIcon={<CallMadeIcon></CallMadeIcon>}>Send Pictures</Button>
+                        <Button  data-toggle="modal" data-target="#picturecapture" color="secondary" variant="outlined"  endIcon={<CallMadeIcon></CallMadeIcon>}>Send Pictures</Button>
                     </div>
                 </div>
                 <Grid container spacing={1} alignItems="flex-end">
@@ -317,7 +319,7 @@ export default function DonorAvailability() {
                             {capture()}
                         </div>
                         <div class="modal-footer">
-                            <Button type="button" class="btn btn-secondary" data-dismiss="modal" >Close</Button>
+                            <Button type="button" class="btn btn-secondary" data-dismiss="modal" onClick={()=>{setEnable(true)}}>Close</Button>
                         </div>
                     </div>
                 </div>
@@ -337,8 +339,7 @@ export default function DonorAvailability() {
                                         {render(l)}
                                     </AccordionDetails>
                                     <AccordionActions>
-                                        <Button size="small" color="primary" onClick={()=>{Send();}}>
-                                        Submit</Button>
+                                        <Button size="small" color="primary" disabled={enable === 'false' ? false : true} onClick={()=>{Send();}}>Submit</Button>
                                     </AccordionActions>
                                 </Accordion>
                             </div>
