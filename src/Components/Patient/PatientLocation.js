@@ -340,10 +340,6 @@ class PatientLocation extends React.Component {
                     </div>
                     <br/><br/><br/><br/><br/><br/><br/>
                     <NavLink to="/"><Button variant="contained" color="primary">HOME</Button></NavLink>{" "}
-                    {/* {this.state.selectedCity.length>1 ? 
-                        <NavLink to="/patient-requirements"><Button variant="contained" color="primary" onClick={()=>{madhu()}}>Search</Button></NavLink> : 
-                        <Button variant="contained" color="primary" onClick={()=>{madhu()}}>Search</Button>
-                        } */}
                     <NavLink
                         to={{
                                 pathname:'/patient-requirements',

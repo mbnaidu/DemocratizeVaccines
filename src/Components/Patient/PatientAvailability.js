@@ -6,35 +6,34 @@ import { ModalBody, ModalFooter, ModalTitle, Modal} from 'react-bootstrap';
 import ModalHeader from 'react-bootstrap/esm/ModalHeader';
 import { ExpandLess, ExpandMore, Twitter } from '@material-ui/icons';
 import axios from 'axios';
-
+import LocationOnIcon from '@material-ui/icons/LocationOn';
+import Map from '../../Map'
 
 function PatientAvailability() {
     const [expanded, setExpanded] = React.useState(false);
     const [oxygens,setOxygens] = useState([])
 	const location = useLocation();
-    var State = location.state.State;
-    var District = location.state.District;
-    var Mandal = location.state.Mandal;
+    console.log(location)
     
     const [list,setList] = useState(location.state.finallist)
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
-    useEffect(() => {
-        axios.post('http://localhost:3010/getalloxygencylinders').then(
-            function(res) {
-                if(res.data.msg) {
-                    alert(res.data.msg);
-                } else {
-                    {res.data.map((m)=>{
-                        if(m.Mandal === Mandal){
-                            oxygens.push(m);
-                        }
-                    })}
-                }
-            }
-        )
-    },[])
+    // useEffect(() => {
+    //     axios.post('http://localhost:3010/getalloxygencylinders').then(
+    //         function(res) {
+    //             if(res.data.msg) {
+    //                 alert(res.data.msg);
+    //             } else {
+    //                 {res.data.map((m)=>{
+    //                     if(m.Mandal === Mandal){
+    //                         oxygens.push(m);
+    //                     }
+    //                 })}
+    //             }
+    //         }
+    //     )
+    // },[])
     // console.log(oxygens)
     const accordian = [
         {
@@ -73,44 +72,6 @@ function PatientAvailability() {
         color: theme.palette.text.primary,
     }
 }));
-        const [finalList,setFinalList] = useState([])
-        const handleInput = (key,value, index) => {
-        var key1 = {};
-        
-        switch(key) {
-            case 'Oxygen Cylinders':
-                key1.OxygenCylinders = value;
-                break;
-            case 'ICU Beds':
-                key1.aadharNumber = value;
-                break;
-            case 'Ambulance':
-                key1.gender = value;
-                break;
-            case 'Private Transport':
-                key1.age = value;
-                break;
-            case 'Vaccine':
-                key1.age1 = value;
-                break;
-            case 'Address':
-                key1.age2 = value;
-                break;
-            default:
-                break;
-        }
-            let s = "";
-                s += key;
-                s += " : "
-                s += value;
-                let e = finalList.indexOf(s)
-                if(e > -1){
-                    finalList.splice(e, 1);
-                }
-                else{
-                    finalList.push(s)
-                }
-    }
     const classes = useStyles();
     const [show,setShow] = useState(false);
     const [generate,setGenerate] = useState('Generate');
@@ -119,10 +80,19 @@ function PatientAvailability() {
     const [twitter,setTwitter] = useState(false);
     const [openCylinder,setCylinder] = useState(false);
     const [openBeds,setBeds] = useState(false);
+    const [show1,setShow1] = useState(false);
     return (
         <div>
             <nav className="glass">
-                <div>
+                <div> 
+                    <Modal show={show1}>
+                        <ModalBody>
+                            <Map/>
+                        </ModalBody>
+                        <ModalFooter>
+                            <Button onClick={()=>{setShow1(false)}}>Close</Button>
+                        </ModalFooter>
+                    </Modal>
                     <Modal size="sm" show={show} >
                         <ModalHeader closeButton onClick={()=>{setShow(false);setGenerate('Generate');setPhoneNumber("");setCode("")}}>
                             <ModalTitle>Verification</ModalTitle>
@@ -193,7 +163,8 @@ function PatientAvailability() {
                 </div>
                 <br/><br/><br/><br/><br/><br/><br/><br/>
                     <div className="trail"> 
-                    <Button variant="contained" color="primary" endIcon={<Icon>send</Icon>} onClick={()=>{setShow(true)}}>Send Request</Button>
+                    <Button variant="contained" color="primary" endIcon={<Icon>send</Icon>} onClick={()=>{setShow(true)}}>Send Request</Button>{' '}
+                    <Button variant="contained" color="primary" endIcon={<LocationOnIcon />} onClick={()=>{setShow1(true)}}>Show Donors</Button>
                         {accordian.map((m,key)=>{
                                 return(
                                     <div>
@@ -244,7 +215,7 @@ function PatientAvailability() {
                     )
                         })}
                     <NavLink to="/"><Button variant="contained" color="primary">HOME</Button></NavLink><br/><br/>
-                    <Button  variant="contained" color="primary" onClick={()=>{console.log(phoneNumber,code,finalList,location.state.State,location.state.District,location.state.Mandal,finalList);setTwitter(true)}}>Show From Twitter</Button>
+                    <Button  variant="contained" color="primary" onClick={()=>{setTwitter(true)}}>Show From Twitter</Button>
                     </div>
             </nav>
         </div>

@@ -21,7 +21,7 @@ body{
   padding: 10px;
 }
 .wrapper {
-    text-align: center;
+    margin-right: -90px;
 }
 
 .patientbutton {
@@ -129,4 +129,28 @@ nav ul li:hover{
 a
 {
   text-decoration: none;
+}
+.half-circle {
+    width: 300px;
+    height: 300px;
+    /* background-color: gold; */
+    border-top-left-radius: 100px;
+    border-top-right-radius: 100px;
+    border: 10px solid #ff758c;
+    border-bottom: 0;
+    
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.half-circle:hover{
+  animation: 10s linear rotate;
+}
+@keyframes rotate {
+  from {
+    transform: rotate(0deg)
+  }
+  to {
+    transform: rotate(90deg)
+  }
 }

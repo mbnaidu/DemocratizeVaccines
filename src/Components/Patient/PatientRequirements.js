@@ -1,16 +1,127 @@
-import { Accordion, AccordionDetails, AccordionSummary, Badge, Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormHelperText, FormLabel, Typography } from '@material-ui/core'
+import { Accordion, AccordionDetails, AccordionSummary, Badge, Button, Card, CardActions, CardContent, Checkbox, FormControl, FormControlLabel, FormGroup, FormHelperText, FormLabel, makeStyles, Typography } from '@material-ui/core'
 import { ExpandMoreSharp } from '@material-ui/icons';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ModalBody, ModalFooter, ModalTitle, Modal} from 'react-bootstrap';
 import ModalHeader from 'react-bootstrap/esm/ModalHeader';
 import { NavLink, useLocation } from 'react-router-dom'
 import '../../Styles/Patient.css'
 
 
-
+const useStyles = makeStyles({
+  root: {
+    minWidth: 275,
+    margin:50,
+    borderRadius:30,
+    marginTop:'30%',
+    paddingTop:30,
+  },
+  bullet: {
+    display: 'inline-block',
+    margin: '0 2px',
+    transform: 'scale(0.8)',
+  },
+  title: {
+    fontSize: 14,
+  },
+  pos: {
+    marginBottom: 12,
+  },
+  header:{
+    marginLeft:'50%',
+  }
+})
 
 function PatientRequirements() {
-    const location = useLocation();
+    const [longLatt,setLongLatt] = useState('');
+    const [patientAddress,setPatientAddress] = useState('')
+    useEffect(() => {
+        const getCoordintes = ()=> {
+	var options = {
+		enableHighAccuracy: true,
+		timeout: 5000,
+		maximumAge: 0
+	};
+	function success(pos) {
+		var crd = pos.coords;
+		var lat = crd.latitude.toString();
+		var lng = crd.longitude.toString();
+		var coordinates = [lat, lng];
+		setLongLatt(`Latitude: ${lat}, Longitude: ${lng}`)
+        console.log(longLatt)
+		getCity(coordinates);
+		return;
+	}
+	function error(err) {
+		console.warn(`ERROR(${err.code}): ${err.message}`);
+	}
+	navigator.geolocation.getCurrentPosition(success, error, options);
+}
+// Step 2: Get city name
+const getCity = (coordinates) =>{
+	var xhr = new XMLHttpRequest();
+	var lat = coordinates[0];
+	var lng = coordinates[1];
+
+	// Paste your LocationIQ token below.
+	xhr.open('GET', "https://us1.locationiq.com/v1/reverse.php?key=pk.a38452a5c36ea022c35226791e032ecd&lat=" +
+	lat + "&lon=" + lng + "&format=json", true);
+	xhr.send();
+	xhr.onreadystatechange = processRequest;
+	xhr.addEventListener("readystatechange", processRequest, false);
+
+	function processRequest(e) {
+		if (xhr.readyState == 4 && xhr.status == 200) {
+			var response = JSON.parse(xhr.responseText);
+            setPatientAddress(response.display_name)
+			return;
+		}
+	}
+}
+getCoordintes()
+    }, [])
+    const getCoordintes = ()=> {
+	var options = {
+		enableHighAccuracy: true,
+		timeout: 5000,
+		maximumAge: 0
+	};
+	function success(pos) {
+		var crd = pos.coords;
+		var lat = crd.latitude.toString();
+		var lng = crd.longitude.toString();
+		var coordinates = [lat, lng];
+		setLongLatt(`Latitude: ${lat}, Longitude: ${lng}`)
+        console.log(longLatt)
+		getCity(coordinates);
+		return;
+	}
+	function error(err) {
+		console.warn(`ERROR(${err.code}): ${err.message}`);
+	}
+	navigator.geolocation.getCurrentPosition(success, error, options);
+}
+// Step 2: Get city name
+const getCity = (coordinates) =>{
+	var xhr = new XMLHttpRequest();
+	var lat = coordinates[0];
+	var lng = coordinates[1];
+
+	// Paste your LocationIQ token below.
+	xhr.open('GET', "https://us1.locationiq.com/v1/reverse.php?key=pk.a38452a5c36ea022c35226791e032ecd&lat=" +
+	lat + "&lon=" + lng + "&format=json", true);
+	xhr.send();
+	xhr.onreadystatechange = processRequest;
+	xhr.addEventListener("readystatechange", processRequest, false);
+
+	function processRequest(e) {
+		if (xhr.readyState == 4 && xhr.status == 200) {
+			var response = JSON.parse(xhr.responseText);
+            setPatientAddress(response.display_name)
+			return;
+		}
+	}
+}
+
     const [show, setShow] = useState(false);
     const [expanded, setExpanded] = React.useState(false);
     const handleChange = (panel) => (event, isExpanded) => {
@@ -35,6 +146,7 @@ function PatientRequirements() {
                 finalList.push(option)
             }
         }
+        const classes = useStyles();
     return (
         <nav className="glass">
             {/* MODELS */}
@@ -103,41 +215,47 @@ function PatientRequirements() {
                         </Button>
                     </ModalFooter>
                 </Modal>
-            <div>
-                <Badge color="primary" badgeContent={13}>
-                    <Button variant="outlined" color="primary" onClick={()=>{setShow(true)}}>HOSPITALS</Button>
-                </Badge>
-            </div>
             <div className="alignList">
-                <FormControl>
-                    <FormLabel>What Do You Need..?</FormLabel>
-                    <FormGroup>
-                        {names.map((n,key=n.id)=>{
-                            return(
-                                <div>
-                                    <FormControlLabel
-                                        control={<Checkbox name={n.value} color="primary"  onChange={()=>{handleInput(n.value)}}/>}
-                                        label={n.value}
-                                    />
-                                </div>
-                            )
-                        })}
-                    </FormGroup>
-                    <br/><br/>
-                    <NavLink
-                        to={{
-                            pathname:'/patient-availability',
-                                state: {
-                                    State:location.state.State,
-                                    District:location.state.District,
-                                    Mandal:location.state.Mandal,
-                                    finallist:finalList,
-                                } 
-                            }}
-                            exact
-                    >
-                    <Button variant="contained" color="primary" >SEARCH</Button></NavLink>
-                </FormControl>
+                <Card className={classes.root} variant="outlined">
+                    <CardContent>
+                        <Typography className={classes.title} color="textSecondary" gutterBottom>
+                            <div>
+                                <Badge color="primary" badgeContent={13}>
+                                    <Button variant="outlined" color="primary" onClick={()=>{setShow(true)}}>HOSPITALS</Button>
+                                </Badge>
+                            </div>
+                        </Typography>
+                        <FormControl>
+                            <FormLabel>What Do You Need..?</FormLabel>
+                            <FormGroup>
+                                {names.map((n,key=n.id)=>{
+                                    return(
+                                        <div>
+                                            <FormControlLabel
+                                                control={<Checkbox name={n.value} color="primary"  onChange={()=>{handleInput(n.value)}}/>}
+                                                label={n.value}
+                                            />
+                                        </div>
+                                    )
+                                })}
+                            </FormGroup>
+                            <br/><br/>
+                            <NavLink
+                                to={{
+                                    pathname:'/patient-availability',
+                                        state: {
+                                            address:patientAddress,
+                                            location:longLatt,
+                                            finallist:finalList,
+                                        } 
+                                    }}
+                                    exact
+                            >
+                            <Button variant="contained" color="primary" onClick={()=>{getCoordintes();}}>SEARCH</Button>
+                            </NavLink>
+                        </FormControl>
+                        </CardContent>
+                    </Card>
             </div>
         </nav>
     )

@@ -2,8 +2,6 @@ import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Button
 import React, { useEffect, useState } from 'react'
 import BatteryStdSharpIcon from '@material-ui/icons/BatteryStdSharp';
 import { NavLink, useLocation } from 'react-router-dom';
-import '../../main.css'
-import '../../styles.css'
 import { AccountCircle, Send } from '@material-ui/icons';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
@@ -339,7 +337,7 @@ export default function DonorAvailability() {
                                         {render(l)}
                                     </AccordionDetails>
                                     <AccordionActions>
-                                        <Button size="small" color="primary" disabled={enable === 'false' ? false : true} onClick={()=>{Send();}}>Submit</Button>
+                                        <Button size="small" color="primary"  onClick={()=>{Send();}}>Submit</Button>
                                     </AccordionActions>
                                 </Accordion>
                             </div>
