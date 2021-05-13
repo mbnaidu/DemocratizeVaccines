@@ -1,9 +1,8 @@
-import { Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormHelperText, FormLabel, Grid, Icon, Input, TextField } from '@material-ui/core'
+import { Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, Icon, Input, TextField } from '@material-ui/core'
 import { AccountCircle } from '@material-ui/icons'
-import React, { useState } from 'react'
-import { NavLink, useLocation } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { NavLink} from 'react-router-dom'
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
-import axios from 'axios';
 
 
 
@@ -12,7 +11,53 @@ import axios from 'axios';
 
 
 function DonorRequirements() {
-    const location = useLocation();
+    // getting donor long,lati and address
+    const [longLatt,setLongLatt] = useState('');
+    const [donorAddress,setdonorAddress] = useState('')
+        useEffect(() => {
+            const getCoordintes = ()=> {
+        var options = {
+            enableHighAccuracy: true,
+            timeout: 5000,
+            maximumAge: 0
+        };
+        function success(pos) {
+            var crd = pos.coords;
+            var lat = crd.latitude.toString();
+            var lng = crd.longitude.toString();
+            var coordinates = [lat, lng];
+            setLongLatt(`Latitude: ${lat}, Longitude: ${lng}`)
+            getCity(coordinates);
+            return;
+        }
+        function error(err) {
+            console.warn(`ERROR(${err.code}): ${err.message}`);
+        }
+        navigator.geolocation.getCurrentPosition(success, error, options);
+    }
+    // Step 2: Get city name
+    const getCity = (coordinates) =>{
+        var xhr = new XMLHttpRequest();
+        var lat = coordinates[0];
+        var lng = coordinates[1];
+
+        // Paste your LocationIQ token below.
+        xhr.open('GET', "https://us1.locationiq.com/v1/reverse.php?key=pk.a38452a5c36ea022c35226791e032ecd&lat=" +
+        lat + "&lon=" + lng + "&format=json", true);
+        xhr.send();
+        xhr.onreadystatechange = processRequest;
+        xhr.addEventListener("readystatechange", processRequest, false);
+
+        function processRequest(e) {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                setdonorAddress(response.display_name)
+                return;
+            }
+        }
+    }
+    getCoordintes()
+        }, [])
     const [login,setLogin] = useState(true);
     const [signup,setSignup] = useState(false);
     const [generate,setGenerate] = useState("Generate");
@@ -21,12 +66,12 @@ function DonorRequirements() {
     const [phoneNumber,setPhoneNumber] = useState('');
     const [code,setCode] = useState('');
     const names = [
-            {id : '1' , value : 'Oxygen Cylinder' },
-            {id : '2' , value : 'ICU Bed' },
-            {id : '3' , value : 'Ambulance' },
-            {id : '4' , value : 'Private Transport' },
-            {id : '5' , value : 'Vaccine' },
-            {id : '6' , value : 'Plasma' },
+            {id : 1 , value : 'Oxygen Cylinder' },
+            {id : 2 , value : 'ICU Bed' },
+            {id : 3 , value : 'Ambulance' },
+            {id : 4 , value : 'Private Transport' },
+            {id : 5 , value : 'Vaccine' },
+            {id : 6 , value : 'Plasma' },
         ];
         var finalList = [];
         const handleInput = (option) =>{
@@ -37,21 +82,6 @@ function DonorRequirements() {
             else{
                 finalList.push(option)
             }
-        }
-        const sendDetails= () => {
-            const data = {
-            username: userId,
-            password:pass,
-            }
-            axios.post('http://localhost:3010/login', {data}).then(
-            function(res) {
-                if(res.data.msg) {
-                    alert(res.data.msg);
-                } else {
-                    setLogin(false)
-                }
-            }
-        )
         }
     return (
         <nav className="glass">
@@ -92,7 +122,7 @@ function DonorRequirements() {
                                             <TextField id="input-with-icon-grid" label="Password" type="password" value={pass} onChange={event => setPass(event.target.value)}/>
                                         </Grid>
                                     </Grid><br/><br/>
-                                    <Button color="primary" variant="outlined" onClick={()=>{sendDetails();}}>Login</Button>{' '}
+                                    <Button color="primary" variant="outlined" onClick={()=>{setLogin(false);}}>Login</Button>{' '}
                                     <Button color="secondary" variant="contained" onClick={()=>{setSignup(true);}}>Sign Up</Button>
                                 </div>
             </div>) : (<div>
@@ -101,10 +131,11 @@ function DonorRequirements() {
                             <FormControl>
                                 <FormLabel>What Do You Have..?</FormLabel>
                                 <FormGroup>
-                                    {names.map((n,key=n.id)=>{
+                                    {names.map((n,key={n})=>{
                                         return(
                                             <div>
                                                 <FormControlLabel
+                                                    key={n.id}
                                                     control={<Checkbox name={n.value} color="primary"  onChange={()=>{handleInput(n.value)}}/>}
                                                     label={n.value}
                                                 />
@@ -117,12 +148,11 @@ function DonorRequirements() {
                                     to={{
                                         pathname:'/donor-availability',
                                             state: {
-                                                State:location.state.State,
-                                                District:location.state.District,
-                                                Mandal:location.state.Mandal,
+                                                address:donorAddress,
                                                 list:finalList,
-                                                user:userId,
-                                                password:pass,
+                                                location:longLatt,
+                                                user:'userId',
+                                                password:'pass',
                                             } 
                                         }}
                                         exact

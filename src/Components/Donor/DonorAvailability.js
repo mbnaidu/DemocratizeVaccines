@@ -1,13 +1,9 @@
-import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Button, Grid, Icon, makeStyles, MenuItem, TextareaAutosize, TextField, Typography } from '@material-ui/core'
-import React, { useEffect, useState } from 'react'
-import BatteryStdSharpIcon from '@material-ui/icons/BatteryStdSharp';
+import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Button, Grid, Icon, makeStyles, MenuItem, TextField, Typography } from '@material-ui/core'
+import React, { useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom';
-import { AccountCircle, Send } from '@material-ui/icons';
-import LocationOnIcon from '@material-ui/icons/LocationOn';
-import LocalOfferIcon from '@material-ui/icons/LocalOffer';
+import {  Send } from '@material-ui/icons';
 import AddAPhotoIcon from '@material-ui/icons/AddAPhoto';
 import CallMadeIcon from '@material-ui/icons/CallMade';
-import axios from 'axios';
 
 
 
@@ -29,69 +25,46 @@ const useStyles = makeStyles((theme) => ({
 }));
 export default function DonorAvailability() {
     // VARIABLES
-        // OXygen
-            const [oxygenQuantity,setoxygenQuantity] = useState('');
-            const [oxygenPrice,setoxygenPrice] = useState('');
-            const [oxygenaddress,setoxygenaddress] = useState('');
+            const [userID,setUserID] = useState('USER ID');
+            const [userName,setUserName] = useState('USER NAME');
+            const [uploadDate,setUploadDate] = useState('UPLOADED DATE');
+            const [address,setAddress] = useState('DEFAULT ADDRESS');
+        // Oxygen
+            const [oxygenAvailability,setOxygenAvailability] = useState('');
+            const [oxygenVerifiedOn,setOxygenVerifiedOn] = useState('');
+            const [oxygenVerifiedBy,setOxygenVerifiedBy] = useState('');
+            const [oxygenPrice,setOxygenPrice] = useState('');
         // ICU
-            const [beds,setBeds] = useState('');
+            const [bedAvailability,setBedAvailability] = useState('');
+            const [bedVerifiedOn,setBedVerifiedOn] = useState('');
+            const [bedVerifiedBy,setBedVerifiedBy] = useState('');
             const [bedPrice,setBedPrice] = useState('');
-            const [bedAddress,setBedAddress] = useState('');
         // Ambulance
-            const [hospital,setHospital] = useState('')
-            const [contactNumber,setContactNumber] = useState('')
-            const [AmbulanceAddress,setAmbulanceAddress] = useState('');
+            const [ambulanceAvailability,setAmbulanceAvailability] = useState('');
+            const [ambulanceVerifiedOn,setAmbulanceVerifiedOn] = useState('');
+            const [ambulanceVerifiedBy,setAmbulanceVerifiedBy] = useState('');
+            const [ambulanceCostPerKm,setAmbulanceCostPerKm] = useState('');
         // Private
-            const [km,setKm] = useState('');
-            const [privateTransportPrice,setprivateTransportPrice] = useState('');
-            const [privateTransportAddress,setprivateTransportAddress] = useState('');
+            const [privateTransportAvailability,setPrivateTransportAvailability] = useState('');
+            const [privateTransportVerifiedOn,setPrivateTransportVerifiedOn] = useState('');
+            const [privateTransportVerifiedBy,setPrivateTransportVerifiedBy] = useState('');
+            const [privateTransportCostPerKm,setPrivateTransportCostPerKm] = useState('');
         // Vaccine
-            const [type,setType] = useState('');
-            const [vaccinePrice,setVaccinePrice] = useState('');
-            const [VaccineAddress,setVaccineAddress] = useState('');
-            const vaccine = [
-                {
-                    value: 'Covishield',
-                    label: 'Covishield',
-                },
-                {
-                    value: 'Covaxin',
-                    label: 'Covaxin',
-                },
-                {
-                    value: 'ZyCoV-D',
-                    label: 'ZyCoV-D',
-                },
-                {
-                    value: 'Biological E',
-                    label: 'Biological E',
-                },
-                {
-                    value: 'Mynvax',
-                    label: 'Mynvax',
-                },
-                {
-                    value: 'HGCO19',
-                    label: 'HGCO19',
-                },
-                {
-                    value: 'Sputnik V',
-                    label: 'Sputnik V',
-                },
-            ];
-        // Plasma
-            const [bloodGroup,setbloodGroup] = useState('');
-            const [plasmaPrice,setplasmaPrice] = useState('');
-            const [plasmaAddress,setplasmaAddress] = useState('');
+            const [vaccineAvailability,setVaccineAvailability] = useState('');
+            const [vaccineVerifiedOn,setVaccineVerifiedOn] = useState('');
+            const [vaccineVerifiedBy,setVaccineVerifiedBy] = useState('');
+            const [vaccinePrice,setVaccinePrice] = useState('');            
+        // Blood
+            const [bloodAvailability,setBloodAvailability] = useState('');
+            const [bloodVerifiedOn,setBloodVerifiedOn] = useState('');
+            const [bloodVerifiedBy,setBloodVerifiedBy] = useState('');
+            const [bloodPrice,setBloodPrice] = useState('');    
 
     const [modal,setModal] = useState('');
     const [enable,setEnable] = useState('true');
     const [disable,setDisable] = useState('true')
     const location = useLocation();
-    var state = location.state.State;
-    var district = location.state.District;
-    var mandal = location.state.Mandal;
-    var username = location.state.user;
+    console.log(location)
     const[list,setList] = useState(location.state.list);
     const classes = useStyles();
     var icons = ["🔋", "🛏️", "🚑", "🚖", "💉", "🩸"];
@@ -113,26 +86,6 @@ export default function DonorAvailability() {
             }
         }
     }
-    const capture = () => {
-        return(
-            <div>
-                <div class="contentarea">
-                    <div class="camera">
-                        <video id="video">Video stream not available.</video>
-                    </div>
-                        <Button id="startbutton" endIcon={<AddAPhotoIcon></AddAPhotoIcon>} onClick={()=>{setDisable('false')}}>Capture</Button>
-                    <br/>
-                    <canvas id="canvas"></canvas>
-                    <div class="output">
-                        <img id="photo" alt="The screen capture will appear in this box." />
-                    </div>
-                    <Button variant="contained" color="primary" disabled={disable === 'true'? true : false} endIcon={<Icon>send</Icon>} onClick={()=>{setEnable('true')}}>Submit</Button>
-                </div>
-            <script src="../js/FileSaver.min.js"></script>
-            <script src="../js/script.js"></script>
-            </div>
-        )
-    }
     // expansion
     const [expanded, setExpanded] = React.useState(false);
     const handleChange = (panel) => (event, isExpanded) => {
@@ -145,183 +98,192 @@ export default function DonorAvailability() {
                     <div className="column">
                         <Grid container spacing={1} alignItems="flex-end">
                             <Grid item>
-                                <TextField id="input-with-icon-grid" label="madhu1213" disabled/>
+                                <TextField id="input-with-icon-grid" label="UserID" value={userID} disabled/>
                             </Grid>
                         </Grid>
                     </div>
                     <div className="column">
-                        <Button  data-toggle="modal" data-target="#picturecapture" color="secondary" variant="outlined"  endIcon={<CallMadeIcon></CallMadeIcon>}>Send Pictures</Button>
+                        <Grid container spacing={1} alignItems="flex-end">
+                            <Grid item>
+                                <TextField id="input-with-icon-grid" label="UserName" value={userName} disabled/>
+                            </Grid>
+                        </Grid>
                     </div>
                 </div>
-                <Grid container spacing={1} alignItems="flex-end">
-                    <Grid item>
-                        {modal === 'Vaccine' ? (<div>
-                            <TextField
-                                id="standard-select-currency"
-                                select
-                                label="Select"
-                                value={type}
-                                onChange={event => {setType(event.target.value)}}
-                                helperText="Please select vaccine type"
-                                >
-                                {vaccine.map((option) => (
-                                    <MenuItem key={option.value} value={option.value}>
-                                        {option.label}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                        </div>) : (<div>
-                            <TextField id="input-with-icon-grid" 
-                                label={
-                                    modal === 'Oxygen Cylinder' ? 'OxygenCylinder Type' : 
-                                    modal === 'ICU Bed' ? 'Available Beds' : 
-                                    modal === 'Private Transport' ? 'Vehicle Type' : 
-                                    modal === 'Plasma' ? 'bloodGroup' : 
-                                    modal === 'Ambulance' ? 'Hospital' : ''
-                                } 
-                                type="text" 
-                                value={
-                                    modal === 'Oxygen Cylinder' ? oxygenQuantity : 
-                                    modal === 'ICU Bed' ? beds : 
-                                    modal === 'Private Transport' ? km : 
-                                    modal === 'Plasma' ? bloodGroup : 
-                                    modal === 'Ambulance' ? hospital : ''
+                <div className="row">
+                    <div className="column">
+                        <Grid container spacing={0} alignItems="flex-end">
+                            <Grid item>
+                                <TextField id="input-with-icon-grid" value={uploadDate} disabled />
+                            </Grid>
+                        </Grid>
+                    </div>
+                    <div className="column">
+                        <Grid container spacing={1} alignItems="flex-end">
+                            <Grid item>
+                                <TextField id="input-with-icon-grid"  value={address} disabled />
+                            </Grid>
+                        </Grid>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="column">
+                        <Grid container spacing={1} alignItems="flex-end">
+                            <Grid item>
+                                <TextField id="input-with-icon-grid" 
+                                    label={
+                                        modal === 'Oxygen Cylinder' ? 'Verified ON' : 
+                                        modal === 'ICU Bed' ? 'Verified ON' : 
+                                        modal === 'Private Transport' ? 'Verified ON' : 
+                                        modal === 'Plasma' ? 'Verified ON' : 
+                                        modal === 'Ambulance' ? 'Verified ON' : 
+                                        modal === 'Vaccine' ? 'Verified ON' :
+                                        ''
                                     } 
-                                onChange={
-                                    modal === 'Oxygen Cylinder' ? event => setoxygenQuantity(event.target.value) : 
-                                    modal === 'ICU Bed' ? event => setBeds(event.target.value) : 
-                                    modal === 'Private Transport' ? event => setKm(event.target.value) : 
-                                    modal === 'Plasma' ? event => setbloodGroup(event.target.value) : 
-                                    modal === 'Ambulance' ? event => setHospital(event.target.value) : 
-                                    ''
-                            }/>
-                        </div>)}
-                    </Grid>
-                </Grid>
-                <Grid container spacing={1} alignItems="flex-end">
-                    <Grid item>
-                        <TextField id="input-with-icon-grid" 
-                            label={
-                                modal === 'Oxygen Cylinder' ? 'Each Cylinder cost' : 
-                                modal === 'ICU Bed' ? 'Each Bed cost' : 
-                                modal === 'Private Transport' ? 'price for 1KM' : 
-                                modal === 'Plasma' ? 'Normal or Plasma' : 
-                                modal === 'Ambulance' ? 'Phone Number' : 
-                                modal === 'Vaccine' ? 'Vaccine Price' :
-                                ''
-                            } 
-                            type="text" 
-                            value={
-                                modal === 'Oxygen Cylinder' ? oxygenPrice : 
-                                modal === 'ICU Bed' ? bedPrice : 
-                                modal === 'Private Transport' ? privateTransportPrice : 
-                                modal === 'Ambulance' ? contactNumber : 
-                                modal === 'Plasma' ? plasmaPrice : 
-                                modal === 'Vaccine' ? vaccinePrice :
-                                ''
-                            } 
-                            onChange={
-                                modal === 'Oxygen Cylinder' ? event => setoxygenPrice(event.target.value) : 
-                                modal === 'ICU Bed' ? event => setBedPrice(event.target.value) : 
-                                modal === 'Private Transport' ? event => setprivateTransportPrice(event.target.value) : 
-                                modal === 'Plasma' ? event => setplasmaPrice(event.target.value) : 
-                                modal === 'Ambulance' ? event => setContactNumber(event.target.value) : 
-                                modal === 'Vaccine' ? event => setVaccinePrice(event.target.value) :
-                                ''
-                            }/>
-                    </Grid>
-                </Grid>
-                <Grid container spacing={1} alignItems="flex-end">
-                    <Grid item>
-                        <TextField id="input-with-icon-grid" 
-                            label={
-                                modal === 'Oxygen Cylinder' ? 'Address' : 
-                                modal === 'ICU Bed' ? 'Address' : 
-                                modal === 'Private Transport' ? 'Address' : 
-                                modal === 'Plasma' ? 'Address' : 
-                                modal === 'Ambulance' ? 'Address' : 
-                                modal === 'Vaccine' ? 'Address' :
-                                ''
-                            } 
-                            type="text" 
-                            value={
-                                modal === 'Oxygen Cylinder' ? oxygenaddress : 
-                                modal === 'ICU Bed' ? bedAddress : 
-                                modal === 'Private Transport' ? privateTransportAddress : 
-                                modal === 'Ambulance' ? AmbulanceAddress : 
-                                modal === 'Plasma' ? plasmaAddress : 
-                                modal === 'Vaccine' ? VaccineAddress :
-                                ''
-                            } 
-                            onChange={
-                                modal === 'Oxygen Cylinder' ? event => setoxygenaddress(event.target.value) : 
-                                modal === 'ICU Bed' ? event => setBedAddress(event.target.value) : 
-                                modal === 'Private Transport' ? event => setprivateTransportAddress(event.target.value) : 
-                                modal === 'Plasma' ? event => setplasmaAddress(event.target.value) : 
-                                modal === 'Ambulance' ? event => setAmbulanceAddress(event.target.value) : 
-                                modal === 'Vaccine' ? event => setVaccineAddress(event.target.value) :
-                                ''
-                            }/>
-                    </Grid>
-                </Grid>
+                                    type="text" 
+                                    value={
+                                        modal === 'Oxygen Cylinder' ? oxygenVerifiedOn : 
+                                        modal === 'ICU Bed' ? bedVerifiedOn : 
+                                        modal === 'Private Transport' ? privateTransportVerifiedOn : 
+                                        modal === 'Ambulance' ? ambulanceVerifiedOn : 
+                                        modal === 'Plasma' ? bloodVerifiedOn : 
+                                        modal === 'Vaccine' ? vaccineVerifiedOn :
+                                        ''
+                                    } 
+                                    onChange={
+                                        modal === 'Oxygen Cylinder' ? event => setOxygenVerifiedOn(event.target.value) : 
+                                        modal === 'ICU Bed' ? event => setBedVerifiedOn(event.target.value) : 
+                                        modal === 'Private Transport' ? event => setPrivateTransportVerifiedOn(event.target.value) : 
+                                        modal === 'Plasma' ? event => setBloodVerifiedOn(event.target.value) : 
+                                        modal === 'Ambulance' ? event => setAmbulanceVerifiedOn(event.target.value) : 
+                                        modal === 'Vaccine' ? event => setVaccineVerifiedOn(event.target.value) :
+                                        ''
+                                    }
+                                    disabled
+                                    />
+                            </Grid>
+                        </Grid>
+                    </div>
+                    <div className="column">
+                        <Grid container spacing={1} alignItems="flex-end">
+                            <Grid item>
+                                <TextField id="input-with-icon-grid" 
+                                    label={
+                                        modal === 'Oxygen Cylinder' ? 'Verified By' : 
+                                        modal === 'ICU Bed' ? 'Verified By' : 
+                                        modal === 'Private Transport' ? 'Verified By' : 
+                                        modal === 'Plasma' ? 'Verified By' : 
+                                        modal === 'Ambulance' ? 'Verified By' : 
+                                        modal === 'Vaccine' ? 'Verified By' :
+                                        ''
+                                    } 
+                                    type="text" 
+                                    value={
+                                        modal === 'Oxygen Cylinder' ? oxygenVerifiedBy : 
+                                        modal === 'ICU Bed' ? bedVerifiedBy : 
+                                        modal === 'Private Transport' ? privateTransportVerifiedBy : 
+                                        modal === 'Ambulance' ? ambulanceVerifiedBy : 
+                                        modal === 'Plasma' ? bloodVerifiedBy : 
+                                        modal === 'Vaccine' ? vaccineVerifiedBy :
+                                        ''
+                                    } 
+                                    onChange={
+                                        modal === 'Oxygen Cylinder' ? event => setOxygenVerifiedBy(event.target.value) : 
+                                        modal === 'ICU Bed' ? event => setBedVerifiedBy(event.target.value) : 
+                                        modal === 'Private Transport' ? event => setPrivateTransportVerifiedBy(event.target.value) : 
+                                        modal === 'Plasma' ? event => setBloodVerifiedBy(event.target.value) : 
+                                        modal === 'Ambulance' ? event => setAmbulanceVerifiedBy(event.target.value) : 
+                                        modal === 'Vaccine' ? event => setVaccineVerifiedBy(event.target.value) :
+                                        ''
+                                    }
+                                    disabled
+                                    />
+                            </Grid>
+                        </Grid>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="column">
+                        <Grid container spacing={1} alignItems="flex-end">
+                            <Grid item>
+                                <TextField id="input-with-icon-grid" 
+                                    label={
+                                        modal === 'Oxygen Cylinder' ? 'Available Cylinders' : 
+                                        modal === 'ICU Bed' ? 'Available Beds' : 
+                                        modal === 'Private Transport' ? 'Available Vehicles' : 
+                                        modal === 'Plasma' ? 'Availble blood groups' : 
+                                        modal === 'Ambulance' ? 'Available Vehicles' : 
+                                        modal === 'Vaccine' ? 'Available Vaccine types' : 
+                                        ''
+                                    } 
+                                    type="text" 
+                                    value={
+                                        modal === 'Oxygen Cylinder' ? oxygenAvailability : 
+                                        modal === 'ICU Bed' ? bedAvailability : 
+                                        modal === 'Private Transport' ? privateTransportAvailability : 
+                                        modal === 'Plasma' ? bloodAvailability : 
+                                        modal === 'Ambulance' ? ambulanceAvailability : 
+                                        modal === 'Vaccine' ? vaccineAvailability :
+                                        ''
+                                        } 
+                                    onChange={
+                                        modal === 'Oxygen Cylinder' ? event => setOxygenAvailability(event.target.value) : 
+                                        modal === 'ICU Bed' ? event => setBedAvailability(event.target.value) : 
+                                        modal === 'Private Transport' ? event => setPrivateTransportAvailability(event.target.value) : 
+                                        modal === 'Plasma' ? event => setBloodAvailability(event.target.value) : 
+                                        modal === 'Ambulance' ? event => setAmbulanceAvailability(event.target.value) : 
+                                        modal === 'Vaccine' ? event => setVaccineAvailability(event.target.value) : 
+                                        ''
+                                    }
+                                />
+                            </Grid>
+                        </Grid>
+                    </div>
+                    <div className="column">
+                        <Grid container spacing={1} alignItems="flex-end">
+                            <Grid item>
+                                <TextField id="input-with-icon-grid" 
+                                    label={
+                                        modal === 'Oxygen Cylinder' ? 'Cost per Cylinder' : 
+                                        modal === 'ICU Bed' ? 'Cost per Bed' : 
+                                        modal === 'Private Transport' ? 'Cost per 1km' : 
+                                        modal === 'Plasma' ? 'Cost per blood group' : 
+                                        modal === 'Ambulance' ? 'Cost per 1km' : 
+                                        modal === 'Vaccine' ? 'Cost per vaccine' :
+                                        ''
+                                    } 
+                                    type="text" 
+                                    value={
+                                        modal === 'Oxygen Cylinder' ? oxygenPrice : 
+                                        modal === 'ICU Bed' ? bedPrice : 
+                                        modal === 'Private Transport' ? privateTransportCostPerKm : 
+                                        modal === 'Ambulance' ? ambulanceCostPerKm : 
+                                        modal === 'Plasma' ? bloodPrice : 
+                                        modal === 'Vaccine' ? vaccinePrice :
+                                        ''
+                                    } 
+                                    onChange={
+                                        modal === 'Oxygen Cylinder' ? event => setOxygenPrice(event.target.value) : 
+                                        modal === 'ICU Bed' ? event => setBedPrice(event.target.value) : 
+                                        modal === 'Private Transport' ? event => setPrivateTransportCostPerKm(event.target.value) : 
+                                        modal === 'Plasma' ? event => setBloodPrice(event.target.value) : 
+                                        modal === 'Ambulance' ? event => setAmbulanceCostPerKm(event.target.value) : 
+                                        modal === 'Vaccine' ? event => setVaccinePrice(event.target.value) :
+                                        ''
+                                    }
+                                    />
+                            </Grid>
+                        </Grid>
+                    </div>
+                </div>
+                <Button color="secondary" variant="contained">Change Address</Button>
             </div>
         )
     }
     const [sendData,setSendData] = useState('');
     const [dataType,setDataType] = useState('')
-    const Send = () =>{
-        console.log(state,district,mandal)
-        return(
-            <div>
-            {   
-                sendData === 'Oxygen Cylinder' ? (sendOxygenCylinders(dataType,{'Oxygen Quantity':oxygenQuantity},{'Oxygen Price':oxygenPrice},{'Oxygen Address':oxygenaddress})) : 
-                sendData === 'ICU Bed' ? (console.log(dataType,{'beds':beds},{'bedPrice':bedPrice},{'bedAddress':bedAddress})) : 
-                sendData === 'Private Transport' ? (console.log(dataType,{'km':km},{'privateTransportPrice':privateTransportPrice},{'privateTransportAddress':privateTransportAddress})) : 
-                sendData === 'Ambulance' ? (console.log(dataType,{'hospital':hospital},{'contactNumber':contactNumber},{'AmbulanceAddress':AmbulanceAddress})) : 
-                sendData === 'Plasma' ? (console.log(dataType,{'bloodGroup':bloodGroup},{'plasmaPrice':plasmaPrice},{'plasmaAddress':plasmaAddress})) : 
-                sendData === 'Vaccine' ? (console.log(dataType,{"Vaccine Type":type},{'Vaccine Price':vaccinePrice},{'Vaccine Address':VaccineAddress})) : ''
-            }
-            </div>
-        )
-    }
-    const sendOxygenCylinders= () => {
-            const data = {
-            "Username":username,
-            "State":state,
-            "District":district,
-            "Mandal":mandal,
-            "OxygenQuantity": oxygenQuantity,
-            "OxygenPrice":oxygenPrice,
-            "OxygenAddress":oxygenaddress
-            }
-            axios.post('http://localhost:3010/oxygencylinder', {data}).then(
-            function(res) {
-                if(res.data.msg) {
-                    alert(res.data.msg);
-                } else {
-                    console.log(res.data.msg)
-                }
-            }
-        )
-        }
     return (
         <div>
-            <div class="modal fade" id="picturecapture" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLongTitle">Oxygen Cylinders</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        </div>
-                        <div class="modal-body">
-                            {capture()}
-                        </div>
-                        <div class="modal-footer">
-                            <Button type="button" class="btn btn-secondary" data-dismiss="modal" onClick={()=>{setEnable(true)}}>Close</Button>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <nav className="glass">
                 <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
                 <div>
@@ -336,14 +298,15 @@ export default function DonorAvailability() {
                                     <AccordionDetails>
                                         {render(l)}
                                     </AccordionDetails>
-                                    <AccordionActions>
-                                        <Button size="small" color="primary"  onClick={()=>{Send();}}>Submit</Button>
+                                    <AccordionActions expanded={expanded === l} onClick={handleChange(l)}>
+                                        <Button size="small" color="primary" variant="contained"  onClick={()=>{handleChange(l);list.splice(list.indexOf(l),1)}}>Submit</Button>
                                     </AccordionActions>
                                 </Accordion>
                             </div>
                         )
                     })}
                 </div>
+                <NavLink to='/'><Button color="primary" variant="contained">HOME</Button></NavLink>
             </nav>
         </div>
     )
