@@ -54,7 +54,6 @@ const MapWithAMarkerClusterer = compose(
 )
 (props => (
 	<GoogleMap defaultZoom={12} defaultCenter={{ lat: parseFloat(props.lat), lng: parseFloat(props.lon)}}>
-		{console.log(parseFloat(props.lat),parseFloat(props.lon))}
 		<MarkerClusterer
 			onClick={props.onMarkerClustererClick}
 			averageCenter
@@ -103,8 +102,9 @@ const MapWithAMarkerClusterer = compose(
 				title="Your Location"
 				position={{ lat: parseFloat(props.lat), lng: parseFloat(props.lon) }}
 			/>
+			{/* parseInt(haversine({ lat: parseFloat(props.lat), lng: parseFloat(props.lon)}, { lat: marker.latitude, lng: marker.longitude})/1000) */}
 			{props.markers.map((marker,i)=>{
-				if(props.type.includes(marker.type) && parseInt(haversine({ lat: parseFloat(props.lat), lng: parseFloat(props.lon)}, { lat: marker.latitude, lng: marker.longitude})/1000) < 500){
+				if(props.type.includes(marker.type) ){
 					return(
 				<Marker
 					icon={
@@ -175,9 +175,6 @@ function DemoApp(props) {
     const [lat,setLat] = useState(0);
     const [lon,setLon] = useState(0);
 	const [markers,setMarkers] = useState([]);
-	const [volunteers,setVolunteers] = useState([
-		{height: 375,latitude: 14.99299800000002,longitude: 79.7399875,verifications: 34,owner_id:1213,owner_number:'1234567890',owner_name: "Madhu",type:"volunteer",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 27930,email: "18pa1a1213@vishnu.edu.in",status: "Active",width: 500},
-	])
 	const [oxygenCylinders,setOxygenCylinders] = useState([
 		{height: 375,latitude: 13.912899800000002,longitude: 79.7399875,owner_id: 4480,owner_number:'1234567890',owner_name: "Madhu",type:"Oxygen Cylinders",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 27930,verifiedBy: "18pa1a1213@vishnu.edu.in",availability: "Available",upload_date: "25 June 2006",width: 500},
 		{height: 375,latitude: 13.992899800000002,longitude: 79.7399875,owner_id: 4481,owner_number:'1234567890',owner_name: "Abhinav",type:"Oxygen Cylinders",owner_address: "rajolu",verifiedOn: "12-04-2021",photo_id: 27931,verifiedBy: "18pa1a1214@vishnu.edu.in",availability: "Not Available",upload_date: "25 June 2006",width: 500},
@@ -258,16 +255,14 @@ const [pathCoordinates,setPathCoordinates] = useState([
         { lat: 15.912899800000002, lng: 79.7399875 },
         { lat: 16.912899800000002, lng: 80.7399875 }
     ])
-	console.log(lat,parseFloat(lon));
 	{oxygenCylinders.map((o)=>{
 		pathCoordinates.push({lat:(o.latitude),lng:(o.longitude)})
 	})}
-	// console.log(typeof(pathCoordinates))
 	return(
 		<div>
 			<MapWithAMarkerClusterer
 					markers={oxygenCylinders}
-					volunteers = {volunteers}
+					volunteers = {props.volunteers}
 				lat={lat} lon={lon} type={array} pathCoordinates={pathCoordinates}/>
 		</div>)
 
