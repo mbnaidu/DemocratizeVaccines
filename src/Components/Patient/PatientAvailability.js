@@ -7,7 +7,7 @@ import ModalHeader from 'react-bootstrap/esm/ModalHeader';
 import { ExpandLess, ExpandMore, Twitter } from '@material-ui/icons';
 import axios from 'axios';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
-import Map from '../Maps/Map'
+import Map from '../Maps/PatientMap'
 
 function PatientAvailability() {
     const [expanded, setExpanded] = React.useState(false);
