@@ -5,8 +5,6 @@ import './styles.css'
 
 import {BrowserRouter as Router,Route,} from "react-router-dom";
 import Home from './Home'
-import DonorLocation from './Components/Donor/DonorLocation'
-import PatientLocation from './Components/Patient/PatientLocation'
 import DonorRequirements from './Components/Donor/DonorRequirements'
 import PatientRequirements from './Components/Patient/PatientRequirements'
 import DonorAvailability from './Components/Donor/DonorAvailability'
@@ -19,12 +17,6 @@ function App() {
           <div className="App">
             <Route exact path="/">
               <Home />
-            </Route>
-            <Route exact path="/donor-location">
-              <DonorLocation />
-            </Route>
-            <Route exact path="/patient-location">
-              <PatientLocation />
             </Route>
             <Route exact path="/donor-requirements">
               <DonorRequirements />

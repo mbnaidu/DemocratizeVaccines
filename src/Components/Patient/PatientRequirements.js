@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react'
 import { ModalBody, ModalFooter, ModalTitle, Modal} from 'react-bootstrap';
 import ModalHeader from 'react-bootstrap/esm/ModalHeader';
 import { NavLink, useLocation } from 'react-router-dom'
-import '../../Styles/Patient.css'
 
 
 const useStyles = makeStyles({
