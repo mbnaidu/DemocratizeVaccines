@@ -13,6 +13,7 @@ function PatientAvailability() {
     const [expanded, setExpanded] = React.useState(false);
     const [oxygens,setOxygens] = useState([])
 	const location = useLocation();
+    console.log(location.state)
     const [list,setList] = useState(location.state.finallist)
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
@@ -146,7 +147,7 @@ function PatientAvailability() {
                 <br/><br/><br/><br/><br/><br/><br/><br/>
                     <div className="trail"> 
                     <Button variant="contained" color="primary" endIcon={<Icon>send</Icon>} onClick={()=>{setShow(true)}}>Send Request</Button>{' '}
-                    <Button variant="contained" color="primary" endIcon={<LocationOnIcon />} onClick={()=>{setShow1(true)}}>Show Donors</Button>
+                    <Button variant="contained" color="primary" endIcon={<LocationOnIcon />} onClick={()=>{setShow1(true)}}>Show On Maps</Button>
                         {accordian.map((m,key)=>{
                                 return(
                                     <div>
