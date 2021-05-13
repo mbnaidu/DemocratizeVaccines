@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom'
 
 import './styles.css'
 
-import Map from './Map'
 import {BrowserRouter as Router,Route,} from "react-router-dom";
 import Home from './Home'
 import DonorLocation from './Components/Donor/DonorLocation'

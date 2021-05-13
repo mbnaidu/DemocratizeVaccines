@@ -7,34 +7,16 @@ import ModalHeader from 'react-bootstrap/esm/ModalHeader';
 import { ExpandLess, ExpandMore, Twitter } from '@material-ui/icons';
 import axios from 'axios';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
-import Map from '../../Map'
+import Map from '../Maps/Map'
 
 function PatientAvailability() {
     const [expanded, setExpanded] = React.useState(false);
     const [oxygens,setOxygens] = useState([])
 	const location = useLocation();
-    console.log(location)
-    
     const [list,setList] = useState(location.state.finallist)
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
-    // useEffect(() => {
-    //     axios.post('http://localhost:3010/getalloxygencylinders').then(
-    //         function(res) {
-    //             if(res.data.msg) {
-    //                 alert(res.data.msg);
-    //             } else {
-    //                 {res.data.map((m)=>{
-    //                     if(m.Mandal === Mandal){
-    //                         oxygens.push(m);
-    //                     }
-    //                 })}
-    //             }
-    //         }
-    //     )
-    // },[])
-    // console.log(oxygens)
     const accordian = [
         {
             id:'panel1',panelName:'',panelControl:'panel1bh-content',panelColor:'blue',panelText1:'Oxygen Cylinders',
@@ -87,7 +69,7 @@ function PatientAvailability() {
                 <div> 
                     <Modal show={show1}>
                         <ModalBody>
-                            <Map/>
+                            <Map  location={location}/>
                         </ModalBody>
                         <ModalFooter>
                             <Button onClick={()=>{setShow1(false)}}>Close</Button>
@@ -168,7 +150,7 @@ function PatientAvailability() {
                         {accordian.map((m,key)=>{
                                 return(
                                     <div>
-                                        {list.map((l)=>{
+                                        {list.map((l,key)=>{
                                             return(
                                                 <div>
                                                     {l === m.panelText1 ? (<div>
@@ -188,7 +170,7 @@ function PatientAvailability() {
                                                                                     <TableCell>Address</TableCell>
                                                                                 </TableHead>
                                                                                 <TableBody >
-                                                                                        {oxygens.map((o,index)=>{
+                                                                                        {oxygens.map((o,key=o.id)=>{
                                                                                             return(
                                                                                                 <TableRow hover role="checkbox">
                                                                                                     <TableCell padding="checkbox">

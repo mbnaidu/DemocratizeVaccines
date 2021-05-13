@@ -79,49 +79,6 @@ const getCity = (coordinates) =>{
 }
 getCoordintes()
     }, [])
-    const getCoordintes = ()=> {
-	var options = {
-		enableHighAccuracy: true,
-		timeout: 5000,
-		maximumAge: 0
-	};
-	function success(pos) {
-		var crd = pos.coords;
-		var lat = crd.latitude.toString();
-		var lng = crd.longitude.toString();
-		var coordinates = [lat, lng];
-		setLongLatt(`Latitude: ${lat}, Longitude: ${lng}`)
-        console.log(longLatt)
-		getCity(coordinates);
-		return;
-	}
-	function error(err) {
-		console.warn(`ERROR(${err.code}): ${err.message}`);
-	}
-	navigator.geolocation.getCurrentPosition(success, error, options);
-}
-// Step 2: Get city name
-const getCity = (coordinates) =>{
-	var xhr = new XMLHttpRequest();
-	var lat = coordinates[0];
-	var lng = coordinates[1];
-
-	// Paste your LocationIQ token below.
-	xhr.open('GET', "https://us1.locationiq.com/v1/reverse.php?key=pk.a38452a5c36ea022c35226791e032ecd&lat=" +
-	lat + "&lon=" + lng + "&format=json", true);
-	xhr.send();
-	xhr.onreadystatechange = processRequest;
-	xhr.addEventListener("readystatechange", processRequest, false);
-
-	function processRequest(e) {
-		if (xhr.readyState == 4 && xhr.status == 200) {
-			var response = JSON.parse(xhr.responseText);
-            setPatientAddress(response.display_name)
-			return;
-		}
-	}
-}
-
     const [show, setShow] = useState(false);
     const [expanded, setExpanded] = React.useState(false);
     const handleChange = (panel) => (event, isExpanded) => {
@@ -240,7 +197,8 @@ const getCity = (coordinates) =>{
                                 })}
                             </FormGroup>
                             <br/><br/>
-                            <NavLink
+                            {patientAddress != '' ? (<div>
+                                <NavLink
                                 to={{
                                     pathname:'/patient-availability',
                                         state: {
@@ -251,8 +209,11 @@ const getCity = (coordinates) =>{
                                     }}
                                     exact
                             >
-                            <Button variant="contained" color="primary" onClick={()=>{getCoordintes();}}>SEARCH</Button>
+                            <Button variant="contained" color="primary" >SEARCH</Button>
                             </NavLink>
+                            </div>) : (<div>
+                                <Button variant="contained" color="primary" type="submit" onClick={()=>{alert('Please allow location');window.location.reload(false)}}>SEARCH</Button>
+                            </div>)}
                         </FormControl>
                         </CardContent>
                     </Card>
