@@ -1,9 +1,11 @@
 import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Button, Grid, Icon, makeStyles, MenuItem, TextField, Typography } from '@material-ui/core'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom';
 import {  Send } from '@material-ui/icons';
-import AddAPhotoIcon from '@material-ui/icons/AddAPhoto';
-import CallMadeIcon from '@material-ui/icons/CallMade';
+
+import { ModalBody, ModalFooter, ModalTitle, Modal} from 'react-bootstrap';
+import ModalHeader from 'react-bootstrap/esm/ModalHeader';
+import DonorMap from '../Maps/DonorMap';
 
 
 
@@ -59,38 +61,70 @@ export default function DonorAvailability() {
             const [bloodVerifiedOn,setBloodVerifiedOn] = useState('');
             const [bloodVerifiedBy,setBloodVerifiedBy] = useState('');
             const [bloodPrice,setBloodPrice] = useState('');    
-
-    const [modal,setModal] = useState('');
-    const [enable,setEnable] = useState('true');
-    const [disable,setDisable] = useState('true')
-    const location = useLocation();
-    console.log(location)
-    const[list,setList] = useState(location.state.list);
-    const classes = useStyles();
-    var icons = ["🔋", "🛏️", "🚑", "🚖", "💉", "🩸"];
-    var panelNumbers = ["panel1", "panel2",'panel3','panel4','panel5','panel6'];
-    var panelIds = ["panel1bh-header","panel2bh-header","panel3bh-header","panel4bh-header","panel5bh-header","panel6bh-header"];
-    var panelControls = ["panel1bh-content", "panel2bh-content","panel3bh-content","panel4bh-content","panel5bh-content","panel6bh-content",];
-    var icon = [''];
-    var panelNumber = [''];
-    var control = [''];
-    var panelId = [''];
-    var requestedList = ['Oxygen Cylinder', 'ICU Bed',"Ambulance","Private Transport",'Vaccine','Plasma'];
-    const settingList = (type) =>{
-        for(var i=0;i<requestedList.length;i++){
-            if(type === requestedList[i]){
-                icon = icons[i];
-                panelNumber = panelNumbers[i];
-                panelId = panelIds[i];
-                control = panelControls[i];
+            // setting modal
+            const [modal,setModal] = useState('');
+            const [enable,setEnable] = useState('true');
+            const [disable,setDisable] = useState('true')
+            const location = useLocation();
+            const[list,setList] = useState(location.state.list);
+            const classes = useStyles();
+            var icons = ["🔋", "🛏️", "🚑", "🚖", "💉", "🩸"];
+            var panelNumbers = ["panel1", "panel2",'panel3','panel4','panel5','panel6'];
+            var panelIds = ["panel1bh-header","panel2bh-header","panel3bh-header","panel4bh-header","panel5bh-header","panel6bh-header"];
+            var panelControls = ["panel1bh-content", "panel2bh-content","panel3bh-content","panel4bh-content","panel5bh-content","panel6bh-content",];
+            var icon = [''];
+            var panelNumber = [''];
+            var control = [''];
+            var panelId = [''];
+            var requestedList = ['Oxygen Cylinder', 'ICU Bed',"Ambulance","Private Transport",'Vaccine','Plasma'];
+            const settingList = (type) =>{
+                for(var i=0;i<requestedList.length;i++){
+                    if(type === requestedList[i]){
+                        icon = icons[i];
+                        panelNumber = panelNumbers[i];
+                        panelId = panelIds[i];
+                        control = panelControls[i];
+                    }
+                }
             }
-        }
-    }
-    // expansion
-    const [expanded, setExpanded] = React.useState(false);
-    const handleChange = (panel) => (event, isExpanded) => {
-        setExpanded(isExpanded ? panel : false);
-    };
+            // expansion
+            const [expanded, setExpanded] = React.useState(false);
+            const handleChange = (panel) => (event, isExpanded) => {
+                setExpanded(isExpanded ? panel : false);
+            };
+            const [lat,setLat] = useState('');
+            const [lng,setLng] = useState('');
+            // setting modal
+                const [show,setShow] = useState(false)
+            useEffect(() => {
+                    var options = {
+                        enableHighAccuracy: true,
+                        timeout: 5000,
+                        maximumAge: 0
+                    };
+                    function success(pos) {
+                        var crd = pos.coords;
+                        setLat(crd.latitude)
+                        setLng(crd.longitude)
+                        return;
+                    }
+                    function error(err) {
+                        console.warn(`ERROR(${err.code}): ${err.message}`);
+                    }
+                    navigator.geolocation.getCurrentPosition(success, error, options);
+                    var k = 0;
+                    const url = [
+                    // Length issue
+                    `https://gist.githubusercontent.com`,
+                    `/farrrr/dfda7dd7fccfec5474d3`,
+                    `/raw/758852bbc1979f6c4522ab4e92d1c92cba8fb0dc/data.json`
+                    ].join('')
+
+                    fetch(url)
+                    .then(res => res.json())
+                    .then(data => {
+                    })
+                }, [])
     const render = () =>{
         return(
             <div>
@@ -276,7 +310,7 @@ export default function DonorAvailability() {
                         </Grid>
                     </div>
                 </div>
-                <Button color="secondary" variant="contained">Change Address</Button>
+                <Button color="secondary" variant="contained" onClick={()=>setShow(true)}>Change Address</Button>
             </div>
         )
     }
@@ -284,6 +318,20 @@ export default function DonorAvailability() {
     const [dataType,setDataType] = useState('')
     return (
         <div>
+            {/* MODALS */}
+            <div>
+                <Modal show={show}>
+                    <ModalHeader>
+                        Select approximate point
+                    </ModalHeader>
+                    <ModalBody>
+                        {<DonorMap lat={lat} lng={lng}/>}
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button size="small" color="primary" variant="outlined" onClick={()=>{setShow(false)}}>Close</Button>
+                    </ModalFooter>
+                </Modal>
+            </div>
             <nav className="glass">
                 <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
                 <div>
