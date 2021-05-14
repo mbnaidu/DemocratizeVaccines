@@ -62,7 +62,7 @@ const MapWithAMarkerClusterer = compose(
 			label={"hi"}
 		>	
 		{props.volunteers.map((v,key=v.owner_id)=>{
-			if(parseInt(haversine({ lat: parseFloat(props.lat), lng: parseFloat(props.lon)}, { lat: v.latitude, lng: v.longitude})/1000) < 900){
+			if(parseInt(haversine({ lat: parseFloat(props.lat), lng: parseFloat(props.lon)}, { lat: v.latitude, lng: v.longitude})/1000) > 100){
 				return(
 					<Marker
 							key={v.owner_id}
