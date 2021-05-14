@@ -7,8 +7,10 @@ class Home extends Component {
         return (
             <nav className="glass">
                 <div className="wrapper patientbutton">
-                    <NavLink to="/patient-requirements"><Button variant="contained"  color="primary">PATIENT</Button></NavLink>{' '}
-                    <NavLink to="/donor-requirements"><Button variant="contained" color="primary">DONOR</Button></NavLink>
+                        <NavLink to="/patient-requirements"><Button variant="contained"  color="primary" >PATIENT</Button></NavLink>{' '}
+                        <NavLink to="/donor-requirements"><Button variant="contained" color="primary" >DONOR</Button></NavLink>
+                        <br/><br/><br/>
+                        <NavLink to="/volunteer-requirements"><Button variant="contained" color="primary" >VOLUNTEER</Button></NavLink>
                 </div>
             </nav>
             )
