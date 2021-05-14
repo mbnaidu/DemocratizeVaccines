@@ -62,14 +62,14 @@ function VolunteerRequirements() {
         setRange(`${value}`)
         return `${value}`;
     }
-    var finalList = [];
+    const [finalList,setFinalList] = useState('')
         const handleInput = (option) =>{
             let index = finalList.indexOf(option)
             if(index > -1){
-                finalList.splice(index, 1);
+                setFinalList('')
             }
             else{
-                finalList.push(option)
+                setFinalList(option)
             }
         }
     const [longLatt,setLongLatt] = useState('');
@@ -117,7 +117,8 @@ function VolunteerRequirements() {
         }
     }
     getCoordintes()
-        }, [])
+        }, []);
+    const [type,setType] = useState('');
     return (
         <div>
             <nav className="glass">
@@ -138,13 +139,18 @@ function VolunteerRequirements() {
                                         valueLabelDisplay="on"
                                         />
                                     </div>
-                                <FormLabel component="legend">Volunteer on....?</FormLabel>
+                                    {/* <FormControl>
+                                        <RadioGroup aria-label="radio" name="radio" value={value} onChange={handleRadioChange}>
+                                            <FormControlLabel value="best" control={<Radio />} label="The best!" />
+                                            <FormControlLabel value="worst" control={<Radio />} label="The worst." />
+                                        </RadioGroup>
+                                    </FormControl> */}
                                     <RadioGroup aria-label="quiz" name="quiz">
-                                        <FormControlLabel value="verify" control={<Checkbox />} label="Verify New Provider" onChange={()=>handleInput('verify')}/>
-                                        <FormControlLabel value="update" control={<Checkbox />} label="Update Old Provider"  onChange={()=>handleInput('update')}/>
-                                        <FormControlLabel value="patient" control={<Checkbox />} label="Help Patient" onChange={()=>handleInput('patient')}/>
-                                        <FormControlLabel value="volunteers" control={<Checkbox />} label="Check Other Volunteers" onChange={()=>handleInput('volunteers')}/>
+                                        <FormControlLabel value="verify" control={<GreenRadio />} label="Verify New Provider" onChange={()=>setType('verify')}/>
+                                        <FormControlLabel value="update" control={<GreenRadio />} label="Update Old Provider"  onChange={()=>setType('update')}/>
+                                        <FormControlLabel value="patient" control={<GreenRadio />} label="Help Patient" onChange={()=>setType('patient')}/>
                                     </RadioGroup>
+                                    <FormControlLabel value="volunteers" control={<Checkbox />} label="Check Other Volunteers" onChange={()=>handleInput('volunteers')}/>
                                     {volunteerAddress != '' ? (<div>
                                     <NavLink
                                     to={{
@@ -153,6 +159,8 @@ function VolunteerRequirements() {
                                                 address:volunteerAddress,
                                                 location:longLatt,
                                                 finallist:finalList,
+                                                type:type,
+                                                range:range
                                             } 
                                         }}
                                         exact
@@ -160,7 +168,7 @@ function VolunteerRequirements() {
                                 <Button variant="contained" color="primary" className={classes.button} >Get Details</Button>
                                 </NavLink>
                                 </div>) : (<div>
-                                    <Button variant="contained" color="primary" className={classes.button} type="submit" onClick={()=>{alert('Please allow location');window.location.reload(false)}}>Get Details</Button>
+                                    <Button variant="contained" color="primary" className={classes.button} type="submit" onClick={()=>{console.log(type,finalList,range);}}>Get Details</Button>
                                 </div>)}
                             </FormControl>
                         </CardContent>
