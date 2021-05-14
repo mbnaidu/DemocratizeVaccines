@@ -139,12 +139,6 @@ function VolunteerRequirements() {
                                         valueLabelDisplay="on"
                                         />
                                     </div>
-                                    {/* <FormControl>
-                                        <RadioGroup aria-label="radio" name="radio" value={value} onChange={handleRadioChange}>
-                                            <FormControlLabel value="best" control={<Radio />} label="The best!" />
-                                            <FormControlLabel value="worst" control={<Radio />} label="The worst." />
-                                        </RadioGroup>
-                                    </FormControl> */}
                                     <RadioGroup aria-label="quiz" name="quiz">
                                         <FormControlLabel value="verify" control={<GreenRadio />} label="Verify New Provider" onChange={()=>setType('verify')}/>
                                         <FormControlLabel value="update" control={<GreenRadio />} label="Update Old Provider"  onChange={()=>setType('update')}/>
@@ -168,7 +162,7 @@ function VolunteerRequirements() {
                                 <Button variant="contained" color="primary" className={classes.button} >Get Details</Button>
                                 </NavLink>
                                 </div>) : (<div>
-                                    <Button variant="contained" color="primary" className={classes.button} type="submit" onClick={()=>{console.log(type,finalList,range);}}>Get Details</Button>
+                                    <Button variant="contained" color="primary" className={classes.button} onClick={()=>{console.log(type,finalList,range);}}>Get Details</Button>
                                 </div>)}
                             </FormControl>
                         </CardContent>
