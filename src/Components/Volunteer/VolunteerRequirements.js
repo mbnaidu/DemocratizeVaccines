@@ -162,7 +162,7 @@ function VolunteerRequirements() {
                                 <Button variant="contained" color="primary" className={classes.button} >Get Details</Button>
                                 </NavLink>
                                 </div>) : (<div>
-                                    <Button variant="contained" color="primary" className={classes.button} onClick={()=>{console.log(type,finalList,range);}}>Get Details</Button>
+                                    <Button variant="contained" color="primary" className={classes.button} onClick={()=>{alert('Please allow location');window.location.reload(false)}}>Get Details</Button>
                                 </div>)}
                             </FormControl>
                         </CardContent>
