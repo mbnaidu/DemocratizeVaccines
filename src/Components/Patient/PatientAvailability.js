@@ -210,7 +210,7 @@ function PatientAvailability() {
                 </div>
                 <br/><br/><br/><br/><br/><br/><br/><br/>
                     <div className="trail"> 
-                    <Button variant="contained" color="primary" endIcon={<Icon>send</Icon>} onClick={()=>{setShow(true)}}>Send Request</Button>{' '}
+                    <Button variant="contained" color="primary" endIcon={<Icon>send</Icon>} onClick={()=>{setShow(true)}}>Show My details</Button>{' '}
                     <Button variant="contained" color="primary" endIcon={<LocationOnIcon />} onClick={()=>{setShow1(true)}}>Show On Maps</Button>
                         {accordian.map((m,key)=>{
                                 return(
