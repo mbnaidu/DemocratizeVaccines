@@ -1,12 +1,13 @@
-import { Accordion, AccordionDetails, AccordionSummary, Button, Checkbox, Collapse, Icon, Input, List, ListItem, ListItemIcon, ListItemText, makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography } from '@material-ui/core'
+import { Accordion, AccordionDetails, AccordionSummary, Button, Checkbox, Collapse, Grid, Icon, Input, List, ListItem, ListItemIcon, ListItemText, makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField, Typography } from '@material-ui/core'
 import React, { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { ModalBody, ModalFooter, ModalTitle, Modal} from 'react-bootstrap';
 import ModalHeader from 'react-bootstrap/esm/ModalHeader';
-import { ExpandLess, ExpandMore, Twitter } from '@material-ui/icons';
-import axios from 'axios';
+import { AccountCircle, ExpandLess, ExpandMore, Twitter } from '@material-ui/icons';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
-import Map from '../Maps/PatientMap'
+import Map from '../Maps/PatientMap';
+import VpnKeyIcon from '@material-ui/icons/VpnKey';
+
 
 function PatientAvailability() {
     const [expanded, setExpanded] = React.useState(false);
@@ -103,12 +104,16 @@ function PatientAvailability() {
         color: theme.palette.text.primary,
     }
 }));
+    const [showMap,setShowMap] = useState(false)
     const classes = useStyles();
-    const [userId,setUserId] = useState(location.state.userId);
-    const [phoneNumber,setphoneNumber] = useState(location.state.phoneNumber);
+    const [login,setLogin] = useState(false);
+    const [signup,setSignup] = useState(false);
+    const [generate,setGenerate] = useState("Generate");
+    const [userId,setUserId] = useState(0);
+    const [pass,setPass] = useState('');
+    const [phoneNumber,setPhoneNumber] = useState('');
+    const [code,setCode] = useState('');
     const [show,setShow] = useState(false);
-    const [generate,setGenerate] = useState('Generate');
-    const [code,setCode] = useState("");
     const [twitter,setTwitter] = useState(false);
     const [openCylinder,setCylinder] = useState(false);
     const [openBeds,setBeds] = useState(false);
@@ -137,7 +142,7 @@ function PatientAvailability() {
                 <div> 
                     <Modal show={show1}>
                         <ModalBody>
-                            <Map  location={location} volunteers={volunteers} userId={userId} phoneNumber={phoneNumber}/>
+                            <Map  location={location} volunteers={volunteers} />
                         </ModalBody>
                         <ModalFooter>
                             <Button onClick={()=>{setShow1(false)}}>Close</Button>
@@ -237,9 +242,53 @@ function PatientAvailability() {
                     </Modal>
                 </div>
                 <br/><br/><br/><br/><br/><br/><br/><br/>
+                {login ? signup ? (<div>
+                    {generate === "Generate" ? (
+							<div>
+                                <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+								<Input placeholder="10-digit-phone-number" type="number" value={phoneNumber} onChange={event => setPhoneNumber(event.target.value)}/>{' '}
+								<Button variant="contained" color="primary" endIcon={<Icon>send</Icon>} onClick={()=>{phoneNumber.length === 10 ? setGenerate('Submit') : alert("Enter valid Number");}}>
+									{generate}
+								</Button>
+							</div>
+						) : (
+							<div>
+                                <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+								<Input placeholder="6-digit-code" value={code} onChange={event => setCode(event.target.value)}/>{' '}
+                                <Button variant="contained" color="primary" endIcon={<Icon>send</Icon>} onClick={()=>{setSignup(false);setLogin(true)}}>
+									{generate}
+								</Button>
+							</div>
+						)}
+                </div>) : (<div>
+                    <div className="center"> 
+                                    <Grid container spacing={1} alignItems="flex-end">
+                                        <Grid item>
+                                            <AccountCircle />
+                                        </Grid>
+                                        <Grid item>
+                                            <TextField id="input-with-icon-grid" label="UserID" value={userId} onChange={event => setUserId(event.target.value)}/>
+                                        </Grid>
+                                    </Grid>
+                                    <Grid container spacing={1} alignItems="flex-end">
+                                        <Grid item>
+                                            <VpnKeyIcon />
+                                        </Grid>
+                                        <Grid item>
+                                            <TextField id="input-with-icon-grid" label="Password" type="password" value={pass} onChange={event => setPass(event.target.value)}/>
+                                        </Grid>
+                                    </Grid><br/><br/>
+                                    <Button color="primary" variant="outlined" onClick={()=>{setLogin(false);}}>Login</Button>{' '}
+                                    <Button color="secondary" variant="contained" onClick={()=>{setSignup(true);}}>Sign Up</Button>
+                                </div>
+                </div>) : showMap ? (<div>
+                    <Map  location={location} volunteers={volunteers} />
+                    <br/>
+                    <Button color="primary" variant="contained" onClick={()=>{setShowMap(false)}}>Close</Button>
+                </div>) : (<div>
                     <div className="trail"> 
                     <Button variant="contained" color="primary" endIcon={<Icon>send</Icon>} onClick={()=>{setShow(true)}}>Recent Calls</Button>{' '}
-                    <Button variant="contained" color="primary" endIcon={<LocationOnIcon />} onClick={()=>{setShow1(true)}}>Show On Maps</Button>
+                    <Button variant="contained" color="primary" endIcon={<LocationOnIcon />} onClick={()=>{setShowMap(true)}}>Show On Maps</Button>
                         {accordian.map((m,key)=>{
                                 return(
                                     <div>
@@ -256,7 +305,7 @@ function PatientAvailability() {
                                                                     <TableContainer >
                                                                             <Table aria-labelledby="tableTitle" size='large' aria-label="enhanced table">
                                                                                 <TableHead>
-                                                                                    <TableCell>Select</TableCell>
+                                                                                    <TableCell>Contact Number</TableCell>
                                                                                     <TableCell>Availability</TableCell>
                                                                                     <TableCell>ID</TableCell>
                                                                                     <TableCell>UserName</TableCell>
@@ -265,14 +314,17 @@ function PatientAvailability() {
                                                                                     <TableCell>VerifiedBy</TableCell>
                                                                                     <TableCell>Price</TableCell>
                                                                                     <TableCell>Address</TableCell>
-                                                                                    <TableCell>ContactNumber</TableCell>
                                                                                 </TableHead>
                                                                                 <TableBody >
                                                                                         {all.map((o,key=o.id)=>{
                                                                                             return(
                                                                                                 <TableRow hover role="checkbox">
                                                                                                     <TableCell padding="checkbox">
-                                                                                                        <Button color="primary" variant="outlined" onClick={()=>{data.push(o);}}>Send Request</Button>
+                                                                                                        {userId !== 0 ? (<div>
+                                                                                                            <Button color="primary" variant="outlined" onClick={()=>{data.push(o);}}>{o.contactNumber}</Button>
+                                                                                                        </div>) : (<div>
+                                                                                                            <Button color="primary" variant="outlined" size="" onClick={()=>{setLogin(true)}}>Get</Button>
+                                                                                                        </div>)}
                                                                                                     </TableCell>
                                                                                                     <TableCell align="right">{o.availability}</TableCell>
                                                                                                     <TableCell scope="row" padding="none">{o.owner_id}</TableCell>
@@ -281,9 +333,7 @@ function PatientAvailability() {
                                                                                                     <TableCell align="right">{o.verifiedOn}</TableCell>
                                                                                                     <TableCell align="right">{o.verifiedBy}</TableCell>
                                                                                                     <TableCell align="right">{o.price}</TableCell>
-                                                                                                    <TableCell align="right">{o.owner_address}</TableCell>
-                                                                                                    <TableCell align="right">{o.contactNumber}</TableCell>
-                                                                                                </TableRow>
+                                                                                                    <TableCell align="right">{o.owner_address}</TableCell>                                                                                                </TableRow>
                                                                                             )
                                                                                         })}
                                                                                 </TableBody>
@@ -301,6 +351,7 @@ function PatientAvailability() {
                     <NavLink to="/"><Button variant="contained" color="primary">HOME</Button></NavLink><br/><br/>
                     <Button  variant="contained" color="primary" onClick={()=>{setTwitter(true)}}>Show From Twitter</Button>
                     </div>
+                </div>)}
             </nav>
         </div>
     )

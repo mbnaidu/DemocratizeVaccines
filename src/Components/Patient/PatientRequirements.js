@@ -1,4 +1,4 @@
-import { Accordion, AccordionDetails, AccordionSummary, Badge, Button, Card, CardActions, CardContent, Checkbox, FormControl, FormControlLabel, FormGroup, FormHelperText, FormLabel, Grid, Icon, Input, makeStyles, TextField, Typography } from '@material-ui/core'
+import { Accordion, AccordionDetails, AccordionSummary, Badge, Button, Card, CardActions, CardContent, Checkbox, FormControl, FormControlLabel, FormGroup, FormHelperText, FormLabel, Grid, Icon, Input, makeStyles, Slider, TextField, Typography } from '@material-ui/core'
 import { AccountCircle, ExpandMoreSharp } from '@material-ui/icons';
 import React, { useEffect, useState } from 'react'
 import { ModalBody, ModalFooter, ModalTitle, Modal} from 'react-bootstrap';
@@ -212,6 +212,16 @@ getCoordintes()
             }
         }
     const classes = useStyles();
+    const [kms,setkms] = useState([
+        {value:10,label:'10 Kms'},
+        {value: 50,label: '50 Kms'},
+        {value: 100,label: '100 Kms'}
+    ])
+    const[range,setRange] = useState('');
+    function valuetext(value) {
+        setRange(`${value}`)
+        return `${value}`;
+    }
     return (
         <nav className="glass">
             {/* MODELS */}
@@ -237,8 +247,15 @@ getCoordintes()
                                     <Button color="primary" variant="outlined" onClick={()=>{setShow1(true)}}>Change Address</Button>
                                 </div>
                             </Typography>
+                            <Slider
+                                        defaultValue={10}
+                                        getAriaValueText={valuetext}
+                                        aria-labelledby="discrete-slider-always"
+                                        step={1}
+                                        marks={kms}
+                                        valueLabelDisplay="on"
+                                        />
                             <FormControl>
-                                <FormLabel>What Do You Need..?</FormLabel>
                                 <FormGroup>
                                     {names.map((n,key=n.id)=>{
                                         return(
