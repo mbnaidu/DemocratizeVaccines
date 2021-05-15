@@ -5,6 +5,14 @@ import { ModalBody, ModalFooter, ModalTitle, Modal} from 'react-bootstrap';
 import ModalHeader from 'react-bootstrap/esm/ModalHeader';
 import { NavLink, useLocation } from 'react-router-dom'
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
+import DonorMap from '../Maps/DonorMap';
+// 
+import {SearchBox} from 'react-google-maps/lib/components/places/SearchBox'
+import {Marker,GoogleMap,withScriptjs,withGoogleMap,InfoWindow,Polyline} from 'react-google-maps'
+import { compose, lifecycle, withProps } from 'recompose';
+const _ = require("lodash");
+
+// 
 
 
 const useStyles = makeStyles({
@@ -32,7 +40,106 @@ const useStyles = makeStyles({
 })
 
 function PatientRequirements() {
-    const [longLatt,setLongLatt] = useState('');
+    const[requiredAddress,setRequiredAddress] = useState([]);
+    const [lng,setLng] = useState([]);
+    const [lat,setLat] = useState([]);
+    const google = window.google = window.google ? window.google : {}
+    const MapWithASearchBox = compose(
+    withProps({
+        googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyCSozCpAn3_xhiippC2_03Gd524yLtwu4E&v=3.exp&libraries=geometry,drawing,places",
+        loadingElement: <div style={{ height: `100%` }} />,
+        containerElement: <div style={{ height: `400px` }} />,
+        mapElement: <div style={{ height: `100%` }} />,
+    }),
+    lifecycle({
+        componentWillMount() {
+        const refs = {}
+        this.setState({
+            bounds: null,
+            center: {
+            lat: 41.9, lng: -87.624
+            },
+            markers: [],
+            onMapMounted: ref => {
+            refs.map = ref;
+            },
+            onBoundsChanged: () => {
+            this.setState({
+                bounds: refs.map.getBounds(),
+                center: refs.map.getCenter(),
+            })
+            },
+            onSearchBoxMounted: ref => {
+            refs.searchBox = ref;
+            },
+            onPlacesChanged: () => {
+            const places = refs.searchBox.getPlaces();
+            const bounds = new google.maps.LatLngBounds();
+            places.forEach(place => {
+                if (place.geometry.viewport) {
+                bounds.union(place.geometry.viewport)
+                } else {
+                bounds.extend(place.geometry.location)
+                }
+            });
+            const nextMarkers = places.map(place => ({
+                position: place.geometry.location,
+            }));
+            places.map((p)=>{
+                lat.push(p.geometry.viewport.La.g)
+                lng.push(p.geometry.viewport.Ua.g)
+                requiredAddress.push(p.formatted_address)
+            })
+            const nextCenter = _.get(nextMarkers, '0.position', this.state.center);
+            this.setState({
+                center: nextCenter,
+                markers: nextMarkers,
+            });
+            // refs.map.fitBounds(bounds);
+            },
+        })
+        },
+    }),
+    withScriptjs,
+    withGoogleMap
+    )(props =>
+    <GoogleMap
+        ref={props.onMapMounted}
+        defaultZoom={15}
+        center={props.center}
+        onBoundsChanged={props.onBoundsChanged}
+    >
+        <SearchBox
+        ref={props.onSearchBoxMounted}
+        bounds={props.bounds}
+        controlPosition={google.maps.ControlPosition.TOP_LEFT}
+        onPlacesChanged={props.onPlacesChanged}
+        >
+        <input
+            type="text"
+            placeholder="Hit Enter After Entering Details"
+            style={{
+            boxSizing: `border-box`,
+            border: `1px solid transparent`,
+            width: `240px`,
+            height: `32px`,
+            marginTop: `27px`,
+            padding: `0 12px`,
+            borderRadius: `3px`,
+            boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
+            fontSize: `14px`,
+            outline: `none`,
+            textOverflow: `ellipses`,
+            }}
+        />
+        </SearchBox>
+        {props.markers.map((marker, index) =>
+        <Marker key={index} position={marker.position} />
+        )}
+    </GoogleMap>
+    );
+    const [finalLat,setFinalLat] = useState(0);
+    const [finalLng,setFinalLng] = useState(0);
     const [patientAddress,setPatientAddress] = useState('')
     useEffect(() => {
         const getCoordintes = ()=> {
@@ -43,11 +150,11 @@ function PatientRequirements() {
 	};
 	function success(pos) {
 		var crd = pos.coords;
-		var lat = crd.latitude.toString();
-		var lng = crd.longitude.toString();
+        var lat = crd.latitude.toString();
+        var lng = crd.longitude.toString();
+		setFinalLat(crd.latitude.toString())
+		setFinalLng(crd.longitude.toString())
 		var coordinates = [lat, lng];
-		setLongLatt(`Latitude: ${lat}, Longitude: ${lng}`)
-        console.log(longLatt)
 		getCity(coordinates);
 		return;
 	}
@@ -72,7 +179,7 @@ const getCity = (coordinates) =>{
 	function processRequest(e) {
 		if (xhr.readyState == 4 && xhr.status == 200) {
 			var response = JSON.parse(xhr.responseText);
-            setPatientAddress(response.display_name)
+            setPatientAddress(response.display_name);
 			return;
 		}
 	}
@@ -80,6 +187,7 @@ const getCity = (coordinates) =>{
 getCoordintes()
     }, [])
     const [show, setShow] = useState(false);
+    const [show1, setShow1] = useState(false);
     const [expanded, setExpanded] = React.useState(false);
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
@@ -111,74 +219,24 @@ getCoordintes()
     const [pass,setPass] = useState('');
     const [phoneNumber,setPhoneNumber] = useState('');
     const [code,setCode] = useState('');
+    const [g,setG] = useState('')
     return (
         <nav className="glass">
             {/* MODELS */}
-                <Modal size="sm" show={show}>
-                    <ModalHeader closeButton onClick={()=>{setShow(false)}}>
-                        <ModalTitle>BHIMAVARM</ModalTitle>
+            <div>
+                <Modal show={show1}>
+                    <ModalHeader>
+                        Changing Address
                     </ModalHeader>
                     <ModalBody>
-                        <div>
-                            <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
-                                <AccordionSummary expandIcon={<ExpandMoreSharp />} >
-                                <Typography color="primary">Varma Hospital</Typography>
-                                </AccordionSummary>
-                                <AccordionDetails>
-                                <Typography>
-                                    Achanta Main Road, Achanta, Andhra Pradesh 534269
-                                </Typography>
-                                </AccordionDetails>
-                            </Accordion>
-                            <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
-                                <AccordionSummary expandIcon={<ExpandMoreSharp />} >
-                                <Typography  color="primary">Bhimavaram Hospitals</Typography>
-                                </AccordionSummary>
-                                <AccordionDetails>
-                                <Typography>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-                                    sit amet blandit leo lobortis eget.
-                                </Typography>
-                                </AccordionDetails>
-                            </Accordion>
-                            <Accordion  expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
-                                <AccordionSummary expandIcon={<ExpandMoreSharp />}>
-                                <Typography color="primary">Imperial Hospitals</Typography>
-                                </AccordionSummary>
-                                <AccordionDetails>
-                                <Typography>
-                                    Achanta Main Road, Achanta, Andhra Pradesh 534269
-                                </Typography>
-                                </AccordionDetails>
-                            </Accordion>
-                            <Accordion>
-                                <AccordionSummary expandIcon={<ExpandMoreSharp />}>
-                                <Typography color="primary">Sai Pragnya Hospital</Typography>
-                                </AccordionSummary>
-                                <AccordionDetails>
-                                <Typography>
-                                    Achanta Main Road, Achanta, Andhra Pradesh 534269
-                                </Typography>
-                                </AccordionDetails>
-                            </Accordion>
-                            <Accordion>
-                                <AccordionSummary expandIcon={<ExpandMoreSharp />}>
-                                <Typography color="primary">New London Hospital</Typography>
-                                </AccordionSummary>
-                                <AccordionDetails>
-                                <Typography>
-                                    Achanta Main Road, Achanta, Andhra Pradesh 534269
-                                </Typography>
-                                </AccordionDetails>
-                            </Accordion>
-                        </div>
+                        {<MapWithASearchBox/>}
                     </ModalBody>
                     <ModalFooter>
-                        <Button variant="secondary" onClick={()=>{setShow(false)}}>
-                            Close
-                        </Button>
+                            <Button size="small" color="primary" variant="outlined" onClick={()=>{setShow1(false);setPatientAddress(requiredAddress[requiredAddress.length-1]);setFinalLat(lat[lat.length-1]);setFinalLng(lng[lng.length-1])}}>Set Address</Button>
+                            <Button size="small" color="primary" variant="outlined" onClick={()=>{setShow1(false)}}>Close</Button>
                     </ModalFooter>
                 </Modal>
+            </div>
             {signup ? (<div>
                 {generate === "Generate" ? (
 							<div>
@@ -225,9 +283,7 @@ getCoordintes()
                     <CardContent>
                         <Typography className={classes.title} color="textSecondary" gutterBottom>
                             <div>
-                                <Badge color="primary" badgeContent={13}>
-                                    <Button variant="outlined" color="primary" onClick={()=>{setShow(true)}}>HOSPITALS</Button>
-                                </Badge>
+                                <Button color="primary" variant="outlined" onClick={()=>{setShow1(true)}}>Change Address</Button>
                             </div>
                         </Typography>
                         <FormControl>
@@ -245,13 +301,14 @@ getCoordintes()
                                 })}
                             </FormGroup>
                             <br/><br/>
-                            {/* {patientAddress != '' ? (<div>
+                            {patientAddress != '' ? (<div>
                                 <NavLink
                                 to={{
                                     pathname:'/patient-availability',
                                         state: {
                                             address:patientAddress,
-                                            location:longLatt,
+                                            lat:finalLat,
+                                            lng:finalLng,
                                             finallist:finalList,
                                             userId:1213,
                                             phoneNumber:1234567890,
@@ -263,12 +320,13 @@ getCoordintes()
                             </NavLink>
                             </div>) : (<div>
                                 <Button variant="contained" color="primary" type="submit" onClick={()=>{alert('Please allow location');window.location.reload(false)}}>SEARCH</Button>
-                            </div>)} */}
-                            <NavLink
+                            </div>)}
+                            {/* <NavLink
                                 to={{
                                     pathname:'/patient-availability',
                                         state: {
                                             address:patientAddress,
+                                            required:requiredAddress,
                                             location:longLatt,
                                             finallist:finalList,
                                             userId:1213,
@@ -278,7 +336,7 @@ getCoordintes()
                                     exact
                             >
                             <Button variant="contained" color="primary" >SEARCH</Button>
-                            </NavLink>
+                            </NavLink> */}
                         </FormControl>
                         </CardContent>
                     </Card>

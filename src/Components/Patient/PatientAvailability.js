@@ -61,6 +61,7 @@ function PatientAvailability() {
 		{height: 375,latitude: 63.912899800000002,longitude: 76.7399875,owner_id: 4985,owner_number:'1234567890',owner_name: "babu",type:"Vaccine",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 27935,verifiedBy: "18pa1a1219@vishnu.edu.in",availability: "Not Available",contactNumber:'12344',price:'Single Item Cost',upload_date: "25 June 2006",width: 500},
     ])
 	const location = useLocation();
+    console.log(location)
     const [list,setList] = useState(location.state.finallist)
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);

@@ -4,6 +4,9 @@ import {SearchBox} from 'react-google-maps/lib/components/places/SearchBox'
 import {Marker,GoogleMap,withScriptjs,withGoogleMap,InfoWindow,Polyline} from 'react-google-maps'
 import { compose, lifecycle, withProps } from 'recompose';
 const _ = require("lodash");
+
+function Trail() {
+  
 const MapWithASearchBox = compose(
   withProps({
     googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyCSozCpAn3_xhiippC2_03Gd524yLtwu4E&v=3.exp&libraries=geometry,drawing,places",
@@ -45,6 +48,7 @@ const MapWithASearchBox = compose(
           const nextMarkers = places.map(place => ({
             position: place.geometry.location,
           }));
+          console.log(places)
           const nextCenter = _.get(nextMarkers, '0.position', this.state.center);
           this.setState({
             center: nextCenter,
@@ -93,11 +97,9 @@ const MapWithASearchBox = compose(
     )}
   </GoogleMap>
 );
-
-function Trail() {
     return (
         <div>
-            <MapWithASearchBox/>
+            <MapWithASearchBox k={','}/>
         </div>
     )
 }
