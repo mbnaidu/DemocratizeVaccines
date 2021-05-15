@@ -211,15 +211,7 @@ getCoordintes()
                 finalList.push(option)
             }
         }
-        const classes = useStyles();
-        const [login,setLogin] = useState(true);
-    const [signup,setSignup] = useState(false);
-    const [generate,setGenerate] = useState("Generate");
-    const [userId,setUserId] = useState('');
-    const [pass,setPass] = useState('');
-    const [phoneNumber,setPhoneNumber] = useState('');
-    const [code,setCode] = useState('');
-    const [g,setG] = useState('')
+    const classes = useStyles();
     return (
         <nav className="glass">
             {/* MODELS */}
@@ -237,111 +229,67 @@ getCoordintes()
                     </ModalFooter>
                 </Modal>
             </div>
-            {signup ? (<div>
-                {generate === "Generate" ? (
-							<div>
-                                <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-								<Input placeholder="10-digit-phone-number" type="number" value={phoneNumber} onChange={event => setPhoneNumber(event.target.value)}/>{' '}
-								<Button variant="contained" color="primary" endIcon={<Icon>send</Icon>} onClick={()=>{phoneNumber.length === 10 ? setGenerate('Submit') : alert("Enter valid Number");}}>
-									{generate}
-								</Button>
-							</div>
-						) : (
-							<div>
-                                <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-								<Input placeholder="6-digit-code" value={code} onChange={event => setCode(event.target.value)}/>{' '}
-                                <Button variant="contained" color="primary" endIcon={<Icon>send</Icon>} onClick={()=>{setSignup(false);setLogin(true)}}>
-									{generate}
-								</Button>
-							</div>
-						)}
-            </div>) : ( login ? (<div>
-                            <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-                                <div className="center"> 
-                                    <Grid container spacing={1} alignItems="flex-end">
-                                        <Grid item>
-                                            <AccountCircle />
-                                        </Grid>
-                                        <Grid item>
-                                            <TextField id="input-with-icon-grid" label="UserID" value={userId} onChange={event => setUserId(event.target.value)}/>
-                                        </Grid>
-                                    </Grid>
-                                    <Grid container spacing={1} alignItems="flex-end">
-                                        <Grid item>
-                                            <VpnKeyIcon />
-                                        </Grid>
-                                        <Grid item>
-                                            <TextField id="input-with-icon-grid" label="Password" type="password" value={pass} onChange={event => setPass(event.target.value)}/>
-                                        </Grid>
-                                    </Grid><br/><br/>
-                                    <Button color="primary" variant="outlined" onClick={()=>{setLogin(false);}}>Login</Button>{' '}
-                                    <Button color="secondary" variant="contained" onClick={()=>{setSignup(true);}}>Sign Up</Button>
+                <div className="alignList">
+                    <Card className={classes.root} variant="outlined">
+                        <CardContent>
+                            <Typography className={classes.title} color="textSecondary" gutterBottom>
+                                <div>
+                                    <Button color="primary" variant="outlined" onClick={()=>{setShow1(true)}}>Change Address</Button>
                                 </div>
-            </div>) : (<div>
-                        <div className="alignList">
-                <Card className={classes.root} variant="outlined">
-                    <CardContent>
-                        <Typography className={classes.title} color="textSecondary" gutterBottom>
-                            <div>
-                                <Button color="primary" variant="outlined" onClick={()=>{setShow1(true)}}>Change Address</Button>
-                            </div>
-                        </Typography>
-                        <FormControl>
-                            <FormLabel>What Do You Need..?</FormLabel>
-                            <FormGroup>
-                                {names.map((n,key=n.id)=>{
-                                    return(
-                                        <div>
-                                            <FormControlLabel
-                                                control={<Checkbox name={n.value} color="primary"  onChange={()=>{handleInput(n.value)}}/>}
-                                                label={n.value}
-                                            />
-                                        </div>
-                                    )
-                                })}
-                            </FormGroup>
-                            <br/><br/>
-                            {patientAddress != '' ? (<div>
-                                <NavLink
-                                to={{
-                                    pathname:'/patient-availability',
-                                        state: {
-                                            address:patientAddress,
-                                            lat:finalLat,
-                                            lng:finalLng,
-                                            finallist:finalList,
-                                            userId:1213,
-                                            phoneNumber:1234567890,
-                                        } 
-                                    }}
-                                    exact
-                            >
-                            <Button variant="contained" color="primary" >SEARCH</Button>
-                            </NavLink>
-                            </div>) : (<div>
-                                <Button variant="contained" color="primary" type="submit" onClick={()=>{alert('Please allow location');window.location.reload(false)}}>SEARCH</Button>
-                            </div>)}
-                            {/* <NavLink
-                                to={{
-                                    pathname:'/patient-availability',
-                                        state: {
-                                            address:patientAddress,
-                                            required:requiredAddress,
-                                            location:longLatt,
-                                            finallist:finalList,
-                                            userId:1213,
-                                            phoneNumber:1234567890,
-                                        } 
-                                    }}
-                                    exact
-                            >
-                            <Button variant="contained" color="primary" >SEARCH</Button>
-                            </NavLink> */}
-                        </FormControl>
+                            </Typography>
+                            <FormControl>
+                                <FormLabel>What Do You Need..?</FormLabel>
+                                <FormGroup>
+                                    {names.map((n,key=n.id)=>{
+                                        return(
+                                            <div>
+                                                <FormControlLabel
+                                                    control={<Checkbox name={n.value} color="primary"  onChange={()=>{handleInput(n.value)}}/>}
+                                                    label={n.value}
+                                                />
+                                            </div>
+                                        )
+                                    })}
+                                </FormGroup>
+                                <br/><br/>
+                                {patientAddress != '' ? (<div>
+                                    <NavLink
+                                    to={{
+                                        pathname:'/patient-availability',
+                                            state: {
+                                                address:patientAddress,
+                                                lat:finalLat,
+                                                lng:finalLng,
+                                                finallist:finalList,
+                                            } 
+                                        }}
+                                        exact
+                                >
+                                <Button variant="contained" color="primary" >SEARCH</Button>
+                                </NavLink>
+                                </div>) : (<div>
+                                    <Button variant="contained" color="primary" type="submit" onClick={()=>{alert('Please allow location');window.location.reload(false)}}>SEARCH</Button>
+                                </div>)}
+                                {/* <NavLink
+                                    to={{
+                                        pathname:'/patient-availability',
+                                            state: {
+                                                address:patientAddress,
+                                                required:requiredAddress,
+                                                location:longLatt,
+                                                finallist:finalList,
+                                                userId:1213,
+                                                phoneNumber:1234567890,
+                                            } 
+                                        }}
+                                        exact
+                                >
+                                <Button variant="contained" color="primary" >SEARCH</Button>
+                                </NavLink> */}
+                            </FormControl>
                         </CardContent>
                     </Card>
             </div>
-            </div>))}
         </nav>
     )
 }
