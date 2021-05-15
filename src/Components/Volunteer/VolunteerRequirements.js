@@ -140,8 +140,8 @@ function VolunteerRequirements() {
                                         />
                                     </div>
                                     <RadioGroup aria-label="quiz" name="quiz">
-                                        <FormControlLabel value="verify" control={<GreenRadio />} label="Verify New Provider" onChange={()=>setType('verify')}/>
-                                        <FormControlLabel value="update" control={<GreenRadio />} label="Update Old Provider"  onChange={()=>setType('update')}/>
+                                        <FormControlLabel value="verified" control={<GreenRadio />} label="Show Verified Profiles" onChange={()=>setType('verified')}/>
+                                        <FormControlLabel value="notverified" control={<GreenRadio />} label="Show UnVerified Profiles"  onChange={()=>setType('notverified')}/>
                                         <FormControlLabel value="patient" control={<GreenRadio />} label="Help Patient" onChange={()=>setType('patient')}/>
                                     </RadioGroup>
                                     <FormControlLabel value="volunteers" control={<Checkbox />} label="Check Other Volunteers" onChange={()=>handleInput('volunteers')}/>

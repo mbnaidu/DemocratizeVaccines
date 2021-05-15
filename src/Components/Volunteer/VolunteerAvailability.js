@@ -26,16 +26,16 @@ function VolunteerAvailability() {
                             patient
                         </div>)}
                     </div>) : 
-                    type === 'update' ? (<div>
+                    type === 'notverified' ? (<div>
                         {volunteers === 'volunteers' ? (<div>
-                            update  + volu
+                            not verified
                         </div>) : (<div>
                             update
                         </div>)}
                     </div>) : 
-                    type === 'verify' ? (<div>
+                    type === 'verified' ? (<div>
                         {volunteers === 'volunteers' ? (<div>
-                            verify + volu
+                            verified + volu
                         </div>) : (<div>
                             verify
                         </div>)}
