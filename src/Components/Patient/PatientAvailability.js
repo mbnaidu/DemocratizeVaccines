@@ -103,10 +103,11 @@ function PatientAvailability() {
     }
 }));
     const classes = useStyles();
+    const [userId,setUserId] = useState(location.state.userId);
+    const [phoneNumber,setphoneNumber] = useState(location.state.phoneNumber);
     const [show,setShow] = useState(false);
     const [generate,setGenerate] = useState('Generate');
     const [code,setCode] = useState("");
-    const [phoneNumber,setPhoneNumber] = useState("");
     const [twitter,setTwitter] = useState(false);
     const [openCylinder,setCylinder] = useState(false);
     const [openBeds,setBeds] = useState(false);
@@ -128,41 +129,67 @@ function PatientAvailability() {
             </div>
         )
     }
+    const [data,setData] = useState([]);
     return (
         <div>
             <nav className="glass">
                 <div> 
                     <Modal show={show1}>
                         <ModalBody>
-                            <Map  location={location} volunteers={volunteers}/>
+                            <Map  location={location} volunteers={volunteers} userId={userId} phoneNumber={phoneNumber}/>
                         </ModalBody>
                         <ModalFooter>
                             <Button onClick={()=>{setShow1(false)}}>Close</Button>
                         </ModalFooter>
                     </Modal>
-                    <Modal size="sm" show={show} >
-                        <ModalHeader closeButton onClick={()=>{setShow(false);setGenerate('Generate');setPhoneNumber("");setCode("")}}>
-                            <ModalTitle>Verification</ModalTitle>
+                    <Modal size="xl" show={show} >
+                        <ModalHeader closeButton onClick={()=>{setShow(false);}}>
+                            <ModalTitle>Recent calls</ModalTitle>
                         </ModalHeader>
                         <ModalBody>
-                            {generate === "Generate" ? (
-                                    <div>
-                                        <Input placeholder="10-digit-phone-number" type="number" value={phoneNumber} onChange={event => setPhoneNumber(event.target.value)}/>{' '}
-                                        <Button variant="contained" color="primary" endIcon={<Icon>send</Icon>} onClick={()=>{phoneNumber.length === 10 ? setGenerate('Submit') : alert('10-digit-phone-number')}}>
-                                            {generate}
-                                        </Button>
-                                    </div>
-                                ) : (
-                                    <div>
-                                        <Input placeholder="6-digit-code" id="6digitcode" value={code} onChange={event => setCode(event.target.value)}/>{' '}
-                                        <Button variant="contained" color="primary" endIcon={<Icon>send</Icon>} onClick={()=>{code.length === 6 ? setShow(false) : alert("Invalid Verification Code");}}>
-                                            {generate}
-                                        </Button>
-                                    </div>
-                                )}	
+                            {data === [] ? (<div>
+                                No data
+                            </div>) : (<div>
+                            <TableContainer >
+                                <Table aria-labelledby="tableTitle" size='large' aria-label="enhanced table">
+                                    <TableHead>
+                                        <TableCell>Select</TableCell>
+                                        <TableCell>Availability</TableCell>
+                                        <TableCell>ID</TableCell>
+                                        <TableCell>UserName</TableCell>
+                                        <TableCell>UploadDate</TableCell>
+                                        <TableCell>VerifiedOn</TableCell>
+                                        <TableCell>VerifiedBy</TableCell>
+                                        <TableCell>Price</TableCell>
+                                        <TableCell>Address</TableCell>
+                                        <TableCell>ContactNumber</TableCell>
+                                    </TableHead>
+                                    <TableBody >
+                                        {data.map((o,key=o.id)=>{
+                                            return(
+                                                <TableRow hover role="checkbox">
+                                                    <TableCell padding="checkbox">
+                                                        <Button color="secondary" variant="outlined" >Delete Request</Button>
+                                                    </TableCell>
+                                                    <TableCell align="right">{o.availability}</TableCell>
+                                                    <TableCell scope="row" padding="none">{o.owner_id}</TableCell>
+                                                    <TableCell align="right">{o.owner_name}</TableCell>
+                                                    <TableCell align="right">{o.upload_date}</TableCell>
+                                                    <TableCell align="right">{o.verifiedOn}</TableCell>
+                                                    <TableCell align="right">{o.verifiedBy}</TableCell>
+                                                    <TableCell align="right">{o.price}</TableCell>
+                                                    <TableCell align="right">{o.owner_address}</TableCell>
+                                                    <TableCell align="right">{o.contactNumber}</TableCell>
+                                                </TableRow>
+                                            )
+                                        })}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                            </div>)}
                         </ModalBody>
                         <ModalFooter>
-                            <Button color="primary" onClick={()=>{setShow(false);setGenerate('Generate');setPhoneNumber("");setCode("")}}>Close</Button>{' '}
+                            <Button color="primary" onClick={()=>{setShow(false);}}>Close</Button>{' '}
                         </ModalFooter>
                     </Modal>
                 </div>
@@ -226,7 +253,7 @@ function PatientAvailability() {
                                                             </AccordionSummary>
                                                                 <AccordionDetails >
                                                                     <TableContainer >
-                                                                            <Table aria-labelledby="tableTitle" size='small' aria-label="enhanced table">
+                                                                            <Table aria-labelledby="tableTitle" size='large' aria-label="enhanced table">
                                                                                 <TableHead>
                                                                                     <TableCell>Select</TableCell>
                                                                                     <TableCell>Availability</TableCell>
@@ -244,7 +271,7 @@ function PatientAvailability() {
                                                                                             return(
                                                                                                 <TableRow hover role="checkbox">
                                                                                                     <TableCell padding="checkbox">
-                                                                                                        <Checkbox />
+                                                                                                        <Button color="primary" variant="outlined" onClick={()=>{data.push(o);console.log(data)}}>Send Request</Button>
                                                                                                     </TableCell>
                                                                                                     <TableCell align="right">{o.availability}</TableCell>
                                                                                                     <TableCell scope="row" padding="none">{o.owner_id}</TableCell>

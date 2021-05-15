@@ -245,7 +245,7 @@ getCoordintes()
                                 })}
                             </FormGroup>
                             <br/><br/>
-                            {patientAddress != '' ? (<div>
+                            {/* {patientAddress != '' ? (<div>
                                 <NavLink
                                 to={{
                                     pathname:'/patient-availability',
@@ -253,6 +253,8 @@ getCoordintes()
                                             address:patientAddress,
                                             location:longLatt,
                                             finallist:finalList,
+                                            userId:1213,
+                                            phoneNumber:1234567890,
                                         } 
                                     }}
                                     exact
@@ -261,7 +263,22 @@ getCoordintes()
                             </NavLink>
                             </div>) : (<div>
                                 <Button variant="contained" color="primary" type="submit" onClick={()=>{alert('Please allow location');window.location.reload(false)}}>SEARCH</Button>
-                            </div>)}
+                            </div>)} */}
+                            <NavLink
+                                to={{
+                                    pathname:'/patient-availability',
+                                        state: {
+                                            address:patientAddress,
+                                            location:longLatt,
+                                            finallist:finalList,
+                                            userId:1213,
+                                            phoneNumber:1234567890,
+                                        } 
+                                    }}
+                                    exact
+                            >
+                            <Button variant="contained" color="primary" >SEARCH</Button>
+                            </NavLink>
                         </FormControl>
                         </CardContent>
                     </Card>

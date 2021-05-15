@@ -159,7 +159,7 @@ const MapWithAMarkerClusterer = compose(
 								<br/>
 								<strong>Distance : </strong>{parseInt(haversine({ lat: parseFloat(props.lat), lng: parseFloat(props.lon)}, { lat: marker.latitude, lng: marker.longitude})/1000)}<strong> KM</strong>
 								<br/>
-								<strong>ContactNumber : </strong><Button variant="outlined" color="primary" size="small" endIcon={<Icon>send</Icon>} >Send Request</Button>{' '}
+								<strong>ContactNumber : </strong><Button variant="outlined" color="primary" size="small" onClick={()=>{console.log(marker,props.userId,props.phoneNumber,parseFloat(props.lat),parseFloat(props.lon))}} endIcon={<Icon>send</Icon>} >Send Request</Button>{' '}
 								<br/>
 							</div>
 						</InfoWindow>
@@ -263,7 +263,7 @@ const [pathCoordinates,setPathCoordinates] = useState([
 			<MapWithAMarkerClusterer
 					markers={oxygenCylinders}
 					volunteers = {props.volunteers}
-				lat={lat} lon={lon} type={array} pathCoordinates={pathCoordinates}/>
+				lat={lat} lon={lon} type={array} pathCoordinates={pathCoordinates} userId={props.userId} phoneNumber={props.phoneNumber}/>
 		</div>)
 
 }
