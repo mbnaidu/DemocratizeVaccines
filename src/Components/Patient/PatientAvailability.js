@@ -154,7 +154,7 @@ function PatientAvailability() {
                                 <Table aria-labelledby="tableTitle" size='large' aria-label="enhanced table">
                                     <TableHead>
                                         <TableCell>Select</TableCell>
-                                        <TableCell>Availability</TableCell>
+                                        <TableCell>type</TableCell>
                                         <TableCell>ID</TableCell>
                                         <TableCell>UserName</TableCell>
                                         <TableCell>UploadDate</TableCell>
@@ -171,7 +171,7 @@ function PatientAvailability() {
                                                     <TableCell padding="checkbox">
                                                         <Button color="secondary" variant="outlined" >Delete Request</Button>
                                                     </TableCell>
-                                                    <TableCell align="right">{o.availability}</TableCell>
+                                                    <TableCell align="right">{o.type}</TableCell>
                                                     <TableCell scope="row" padding="none">{o.owner_id}</TableCell>
                                                     <TableCell align="right">{o.owner_name}</TableCell>
                                                     <TableCell align="right">{o.upload_date}</TableCell>
@@ -237,7 +237,7 @@ function PatientAvailability() {
                 </div>
                 <br/><br/><br/><br/><br/><br/><br/><br/>
                     <div className="trail"> 
-                    <Button variant="contained" color="primary" endIcon={<Icon>send</Icon>} onClick={()=>{setShow(true)}}>Show My details</Button>{' '}
+                    <Button variant="contained" color="primary" endIcon={<Icon>send</Icon>} onClick={()=>{setShow(true)}}>Recent Calls</Button>{' '}
                     <Button variant="contained" color="primary" endIcon={<LocationOnIcon />} onClick={()=>{setShow1(true)}}>Show On Maps</Button>
                         {accordian.map((m,key)=>{
                                 return(
@@ -271,7 +271,7 @@ function PatientAvailability() {
                                                                                             return(
                                                                                                 <TableRow hover role="checkbox">
                                                                                                     <TableCell padding="checkbox">
-                                                                                                        <Button color="primary" variant="outlined" onClick={()=>{data.push(o);console.log(data)}}>Send Request</Button>
+                                                                                                        <Button color="primary" variant="outlined" onClick={()=>{data.push(o);}}>Send Request</Button>
                                                                                                     </TableCell>
                                                                                                     <TableCell align="right">{o.availability}</TableCell>
                                                                                                     <TableCell scope="row" padding="none">{o.owner_id}</TableCell>
