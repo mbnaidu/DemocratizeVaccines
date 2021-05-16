@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { useLocation } from 'react-router';
 import VolunteerMap from '../Maps/VolunteerMap';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { NavLink } from 'react-router-dom';
 
 
 
@@ -207,7 +208,71 @@ function VolunteerAvailability() {
                     </div>) : 
                     type === 'verified' ? (<div>
                         {volunteerOption === 'volunteers' ? (<div>
-                            verified + volu
+                            {showVerifiedMap ? (<div>
+                                <VolunteerMap details={details} lat={parseFloat(lat)} lng={parseFloat(lng)} types={types} volunteers={volunteers}/>
+                                <Button color="primary" variant="contained" onClick={()=>{setShowVerifiedMap(false)}}>Go Back</Button>
+                            </div>) : (<div>
+                                <Button color="primary" variant="contained" onClick={()=>{setShowVerifiedMap(true);setDetails(verified);setTypes('showall')}}>SHOW ALL</Button>
+                                {verified.map((p)=>{
+                                return(
+                                    <div key={p.owner_id}>
+                                        <Accordion expanded={expanded === p.owner_id} onChange={handleChange(p.owner_id)}  className="patientable accordian" >
+                                            <AccordionSummary
+                                                expandIcon={<ExpandMoreIcon />}
+                                                aria-controls="panel1bh-content"
+                                                id="panel1bh-header"
+                                                >
+                                                <Typography className={classes.heading}>{p.owner_id}</Typography>
+                                                <Typography className={classes.secondaryHeading}>{p.type}</Typography>
+                                                <Typography className={classes.secondaryHeading}>{p.upload_date}</Typography>
+                                                </AccordionSummary>
+                                            <AccordionDetails >
+                                                <TableContainer >
+                                                        <Table aria-labelledby="tableTitle" size='large' aria-label="enhanced table">
+                                                            <TableHead>
+                                                                <TableCell>OnMap</TableCell>
+                                                                <TableCell>OwnerId</TableCell>
+                                                                <TableCell>OwnerName</TableCell>
+                                                                <TableCell>Type</TableCell>
+                                                                <TableCell>UploadDate</TableCell>
+                                                                <TableCell>Verifications</TableCell>
+                                                                <TableCell>Address</TableCell>
+                                                                <TableCell>Contact</TableCell>
+                                                                <TableCell>Verified</TableCell>
+                                                            </TableHead>
+                                                            <TableBody >
+                                                                <TableRow hover role="checkbox">
+                                                                    <TableCell>
+                                                                        <Button size="large" color="secondary" variant="contained" onClick={()=>{setShowVerifiedMap(true);setDetails(p);setLat(p.latitude);setLng(p.longitude);setTypes('verified')}}>
+                                                                        Show
+                                                                    </Button>
+                                                                    </TableCell>
+                                                                    <TableCell padding="checkbox">{p.owner_id}</TableCell>
+                                                                    <TableCell align="right">{p.owner_name}</TableCell>
+                                                                    <TableCell scope="row" padding="none">{p.type}</TableCell>
+                                                                    <TableCell align="right">{p.upload_date}</TableCell>
+                                                                    <TableCell align="right">
+                                                                        {p.Verifications.map((v)=>{
+                                                                            return(
+                                                                                <div>
+                                                                                    {v}
+                                                                                </div>
+                                                                            )
+                                                                        })}
+                                                                    </TableCell>
+                                                                    <TableCell align="right">{p.owner_address}</TableCell>
+                                                                    <TableCell align="right">{p.owner_number}</TableCell>
+                                                                    <TableCell><Button color="primary" variant="outlined" onClick={()=>{p.Verifications.push('abhinav@gmail.com - 16-05-2020');alert('Verified Please Check On MAP')}}>Verify</Button></TableCell>
+                                                                </TableRow>     
+                                                            </TableBody>
+                                                        </Table>
+                                                    </TableContainer>
+                                            </AccordionDetails>
+                                    </Accordion>
+                                    </div>
+                                )
+                            })}
+                            </div>)}
                         </div>) : (<div>
                             {showVerifiedMap ? (<div>
                                 <VolunteerMap details={details} lat={parseFloat(lat)} lng={parseFloat(lng)} types={types}/>
@@ -280,6 +345,7 @@ function VolunteerAvailability() {
                         volunteer
                     </div>) :
                 (<div></div>)}
+                <NavLink to="/volunteer-requirements"><Button color="primary" variant="contained">Go Back</Button></NavLink>
             </nav>
         </div>
     )
