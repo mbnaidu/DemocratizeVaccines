@@ -125,3 +125,27 @@ a
 {
   text-decoration: none;
 }
+.wrappers {
+    display: grid;
+    grid-auto-flow: column;  
+}
+
+.boxs {
+    align-self: center;
+}
+.wrappers {
+  grid-gap: 10px;
+  color: #444;
+}
+
+.boxs {
+    background-color: #444;
+    color: #fff;
+    border-radius: 5px;
+    padding: 20px;
+    font-size: 150%;
+}
+
+.boxs.a {
+     height: 200px;
+}

@@ -15,29 +15,40 @@ const _ = require("lodash");
 // 
 
 
-const useStyles = makeStyles({
-  root: {
-    minWidth: 275,
-    margin:50,
-    borderRadius:30,
-    marginTop:'30%',
-    paddingTop:30,
-  },
-  bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)',
-  },
-  title: {
-    fontSize: 14,
-  },
-  pos: {
-    marginBottom: 12,
-  },
-  header:{
-    marginLeft:'50%',
-  }
-})
+const useStyles = makeStyles((theme) => ({
+    root: {
+        minWidth: 275,
+        margin:50,
+        borderRadius:30,
+        paddingTop:30,
+    },
+    bullet: {
+        display: 'inline-block',
+        margin: '0 2px',
+        transform: 'scale(0.8)',
+    },
+    title: {
+        fontSize: 14,
+    },
+    pos: {
+        marginBottom: 12,
+    },
+    header:{
+        marginLeft:'50%',
+    },
+    root1: {
+        margin:0,
+    },
+    heading: {
+        fontSize: theme.typography.pxToRem(20),
+        flexBasis: '100%',
+        flexShrink: 0,
+    },
+    root2:{
+        marginRight:"auto",
+        marginLeft:"auto"
+    }
+}));
 
 function PatientRequirements() {
     const[requiredAddress,setRequiredAddress] = useState([]);
@@ -188,10 +199,6 @@ getCoordintes()
     }, [])
     const [show, setShow] = useState(false);
     const [show1, setShow1] = useState(false);
-    const [expanded, setExpanded] = React.useState(false);
-    const handleChange = (panel) => (event, isExpanded) => {
-        setExpanded(isExpanded ? panel : false);
-    };
     // 
         const names = [
             {id : '1' , value : 'Oxygen Cylinders' },
@@ -200,6 +207,12 @@ getCoordintes()
             {id : '4' , value : 'Private Transport' },
             {id : '5' , value : 'Vaccine' },
             {id : '6' , value : 'Plasma' },
+        ];
+        const home = [
+            {id : '11' , value : 'Electrician' },
+            {id : '12' , value : 'Grocery' },
+            {id : '13' , value : 'Doctors' },
+            {id : '14' , value : 'Covid Assistance' },
         ];
         var finalList = [];
         const handleInput = (option) =>{
@@ -222,6 +235,10 @@ getCoordintes()
         setRange(`${value}`)
         return `${value}`;
     }
+    const [expanded, setExpanded] = React.useState(false);
+    const handleChange = (panel) => (event, isExpanded) => {
+        setExpanded(isExpanded ? panel : false);
+    };
     return (
         <nav className="glass">
             {/* MODELS */}
@@ -239,23 +256,27 @@ getCoordintes()
                     </ModalFooter>
                 </Modal>
             </div>
-                <div className="alignList">
-                    <Card className={classes.root} variant="outlined">
-                        <CardContent>
-                            <Typography className={classes.title} color="textSecondary" gutterBottom>
-                                <div>
-                                    <Button color="primary" variant="outlined" onClick={()=>{setShow1(true)}}>Change Address</Button>
-                                </div>
-                            </Typography>
-                            <Slider
-                                        defaultValue={10}
-                                        getAriaValueText={valuetext}
-                                        aria-labelledby="discrete-slider-always"
-                                        step={1}
-                                        marks={kms}
-                                        valueLabelDisplay="on"
-                                        />
-                            <FormControl>
+            <div className={classes.root}>
+                <Typography className={classes.title} color="textSecondary" gutterBottom>
+                    <div>
+                        <Button color="primary" variant="outlined" onClick={()=>{setShow1(true)}}>Change Address</Button>
+                    </div>
+                </Typography>
+                <Slider
+                    defaultValue={10}
+                    getAriaValueText={valuetext}
+                    aria-labelledby="discrete-slider-always"
+                    step={1}
+                    marks={kms}
+                    valueLabelDisplay="on"
+                />
+                <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')} className={classes.root1}>
+                    <AccordionSummary expandIcon={<ExpandMoreSharp />} aria-controls="panel2bh-content" id="panel2bh-header" >
+                    <Typography className={classes.heading}>Patient Appliances</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <div className="alignList" className={classes.root2}>
+                            <FormControl >
                                 <FormGroup>
                                     {names.map((n,key=n.id)=>{
                                         return(
@@ -302,8 +323,33 @@ getCoordintes()
                                 <Button variant="contained" color="primary" >SEARCH</Button>
                                 </NavLink>
                             </FormControl>
-                        </CardContent>
-                    </Card>
+                        </div>
+                    </AccordionDetails>
+                </Accordion>
+                <br/>
+                <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} className={classes.root1}>
+                    <AccordionSummary
+                    expandIcon={<ExpandMoreSharp />}
+                    aria-controls="panel1bh-content"
+                    id="panel1bh-header"
+                    >
+                    <Typography className={classes.heading}>Home Appliances</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <FormGroup>
+                            {home.map((n,key=n.id)=>{
+                                return(
+                                    <div>
+                                        <FormControlLabel
+                                            control={<Checkbox name={n.value} color="primary"  onChange={()=>{handleInput(n.value)}}/>}
+                                            label={n.value}
+                                        />
+                                    </div>
+                                )
+                            })}
+                        </FormGroup>
+                    </AccordionDetails>
+                </Accordion>
             </div>
         </nav>
     )
