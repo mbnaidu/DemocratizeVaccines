@@ -53,7 +53,7 @@ const MapWithAMarkerClusterer = compose(
 	withGoogleMap
 )
 (props => (
-	<GoogleMap defaultZoom={12} defaultCenter={{ lat: parseFloat(props.lat), lng: parseFloat(props.lon)}}>
+	<GoogleMap defaultZoom={12} defaultCenter={{ lat: parseFloat(props.lat), lng: parseFloat(props.lng)}}>
 		<MarkerClusterer
 			onClick={props.onMarkerClustererClick}
 			averageCenter
@@ -61,8 +61,9 @@ const MapWithAMarkerClusterer = compose(
 			gridSize={60}
 			label={"hi"}
 		>	
-		{props.volunteers.map((v,key=v.owner_id)=>{
-			console.log(v)
+			{props.volunteers !== undefined ? (
+				<div>
+					{props.volunteers.map((v,key=v.owner_id)=>{
 				return(
 					<Marker
 							key={v.owner_id}
@@ -96,14 +97,15 @@ const MapWithAMarkerClusterer = compose(
 					</Marker>
 				)
 		})}
+				</div>
+			) : (<div></div>)}
 			<Marker
 				icon={patient}
 				title="Your Location"
-				position={{ lat: parseFloat(props.lat), lng: parseFloat(props.lon) }}
+				position={{ lat: parseFloat(props.lat), lng: parseFloat(props.lng) }}
 			/>
 			{/* parseInt(haversine({ lat: parseFloat(props.lat), lng: parseFloat(props.lon)}, { lat: marker.latitude, lng: marker.longitude})/1000) */}
-			{props.markers.map((marker,i)=>{
-				console.log(marker)
+			{props.details.donors.map((marker,i)=>{
 					return(
 				<Marker
 					icon={
@@ -120,7 +122,7 @@ const MapWithAMarkerClusterer = compose(
 				>
 					<Polyline
 						path={[
-							{ lat: parseFloat(props.lat), lng: parseFloat(props.lon) },
+							{ lat: parseFloat(props.lat), lng: parseFloat(props.lng) },
 							{ lat:  marker.latitude, lng: marker.longitude }
 						]}
 						geodesic={true}
@@ -156,9 +158,9 @@ const MapWithAMarkerClusterer = compose(
 								<br/>
 								<strong>DonorAddress : </strong>{marker.owner_address}
 								<br/>
-								<strong>Distance : </strong>{parseInt(haversine({ lat: parseFloat(props.lat), lng: parseFloat(props.lon)}, { lat: marker.latitude, lng: marker.longitude})/1000)}<strong> KM</strong>
+								<strong>Distance : </strong>{parseInt(haversine({ lat: parseFloat(props.lat), lng: parseFloat(props.lng)}, { lat: marker.latitude, lng: marker.longitude})/1000)}<strong> KM</strong>
 								<br/>
-								<strong>ContactNumber : </strong><Button variant="outlined" color="primary" size="small" onClick={()=>{console.log(marker,props.userId,props.phoneNumber,parseFloat(props.lat),parseFloat(props.lon))}} endIcon={<Icon>send</Icon>} >Send Request</Button>{' '}
+								<strong>ContactNumber : </strong><Button variant="outlined" color="primary" size="small" onClick={()=>{console.log(marker,props.userId,props.phoneNumber,parseFloat(props.lat),parseFloat(props.lng))}} endIcon={<Icon>send</Icon>} >Send Request</Button>{' '}
 								<br/>
 							</div>
 						</InfoWindow>
@@ -173,47 +175,7 @@ function DemoApp(props) {
     const [lat,setLat] = useState(0);
     const [lon,setLon] = useState(0);
 	const [markers,setMarkers] = useState([]);
-	const [oxygenCylinders,setOxygenCylinders] = useState([
-		{height: 375,latitude: 13.912899800000002,longitude: 79.7399875,owner_id: 4480,owner_number:'1234567890',owner_name: "Madhu",type:"Oxygen Cylinders",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 27930,verifiedBy: "18pa1a1213@vishnu.edu.in",availability: "Available",upload_date: "25 June 2006",width: 500},
-		{height: 375,latitude: 13.992899800000002,longitude: 79.7399875,owner_id: 4481,owner_number:'1234567890',owner_name: "Abhinav",type:"Oxygen Cylinders",owner_address: "rajolu",verifiedOn: "12-04-2021",photo_id: 27931,verifiedBy: "18pa1a1214@vishnu.edu.in",availability: "Not Available",upload_date: "25 June 2006",width: 500},
-		{height: 375,latitude: 17.912899800000002,longitude: 81.7399875,owner_id: 4482,owner_number:'1234567890',owner_name: "Sai",type:"Oxygen Cylinders",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 27932,verifiedBy: "18pa1a1215@vishnu.edu.in",availability: "Available",upload_date: "25 June 2006",width: 500},
-		{height: 375,latitude: 14.912899800000002,longitude: 78.7399875,owner_id: 4486,owner_number:'1234567890',owner_name: "Hari",type:"Oxygen Cylinders",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 27933,verifiedBy: "18pa1a1216@vishnu.edu.in",availability: "Not Available",upload_date: "25 June 2006",width: 500},
-		{height: 375,latitude: 13.912899800000002,longitude: 77.7399875,owner_id: 4484,owner_number:'1234567890',owner_name: "Richad",type:"Oxygen Cylinders",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 27934,verifiedBy: "18pa1a1217@vishnu.edu.in",availability: "Available",upload_date: "25 June 2006",width: 500},
-		{height: 375,latitude: 13.912899800000002,longitude: 76.7399875,owner_id: 4485,owner_number:'1234567890',owner_name: "babu",type:"Oxygen Cylinders",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 27935,verifiedBy: "18pa1a1219@vishnu.edu.in",availability: "Not Available",upload_date: "25 June 2006",width: 500},
-		{height: 375,latitude: 25.912899800000002,longitude: 79.7399875,owner_id: 4580,owner_number:'1234567890',owner_name: "Madhu",type:"ICU Beds",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 27930,verifiedBy: "18pa1a1213@vishnu.edu.in",availability: "Available",upload_date: "25 June 2006",width: 500},
-		{height: 375,latitude: 26.912899800000002,longitude: 80.7399875,owner_id: 4581,owner_number:'1234567890',owner_name: "Abhinav",type:"ICU Beds",owner_address: "rajolu",verifiedOn: "12-04-2021",photo_id: 27931,verifiedBy: "18pa1a1214@vishnu.edu.in",availability: "Not Available",upload_date: "25 June 2006",width: 500},
-		{height: 375,latitude: 27.912899800000002,longitude: 81.7399875,owner_id: 4582,owner_number:'1234567890',owner_name: "Sai",type:"ICU Beds",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 27932,verifiedBy: "18pa1a1215@vishnu.edu.in",availability: "Available",upload_date: "25 June 2006",width: 500},
-		{height: 375,latitude: 24.912899800000002,longitude: 78.7399875,owner_id: 4586,owner_number:'1234567890',owner_name: "Hari",type:"ICU Beds",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 27933,verifiedBy: "18pa1a1216@vishnu.edu.in",availability: "Not Available",upload_date: "25 June 2006",width: 500},
-		{height: 375,latitude: 23.912899800000002,longitude: 77.7399875,owner_id: 4584,owner_number:'1234567890',owner_name: "Richad",type:"ICU Beds",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 27934,verifiedBy: "18pa1a1217@vishnu.edu.in",availability: "Available",upload_date: "25 June 2006",width: 500},
-		{height: 375,latitude: 23.912899800000002,longitude: 76.7399875,owner_id: 4585,owner_number:'1234567890',owner_name: "babu",type:"ICU Beds",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 27935,verifiedBy: "18pa1a1219@vishnu.edu.in",availability: "Not Available",upload_date: "25 June 2006",width: 500},
-		{height: 375,latitude: 35.912899800000002,longitude: 79.7399875,owner_id: 4680,owner_number:'1234567890',owner_name: "Madhu",type:"Private Transport",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 27930,verifiedBy: "18pa1a1213@vishnu.edu.in",availability: "Available",upload_date: "25 June 2006",width: 500},
-		{height: 375,latitude: 36.912899800000002,longitude: 80.7399875,owner_id: 4681,owner_number:'1234567890',owner_name: "Abhinav",type:"Private Transport",owner_address: "rajolu",verifiedOn: "12-04-2021",photo_id: 27931,verifiedBy: "18pa1a1214@vishnu.edu.in",availability: "Not Available",upload_date: "25 June 2006",width: 500},
-		{height: 375,latitude: 37.912899800000002,longitude: 81.7399875,owner_id: 4682,owner_number:'1234567890',owner_name: "Sai",type:"Private Transport",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 27932,verifiedBy: "18pa1a1215@vishnu.edu.in",availability: "Available",upload_date: "25 June 2006",width: 500},
-		{height: 375,latitude: 34.912899800000002,longitude: 78.7399875,owner_id: 4686,owner_number:'1234567890',owner_name: "Hari",type:"Private Transport",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 27933,verifiedBy: "18pa1a1216@vishnu.edu.in",availability: "Not Available",upload_date: "25 June 2006",width: 500},
-		{height: 375,latitude: 33.912899800000002,longitude: 77.7399875,owner_id: 4684,owner_number:'1234567890',owner_name: "Richad",type:"Private Transport",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 27934,verifiedBy: "18pa1a1217@vishnu.edu.in",availability: "Available",upload_date: "25 June 2006",width: 500},
-		{height: 375,latitude: 33.912899800000002,longitude: 76.7399875,owner_id: 4685,owner_number:'1234567890',owner_name: "babu",type:"Private Transport",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 27935,verifiedBy: "18pa1a1219@vishnu.edu.in",availability: "Not Available",upload_date: "25 June 2006",width: 500},
-		{height: 375,latitude: 45.912899800000002,longitude: 79.7399875,owner_id: 4780,owner_number:'1234567890',owner_name: "Madhu",type:"Ambulance",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 27930,verifiedBy: "18pa1a1213@vishnu.edu.in",availability: "Available",upload_date: "25 June 2006",width: 500},
-		{height: 375,latitude: 46.912899800000002,longitude: 80.7399875,owner_id: 4781,owner_number:'1234567890',owner_name: "Abhinav",type:"Ambulance",owner_address: "rajolu",verifiedOn: "12-04-2021",photo_id: 27931,verifiedBy: "18pa1a1214@vishnu.edu.in",availability: "Not Available",upload_date: "25 June 2006",width: 500},
-		{height: 375,latitude: 47.912899800000002,longitude: 81.7399875,owner_id: 4782,owner_number:'1234567890',owner_name: "Sai",type:"Ambulance",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 27932,verifiedBy: "18pa1a1215@vishnu.edu.in",availability: "Available",upload_date: "25 June 2006",width: 500},
-		{height: 375,latitude: 47.912899800000002,longitude: 78.7399875,owner_id: 4786,owner_number:'1234567890',owner_name: "Hari",type:"Ambulance",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 27933,verifiedBy: "18pa1a1216@vishnu.edu.in",availability: "Not Available",upload_date: "25 June 2006",width: 500},
-		{height: 375,latitude: 43.912899800000002,longitude: 77.7399875,owner_id: 4784,owner_number:'1234567890',owner_name: "Richad",type:"Ambulance",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 27934,verifiedBy: "18pa1a1217@vishnu.edu.in",availability: "Available",upload_date: "25 June 2006",width: 500},
-		{height: 375,latitude: 43.912899800000002,longitude: 76.7399875,owner_id: 4785,owner_number:'1234567890',owner_name: "babu",type:"Ambulance",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 27935,verifiedBy: "18pa1a1219@vishnu.edu.in",availability: "Not Available",upload_date: "25 June 2006",width: 500},
-		{height: 375,latitude: 55.912899800000002,longitude: 79.7399875,owner_id: 4880,owner_number:'1234567890',owner_name: "Madhu",type:"Plasma",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 27930,verifiedBy: "18pa1a1213@vishnu.edu.in",availability: "Available",upload_date: "25 June 2006",width: 500},
-		{height: 375,latitude: 56.912899800000002,longitude: 80.7399875,owner_id: 4881,owner_number:'1234567890',owner_name: "Abhinav",type:"Plasma",owner_address: "rajolu",verifiedOn: "12-04-2021",photo_id: 27931,verifiedBy: "18pa1a1214@vishnu.edu.in",availability: "Not Available",upload_date: "25 June 2006",width: 500},
-		{height: 375,latitude: 57.912899800000002,longitude: 81.7399875,owner_id: 4882,owner_number:'1234567890',owner_name: "Sai",type:"Plasma",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 27932,verifiedBy: "18pa1a1215@vishnu.edu.in",availability: "Available",upload_date: "25 June 2006",width: 500},
-		{height: 375,latitude: 54.912899800000002,longitude: 78.7399875,owner_id: 4886,owner_number:'1234567890',owner_name: "Hari",type:"Plasma",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 27933,verifiedBy: "18pa1a1216@vishnu.edu.in",availability: "Not Available",upload_date: "25 June 2006",width: 500},
-		{height: 375,latitude: 53.912899800000002,longitude: 77.7399875,owner_id: 4884,owner_number:'1234567890',owner_name: "Richad",type:"Plasma",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 27934,verifiedBy: "18pa1a1217@vishnu.edu.in",availability: "Available",upload_date: "25 June 2006",width: 500},
-		{height: 375,latitude: 53.912899800000002,longitude: 76.7399875,owner_id: 4885,owner_number:'1234567890',owner_name: "babu",type:"Plasma",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 27935,verifiedBy: "18pa1a1219@vishnu.edu.in",availability: "Not Available",upload_date: "25 June 2006",width: 500},
-		{height: 375,latitude: 65.912899800000002,longitude: 79.7399875,owner_id: 4980,owner_number:'1234567890',owner_name: "Madhu",type:"Vaccine",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 27930,verifiedBy: "18pa1a1213@vishnu.edu.in",availability: "Available",upload_date: "25 June 2006",width: 500},
-		{height: 375,latitude: 66.912899800000002,longitude: 80.7399875,owner_id: 4981,owner_number:'1234567890',owner_name: "Abhinav",type:"Vaccine",owner_address: "rajolu",verifiedOn: "12-04-2021",photo_id: 27931,verifiedBy: "18pa1a1214@vishnu.edu.in",availability: "Not Available",upload_date: "25 June 2006",width: 500},
-		{height: 375,latitude: 67.912899800000002,longitude: 81.7399875,owner_id: 4982,owner_number:'1234567890',owner_name: "Sai",type:"Vaccine",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 27932,verifiedBy: "18pa1a1215@vishnu.edu.in",availability: "Available",upload_date: "25 June 2006",width: 500},
-		{height: 375,latitude: 64.912899800000002,longitude: 78.7399875,owner_id: 4986,owner_number:'1234567890',owner_name: "Hari",type:"Vaccine",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 27933,verifiedBy: "18pa1a1216@vishnu.edu.in",availability: "Not Available",upload_date: "25 June 2006",width: 500},
-		{height: 375,latitude: 63.912899800000002,longitude: 77.7399875,owner_id: 4984,owner_number:'1234567890',owner_name: "Richad",type:"Vaccine",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 27934,verifiedBy: "18pa1a1217@vishnu.edu.in",availability: "Available",upload_date: "25 June 2006",width: 500},
-		{height: 375,latitude: 63.912899800000002,longitude: 76.7399875,owner_id: 4985,owner_number:'1234567890',owner_name: "babu",type:"Vaccine",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 27935,verifiedBy: "18pa1a1219@vishnu.edu.in",availability: "Not Available",upload_date: "25 June 2006",width: 500},
-	])
-	const [array,setArray] = useState();
 	useEffect(() => {
-		setArray(props.location.state.finallist);
 		var options = {
 			enableHighAccuracy: true,
 			timeout: 5000,
@@ -240,28 +202,14 @@ function DemoApp(props) {
 		fetch(url)
 		.then(res => res.json())
 		.then(data => {
-			{data.photos.map((m)=>{
-				k = k + 1;
-				if(k<100){
-				markers.push(m);
-				}
-			})}
 		})
 	}, [])
-	
-const [pathCoordinates,setPathCoordinates] = useState([
-        { lat: 15.912899800000002, lng: 79.7399875 },
-        { lat: 16.912899800000002, lng: 80.7399875 }
-    ])
-	{oxygenCylinders.map((o)=>{
-		pathCoordinates.push({lat:(o.latitude),lng:(o.longitude)})
-	})}
 	return(
 		<div>
 			<MapWithAMarkerClusterer
-					markers={props.markers}
-					volunteers = {props.volunteers}
-				lat={lat} lon={lon} type={array} pathCoordinates={pathCoordinates} userId={props.userId} phoneNumber={props.phoneNumber}/>
+					details={props.details}
+					volunteers={props.volunteers}
+				lat={props.lat} lng={props.lng} />
 		</div>)
 
 }

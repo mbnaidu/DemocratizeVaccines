@@ -1,36 +1,202 @@
+import { Accordion, AccordionDetails, AccordionSummary, Button, makeStyles, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@material-ui/core';
 import React, { useState } from 'react'
 import { useLocation } from 'react-router';
 import VolunteerMap from '../Maps/VolunteerMap';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
+
+
+    const useStyles = makeStyles((theme) => ({
+        root: {
+            width: '100%',
+        },
+        heading: {
+            fontSize: theme.typography.pxToRem(15),
+            flexBasis: '15.33%',
+            flexShrink: 0,
+        },
+        secondaryHeading: {
+            fontSize: theme.typography.pxToRem(15),
+            flexBasis: '33.33%',
+        },
+    }));
 function VolunteerAvailability() {
     const location = useLocation();
     const [type,setType] = useState(location.state.type);
     const [range,setRange] = useState(location.state.range);
     const [volunteers,setVolunteers] = useState([
-		{height: 375,latitude: 14.99299800000002,longitude: 79.7399875,verifications: 34,owner_id:1213,owner_number:'1234567890',owner_name: "Madhu",type:"volunteer",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 2793,email: "18pa1a1213@vishnu.edu.in",status: "Active",width: 500},
-        {height: 375,latitude: 15.99299800000002,longitude: 79.7399875,verifications: 34,owner_id:1214,owner_number:'1234567890',owner_name: "Madhu",type:"volunteer",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 2790,email: "18pa1a1213@vishnu.edu.in",status: "Active",width: 500},
-        {height: 375,latitude: 16.99299800000002,longitude: 79.7399875,verifications: 34,owner_id:1215,owner_number:'1234567890',owner_name: "Madhu",type:"volunteer",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 2730,email: "18pa1a1213@vishnu.edu.in",status: "Active",width: 500},
-        {height: 375,latitude: 17.99299800000002,longitude: 79.7399875,verifications: 34,owner_id:1216,owner_number:'1234567890',owner_name: "Madhu",type:"volunteer",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 2930,email: "18pa1a1213@vishnu.edu.in",status: "Active",width: 500},
-        {height: 375,latitude: 18.99299800000002,longitude: 79.7399875,verifications: 34,owner_id:1217,owner_number:'1234567890',owner_name: "Madhu",type:"volunteer",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 7930,email: "18pa1a1213@vishnu.edu.in",status: "Active",width: 500},
+		{height: 375,latitude: 14.99299800000002,longitude: 79.7399875,verifications: 34,owner_id:1213,owner_number:'1234567890',owner_name: "Madhu",type:"volunteer",owner_address: "bhimavaram",verifiedOn: "12-04-2021",email: "18pa1a1213@vishnu.edu.in",status: "Active",width: 500},
+        {height: 375,latitude: 15.99299800000002,longitude: 79.7399875,verifications: 34,owner_id:1214,owner_number:'1234567890',owner_name: "Madhu",type:"volunteer",owner_address: "bhimavaram",verifiedOn: "12-04-2021",email: "18pa1a1213@vishnu.edu.in",status: "Active",width: 500},
+        {height: 375,latitude: 16.99299800000002,longitude: 79.7399875,verifications: 34,owner_id:1215,owner_number:'1234567890',owner_name: "Madhu",type:"volunteer",owner_address: "bhimavaram",verifiedOn: "12-04-2021",email: "18pa1a1213@vishnu.edu.in",status: "Active",width: 500},
+        {height: 375,latitude: 17.99299800000002,longitude: 79.7399875,verifications: 34,owner_id:1216,owner_number:'1234567890',owner_name: "Madhu",type:"volunteer",owner_address: "bhimavaram",verifiedOn: "12-04-2021",email: "18pa1a1213@vishnu.edu.in",status: "Active",width: 500},
+        {height: 375,latitude: 18.99299800000002,longitude: 79.7399875,verifications: 34,owner_id:1217,owner_number:'1234567890',owner_name: "Madhu",type:"volunteer",owner_address: "bhimavaram",verifiedOn: "12-04-2021",email: "18pa1a1213@vishnu.edu.in",status: "Active",width: 500},
 	])
     const [volunteerOption,setVolunteerOption] = useState(location.state.finallist);
     // PATIENT AND DONORS
         const [patientDetails,setPatientDetails] = useState([
-		{height: 375,latitude: 26.912899800000002,longitude: 80.7399875,owner_id: 4581,owner_number:'1234567890',owner_name: "Abhinav",type:"ICU Beds",owner_address: "rajolu",verifiedOn: "12-04-2021",photo_id: 27931,verifiedBy: "18pa1a1214@vishnu.edu.in",availability: "Not Available",upload_date: "25 June 2006",width: 500},
-        {height: 375,latitude: 13.912899800000002,longitude: 79.7399875,owner_id: 4480,owner_number:'1234567890',owner_name: "Madhu",type:"Oxygen Cylinders",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 27930,verifiedBy: "18pa1a1213@vishnu.edu.in",availability: "Available",upload_date: "25 June 2006",width: 500},
-        {height: 375,latitude: 36.912899800000002,longitude: 80.7399875,owner_id: 4681,owner_number:'1234567890',owner_name: "Abhinav",type:"Private Transport",owner_address: "rajolu",verifiedOn: "12-04-2021",photo_id: 27931,verifiedBy: "18pa1a1214@vishnu.edu.in",availability: "Not Available",upload_date: "25 June 2006",width: 500},
-		{height: 375,latitude: 47.912899800000002,longitude: 81.7399875,owner_id: 4782,owner_number:'1234567890',owner_name: "Sai",type:"Ambulance",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 27932,verifiedBy: "18pa1a1215@vishnu.edu.in",availability: "Available",upload_date: "25 June 2006",width: 500},
-		{height: 375,latitude: 65.912899800000002,longitude: 79.7399875,owner_id: 4980,owner_number:'1234567890',owner_name: "Madhu",type:"Vaccine",owner_address: "bhimavaram",verifiedOn: "12-04-2021",photo_id: 27930,verifiedBy: "18pa1a1213@vishnu.edu.in",availability: "Available",upload_date: "25 June 2006",width: 500},
-        ])
+		{
+            height: 375,latitude: 26.912899800000002,longitude: 80.7399875,owner_id: 4581,owner_number:'1234567890',owner_name: "Abhinav",type:"ICU Beds",owner_address: "rajolu",upload_date: "25 June 2006",
+            donors:[
+                {height: 375,latitude: 13.912899800000002,longitude: 79.7399875,owner_id: 4480,owner_number:'1234567890',owner_name: "Madhu",type:"Oxygen Cylinders",owner_address: "bhimavaram",verifiedOn: "12-04-2021",verifiedBy: "18pa1a1213@vishnu.edu.in",upload_date: "25 June 2006",contactNumber:'12344',width: 500},
+            ],
+            width: 500},
+        {
+            height: 375,latitude: 13.912899800000002,longitude: 79.7399875,owner_id: 4480,owner_number:'1234567890',owner_name: "Madhu",type:"Oxygen Cylinders",owner_address: "bhimavaram",upload_date: "25 June 2006",
+            donors:[
+                {height: 375,latitude: 25.912899800000002,longitude: 79.7399875,owner_id: 4580,owner_number:'1234567890',owner_name: "Madhu",type:"ICU Beds",owner_address: "bhimavaram",verifiedOn: "12-04-2021",verifiedBy: "18pa1a1213@vishnu.edu.in",upload_date: "25 June 2006",contactNumber:'12344',width: 500},
+            ],
+            width: 500},
+        {
+            height: 375,latitude: 36.912899800000002,longitude: 80.7399875,owner_id: 4681,owner_number:'1234567890',owner_name: "Abhinav",type:"Private Transport",owner_address: "rajolu",upload_date: "25 June 2006",
+            donors:[
+                {height: 375,latitude: 35.912899800000002,longitude: 79.7399875,owner_id: 4680,owner_number:'1234567890',owner_name: "Madhu",type:"Private Transport",owner_address: "bhimavaram",verifiedOn: "12-04-2021",verifiedBy: "18pa1a1213@vishnu.edu.in",contactNumber:'12344',upload_date: "25 June 2006",width: 500},
+            ],
+            width: 500},
+		{
+            height: 375,latitude: 47.912899800000002,longitude: 81.7399875,owner_id: 4782,owner_number:'1234567890',owner_name: "Sai",type:"Ambulance",owner_address: "bhimavaram",upload_date: "25 June 2006",
+            donors:[
+            {height: 375,latitude: 45.912899800000002,longitude: 79.7399875,owner_id: 4780,owner_number:'1234567890',owner_name: "Madhu",type:"Ambulance",owner_address: "bhimavaram",verifiedOn: "12-04-2021",verifiedBy: "18pa1a1213@vishnu.edu.in",contactNumber:'12344',upload_date: "25 June 2006",width: 500},
+            {height: 375,latitude: 55.912899800000002,longitude: 79.7399875,owner_id: 4880,owner_number:'1234567890',owner_name: "Madhu",type:"Plasma",owner_address: "bhimavaram",verifiedOn: "12-04-2021",verifiedBy: "18pa1a1213@vishnu.edu.in",contactNumber:'12344',upload_date: "25 June 2006",width: 500},
+            ],
+            width: 500},
+		{
+            height: 375,latitude: 65.912899800000002,longitude: 79.7399875,owner_id: 4980,owner_number:'1234567890',owner_name: "Madhu",type:"Vaccine",owner_address: "bhimavaram",upload_date: "25 June 2006",
+            donors:[
+                {height: 375,latitude: 65.912899800000002,longitude: 79.7399875,owner_id: 4980,owner_number:'1234567890',owner_name: "Madhu",type:"Vaccine",owner_address: "bhimavaram",verifiedOn: "12-04-2021",verifiedBy: "18pa1a1213@vishnu.edu.in",contactNumber:'12344',upload_date: "25 June 2006",width: 500},
+            ],
+            width: 500},
+        ]);
+    // Accordion
+        const classes = useStyles();
+        const [expanded, setExpanded] = React.useState(false);
+        const handleChange = (panel) => (event, isExpanded) => {
+            setExpanded(isExpanded ? panel : false);
+        };
+        const [showMap,setShowMap] = useState(false); 
+        const [details,setDetails] = useState([]);
+        const [lat,setLat] = useState('');
+        const [lng,setLng] = useState('');
     return (
         <div>
             <nav className="glass">
                 {
                     type === 'patient' ? (<div>
                         {volunteerOption === 'volunteers' ? (<div>
-                            <VolunteerMap location={location} volunteers={volunteers} markers={patientDetails}/>
+                            {showMap ? (<div>
+                                <VolunteerMap details={details} lat={parseFloat(lat)} lng={parseFloat(lng)} volunteers={volunteers}/>
+                            </div>) : (<div>
+                                {patientDetails.map((p)=>{
+                                return(
+                                    <div>
+                                        <Accordion expanded={expanded === p.owner_id} onChange={handleChange(p.owner_id)}  className="patientable accordian" >
+                                            <AccordionSummary
+                                                aria-controls="panel1bh-content"
+                                                id="panel1bh-header"
+                                                >
+                                                <Typography className={classes.heading}>{p.owner_id}</Typography>
+                                                <Typography className={classes.secondaryHeading}>{p.type}</Typography>
+                                                <Typography className={classes.secondaryHeading}>{p.upload_date}</Typography>
+                                                <Button size="large" color="secondary" variant="contained" onClick={()=>{setShowMap(true);setDetails(p);setLat(p.latitude);setLng(p.longitude)}}>
+                                                    Map
+                                                </Button>
+                                            </AccordionSummary>
+                                            <AccordionDetails >
+                                                <TableContainer >
+                                                        <Table aria-labelledby="tableTitle" size='large' aria-label="enhanced table">
+                                                            <TableHead>
+                                                                <TableCell>OwnerId</TableCell>
+                                                                <TableCell>OwnerName</TableCell>
+                                                                <TableCell>Type</TableCell>
+                                                                <TableCell>UploadDate</TableCell>
+                                                                <TableCell>VerifiedOn</TableCell>
+                                                                <TableCell>VerifiedBy</TableCell>
+                                                                <TableCell>Address</TableCell>
+                                                                <TableCell>Contact</TableCell>
+                                                            </TableHead>
+                                                            <TableBody >
+                                                                    {p.donors.map((o,key=o.id)=>{
+                                                                        return(
+                                                                            <TableRow hover role="checkbox">
+                                                                                <TableCell padding="checkbox">
+                                                                                    {o.owner_id}
+                                                                                </TableCell>
+                                                                                <TableCell align="right">{o.owner_name}</TableCell>
+                                                                                <TableCell scope="row" padding="none">{o.type}</TableCell>
+                                                                                <TableCell align="right">{o.upload_date}</TableCell>
+                                                                                <TableCell align="right">{o.verifiedOn}</TableCell>
+                                                                                <TableCell align="right">{o.verifiedBy}</TableCell>
+                                                                                <TableCell align="right">{o.owner_address}</TableCell>
+                                                                                <TableCell align="right">{o.owner_number}</TableCell>
+                                                                            </TableRow>     
+                                                                        )
+                                                                    })}
+                                                            </TableBody>
+                                                        </Table>
+                                                    </TableContainer>
+                                            </AccordionDetails>
+                                    </Accordion>
+                                    </div>
+                                )
+                            })}
+                            </div>)}
                         </div>) : (<div>
-                            patient
+                            {showMap ? (<div>
+                                <VolunteerMap details={details} lat={parseFloat(lat)} lng={parseFloat(lng)}/>
+                            </div>) : (<div>
+                                {patientDetails.map((p)=>{
+                                return(
+                                    <div>
+                                        <Accordion expanded={expanded === p.owner_id} onChange={handleChange(p.owner_id)}  className="patientable accordian" >
+                                            <AccordionSummary
+                                                aria-controls="panel1bh-content"
+                                                id="panel1bh-header"
+                                                >
+                                                <Typography className={classes.heading}>{p.owner_id}</Typography>
+                                                <Typography className={classes.secondaryHeading}>{p.type}</Typography>
+                                                <Typography className={classes.secondaryHeading}>{p.upload_date}</Typography>
+                                                <Button size="large" color="secondary" variant="contained" onClick={()=>{setShowMap(true);setDetails(p);setLat(p.latitude);setLng(p.longitude)}}>
+                                                    Map
+                                                </Button>
+                                            </AccordionSummary>
+                                            <AccordionDetails >
+                                                <TableContainer >
+                                                        <Table aria-labelledby="tableTitle" size='large' aria-label="enhanced table">
+                                                            <TableHead>
+                                                                <TableCell>OwnerId</TableCell>
+                                                                <TableCell>OwnerName</TableCell>
+                                                                <TableCell>Type</TableCell>
+                                                                <TableCell>UploadDate</TableCell>
+                                                                <TableCell>VerifiedOn</TableCell>
+                                                                <TableCell>VerifiedBy</TableCell>
+                                                                <TableCell>Address</TableCell>
+                                                                <TableCell>Contact</TableCell>
+                                                            </TableHead>
+                                                            <TableBody >
+                                                                    {p.donors.map((o,key=o.id)=>{
+                                                                        return(
+                                                                            <TableRow hover role="checkbox">
+                                                                                <TableCell padding="checkbox">
+                                                                                    {o.owner_id}
+                                                                                </TableCell>
+                                                                                <TableCell align="right">{o.owner_name}</TableCell>
+                                                                                <TableCell scope="row" padding="none">{o.type}</TableCell>
+                                                                                <TableCell align="right">{o.upload_date}</TableCell>
+                                                                                <TableCell align="right">{o.verifiedOn}</TableCell>
+                                                                                <TableCell align="right">{o.verifiedBy}</TableCell>
+                                                                                <TableCell align="right">{o.owner_address}</TableCell>
+                                                                                <TableCell align="right">{o.owner_number}</TableCell>
+                                                                            </TableRow>     
+                                                                        )
+                                                                    })}
+                                                            </TableBody>
+                                                        </Table>
+                                                    </TableContainer>
+                                            </AccordionDetails>
+                                    </Accordion>
+                                    </div>
+                                )
+                            })}
+                            </div>)}
                         </div>)}
                     </div>) : 
                     type === 'notverified' ? (<div>
