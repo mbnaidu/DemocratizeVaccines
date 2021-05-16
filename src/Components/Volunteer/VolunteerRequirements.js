@@ -145,7 +145,7 @@ function VolunteerRequirements() {
                                         <FormControlLabel value="patient" control={<GreenRadio />} label="Show My Requests" onChange={()=>setType('patient')}/>
                                     </RadioGroup>
                                     <FormControlLabel value="volunteers" control={<Checkbox />} label="Check Other Volunteers" onChange={()=>handleInput('volunteers')}/>
-                                    {volunteerAddress != '' ? (<div>
+                                    {/* {volunteerAddress != '' ? (<div>
                                     <NavLink
                                     to={{
                                         pathname:'/volunteer-availability',
@@ -163,7 +163,22 @@ function VolunteerRequirements() {
                                 </NavLink>
                                 </div>) : (<div>
                                     <Button variant="contained" color="primary" className={classes.button} onClick={()=>{alert('Please allow location');window.location.reload(false)}}>Get Details</Button>
-                                </div>)}
+                                </div>)} */}
+                                <NavLink
+                                    to={{
+                                        pathname:'/volunteer-availability',
+                                            state: {
+                                                address:volunteerAddress,
+                                                location:longLatt,
+                                                finallist:finalList,
+                                                type:type,
+                                                range:range
+                                            } 
+                                        }}
+                                        exact
+                                >
+                                <Button variant="contained" color="primary" className={classes.button} >Get Details</Button>
+                                </NavLink>
                             </FormControl>
                         </CardContent>
                     </Card>

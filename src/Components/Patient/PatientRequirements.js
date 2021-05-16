@@ -269,7 +269,7 @@ getCoordintes()
                                     })}
                                 </FormGroup>
                                 <br/><br/>
-                                {patientAddress != '' ? (<div>
+                                {/* {patientAddress != '' ? (<div>
                                     <NavLink
                                     to={{
                                         pathname:'/patient-availability',
@@ -286,23 +286,21 @@ getCoordintes()
                                 </NavLink>
                                 </div>) : (<div>
                                     <Button variant="contained" color="primary" type="submit" onClick={()=>{alert('Please allow location');window.location.reload(false)}}>SEARCH</Button>
-                                </div>)}
-                                {/* <NavLink
+                                </div>)} */}
+                                <NavLink
                                     to={{
                                         pathname:'/patient-availability',
                                             state: {
                                                 address:patientAddress,
-                                                required:requiredAddress,
-                                                location:longLatt,
+                                                lat:finalLat,
+                                                lng:finalLng,
                                                 finallist:finalList,
-                                                userId:1213,
-                                                phoneNumber:1234567890,
                                             } 
                                         }}
                                         exact
                                 >
                                 <Button variant="contained" color="primary" >SEARCH</Button>
-                                </NavLink> */}
+                                </NavLink>
                             </FormControl>
                         </CardContent>
                     </Card>

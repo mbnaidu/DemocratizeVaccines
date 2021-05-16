@@ -44,6 +44,15 @@ function VolunteerAvailability() {
                 {height: 375,latitude: 55.912899800000002,longitude: 79.7399875,owner_id: 4880,owner_number:'1234567890',owner_name: "Madhu",type:"Plasma",owner_address: "bhimavaram",Verifications: ["18pa1a1213@vishnu.edu.in - 12-04-2021","madhucharliehash@gmail.com - 02-03-2022"],contactNumber:'12344',upload_date: "25 June 2006",width: 500},
                 {height: 375,latitude: 65.912899800000002,longitude: 79.7399875,owner_id: 4980,owner_number:'1234567890',owner_name: "Madhu",type:"Vaccine",owner_address: "bhimavaram",Verifications: ["18pa1a121318pa1a1213@vishnu.edu.in - 12-04-2021","madhucharliehashnaidugaru@gmail.com - 02-03-2022"],contactNumber:'12344',upload_date: "25 June 2006",width: 500},
             ])
+        // NOT VERIFIED PROFILES
+            const [notVerified,setNotVerified] = useState([
+                {height: 375,latitude: 13.912899800000002,longitude: 79.7399875,owner_id: 4480,owner_number:'1234567890',owner_name: "Madhu",type:"Oxygen Cylinders",owner_address: "bhimavaram",Verifications: [" "],upload_date: "25 June 2006",contactNumber:'12344',width: 500},
+                {height: 375,latitude: 25.912899800000002,longitude: 79.7399875,owner_id: 4580,owner_number:'1234567890',owner_name: "Madhu",type:"ICU Beds",owner_address: "bhimavaram",Verifications: [""],upload_date: "25 June 2006",contactNumber:'12344',width: 500},
+                {height: 375,latitude: 35.912899800000002,longitude: 79.7399875,owner_id: 4680,owner_number:'1234567890',owner_name: "Madhu",type:"Private Transport",owner_address: "bhimavaram",Verifications: [""],contactNumber:'12344',upload_date: "25 June 2006",width: 500},
+                {height: 375,latitude: 45.912899800000002,longitude: 79.7399875,owner_id: 4780,owner_number:'1234567890',owner_name: "Madhu",type:"Ambulance",owner_address: "bhimavaram",Verifications: [""],contactNumber:'12344',upload_date: "25 June 2006",width: 500},
+                {height: 375,latitude: 55.912899800000002,longitude: 79.7399875,owner_id: 4880,owner_number:'1234567890',owner_name: "Madhu",type:"Plasma",owner_address: "bhimavaram",Verifications: [""],contactNumber:'12344',upload_date: "25 June 2006",width: 500},
+                {height: 375,latitude: 65.912899800000002,longitude: 79.7399875,owner_id: 4980,owner_number:'1234567890',owner_name: "Madhu",type:"Vaccine",owner_address: "bhimavaram",Verifications: [""],contactNumber:'12344',upload_date: "25 June 2006",width: 500},
+            ])
         // PATIENT AND DONORS
             const [patientDetails,setPatientDetails] = useState([
                 {height: 375,latitude: 26.912899800000002,longitude: 80.7399875,owner_id: 4581,owner_number:'1234567890',owner_name: "Abhinav",type:"ICU Beds",owner_address: "rajolu",upload_date: "25 June 2006",donors:[{height: 375,latitude: 13.912899800000002,longitude: 79.7399875,owner_id: 4480,owner_number:'1234567890',owner_name: "Madhu",type:"Oxygen Cylinders",owner_address: "bhimavaram",verifiedOn: "12-04-2021",verifiedBy: "18pa1a1213@vishnu.edu.in",upload_date: "25 June 2006",contactNumber:'12344',width: 500},],width: 500},
@@ -201,9 +210,137 @@ function VolunteerAvailability() {
                     </div>) : 
                     type === 'notverified' ? (<div>
                         {volunteerOption === 'volunteers' ? (<div>
-                            not verified
+                            {showVerifiedMap ? (<div>
+                                <VolunteerMap details={details} lat={parseFloat(lat)} lng={parseFloat(lng)} types={types} volunteers={volunteers}/>
+                                <Button color="primary" variant="contained" onClick={()=>{setShowVerifiedMap(false)}}>Go Back</Button>
+                            </div>) : (<div>
+                                <Button color="primary" variant="contained" onClick={()=>{setShowVerifiedMap(true);setDetails(notVerified);setTypes('showall')}}>SHOW ALL</Button>
+                                {notVerified.map((p)=>{
+                                return(
+                                    <div key={p.owner_id}>
+                                        <Accordion expanded={expanded === p.owner_id} onChange={handleChange(p.owner_id)}  className="patientable accordian" >
+                                            <AccordionSummary
+                                                expandIcon={<ExpandMoreIcon />}
+                                                aria-controls="panel1bh-content"
+                                                id="panel1bh-header"
+                                                >
+                                                <Typography className={classes.heading}>{p.owner_id}</Typography>
+                                                <Typography className={classes.secondaryHeading}>{p.type}</Typography>
+                                                <Typography className={classes.secondaryHeading}>{p.upload_date}</Typography>
+                                                </AccordionSummary>
+                                            <AccordionDetails >
+                                                <TableContainer >
+                                                        <Table aria-labelledby="tableTitle" size='large' aria-label="enhanced table">
+                                                            <TableHead>
+                                                                <TableCell>OnMap</TableCell>
+                                                                <TableCell>OwnerId</TableCell>
+                                                                <TableCell>OwnerName</TableCell>
+                                                                <TableCell>Type</TableCell>
+                                                                <TableCell>UploadDate</TableCell>
+                                                                <TableCell>Verifications</TableCell>
+                                                                <TableCell>Address</TableCell>
+                                                                <TableCell>Contact</TableCell>
+                                                                <TableCell>Verified</TableCell>
+                                                            </TableHead>
+                                                            <TableBody >
+                                                                <TableRow hover role="checkbox">
+                                                                    <TableCell>
+                                                                        <Button size="large" color="secondary" variant="contained" onClick={()=>{setShowVerifiedMap(true);setDetails(p);setLat(p.latitude);setLng(p.longitude);setTypes('verified')}}>
+                                                                        Show
+                                                                    </Button>
+                                                                    </TableCell>
+                                                                    <TableCell padding="checkbox">{p.owner_id}</TableCell>
+                                                                    <TableCell align="right">{p.owner_name}</TableCell>
+                                                                    <TableCell scope="row" padding="none">{p.type}</TableCell>
+                                                                    <TableCell align="right">{p.upload_date}</TableCell>
+                                                                    <TableCell align="right">
+                                                                        {p.Verifications.map((v)=>{
+                                                                            return(
+                                                                                <div>
+                                                                                    {v}
+                                                                                </div>
+                                                                            )
+                                                                        })}
+                                                                    </TableCell>
+                                                                    <TableCell align="right">{p.owner_address}</TableCell>
+                                                                    <TableCell align="right">{p.owner_number}</TableCell>
+                                                                    <TableCell><Button color="primary" variant="outlined" onClick={()=>{p.Verifications.push('abhinav@gmail.com - 16-05-2020');alert('Verified Please Check On MAP')}}>Verify</Button></TableCell>
+                                                                </TableRow>     
+                                                            </TableBody>
+                                                        </Table>
+                                                    </TableContainer>
+                                            </AccordionDetails>
+                                    </Accordion>
+                                    </div>
+                                )
+                            })}
+                            </div>)}
                         </div>) : (<div>
-                            not verified
+                            {showVerifiedMap ? (<div>
+                                <VolunteerMap details={details} lat={parseFloat(lat)} lng={parseFloat(lng)} types={types} />
+                                <Button color="primary" variant="contained" onClick={()=>{setShowVerifiedMap(false)}}>Go Back</Button>
+                            </div>) : (<div>
+                                <Button color="primary" variant="contained" onClick={()=>{setShowVerifiedMap(true);setDetails(notVerified);setTypes('showall')}}>SHOW ALL</Button>
+                                {notVerified.map((p)=>{
+                                return(
+                                    <div key={p.owner_id}>
+                                        <Accordion expanded={expanded === p.owner_id} onChange={handleChange(p.owner_id)}  className="patientable accordian" >
+                                            <AccordionSummary
+                                                expandIcon={<ExpandMoreIcon />}
+                                                aria-controls="panel1bh-content"
+                                                id="panel1bh-header"
+                                                >
+                                                <Typography className={classes.heading}>{p.owner_id}</Typography>
+                                                <Typography className={classes.secondaryHeading}>{p.type}</Typography>
+                                                <Typography className={classes.secondaryHeading}>{p.upload_date}</Typography>
+                                                </AccordionSummary>
+                                            <AccordionDetails >
+                                                <TableContainer >
+                                                        <Table aria-labelledby="tableTitle" size='large' aria-label="enhanced table">
+                                                            <TableHead>
+                                                                <TableCell>OnMap</TableCell>
+                                                                <TableCell>OwnerId</TableCell>
+                                                                <TableCell>OwnerName</TableCell>
+                                                                <TableCell>Type</TableCell>
+                                                                <TableCell>UploadDate</TableCell>
+                                                                <TableCell>Verifications</TableCell>
+                                                                <TableCell>Address</TableCell>
+                                                                <TableCell>Contact</TableCell>
+                                                                <TableCell>Verified</TableCell>
+                                                            </TableHead>
+                                                            <TableBody >
+                                                                <TableRow hover role="checkbox">
+                                                                    <TableCell>
+                                                                        <Button size="large" color="secondary" variant="contained" onClick={()=>{setShowVerifiedMap(true);setDetails(p);setLat(p.latitude);setLng(p.longitude);setTypes('verified')}}>
+                                                                        Show
+                                                                    </Button>
+                                                                    </TableCell>
+                                                                    <TableCell padding="checkbox">{p.owner_id}</TableCell>
+                                                                    <TableCell align="right">{p.owner_name}</TableCell>
+                                                                    <TableCell scope="row" padding="none">{p.type}</TableCell>
+                                                                    <TableCell align="right">{p.upload_date}</TableCell>
+                                                                    <TableCell align="right">
+                                                                        {p.Verifications.map((v)=>{
+                                                                            return(
+                                                                                <div>
+                                                                                    {v}
+                                                                                </div>
+                                                                            )
+                                                                        })}
+                                                                    </TableCell>
+                                                                    <TableCell align="right">{p.owner_address}</TableCell>
+                                                                    <TableCell align="right">{p.owner_number}</TableCell>
+                                                                    <TableCell><Button color="primary" variant="outlined" onClick={()=>{p.Verifications.push('abhinav@gmail.com - 16-05-2020');alert('Verified Please Check On MAP')}}>Verify</Button></TableCell>
+                                                                </TableRow>     
+                                                            </TableBody>
+                                                        </Table>
+                                                    </TableContainer>
+                                            </AccordionDetails>
+                                    </Accordion>
+                                    </div>
+                                )
+                            })}
+                            </div>)}
                         </div>)}
                     </div>) : 
                     type === 'verified' ? (<div>
@@ -345,7 +482,7 @@ function VolunteerAvailability() {
                         <VolunteerMap details={details} lat={parseFloat(lat)} lng={parseFloat(lng)} volunteers={volunteers} types={types}/>
                     </div>) :
                 (<div></div>)}
-                <NavLink to="/volunteer-requirements"><Button color="primary" variant="contained">Go Back</Button></NavLink>
+                <NavLink to="/volunteer-requirements"><Button color="primary" variant="contained">Home</Button></NavLink>
             </nav>
         </div>
     )
