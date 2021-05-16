@@ -105,7 +105,8 @@ const MapWithAMarkerClusterer = compose(
 				position={{ lat: parseFloat(props.lat), lng: parseFloat(props.lng) }}
 			/>
 			{/* parseInt(haversine({ lat: parseFloat(props.lat), lng: parseFloat(props.lon)}, { lat: marker.latitude, lng: marker.longitude})/1000) */}
-			{props.details.donors.map((marker,i)=>{
+			{props.type === 'patient' ? (<div>
+				{props.details.donors.map((marker,i)=>{
 					return(
 				<Marker
 					icon={
@@ -168,13 +169,130 @@ const MapWithAMarkerClusterer = compose(
 				</Marker>
 				)
 			})}
+			</div>) : (<div>
+				{props.details.length === undefined ? (<div>
+					<Marker
+					icon={
+						props.details.type === 'Oxygen Cylinders' ? cylinder : 
+						props.details.type === 'ICU Beds' ? beds : 
+						props.details.type === 'Private Transport' ? transport : 
+						props.details.type === 'Ambulance' ? ambulance : 
+						props.details.type === 'Plasma' ? blood : 
+						props.details.type === 'Vaccine' ? vaccine : 
+					''}
+					key={props.details.owner_id}
+					position={{ lat: props.details.latitude, lng: props.details.longitude }}
+					onClick={() => props.onToggleOpen(props.details.owner_id)}	
+				>
+					<Polyline
+						path={[
+							{ lat: parseFloat(props.lat), lng: parseFloat(props.lng) },
+							{ lat:  props.details.latitude, lng: props.details.longitude }
+						]}
+						geodesic={true}
+						options={{
+							strokeColor: "#ff2527",
+							strokeOpacity: 0.75,
+							strokeWeight: 2,
+							icons: [
+								{
+									icon: vaccine,
+									offset: "0",
+									repeat: "20px"
+								}
+							]
+						}}
+					/>
+					{props.isOpen[props.details.owner_id] && (
+						<InfoWindow onCloseClick={props.onToggleOpen}>
+							<div>
+								<strong>DonorID : </strong>{props.details.owner_id}
+								<br/>
+								<strong>Name : </strong>{props.details.owner_name}
+								<br/>
+								<strong>Type : </strong>{props.details.type}
+								<br/>
+								<strong>UploadDate : </strong>{props.details.upload_date}
+								<br/>
+								<strong>Verifications : </strong>{props.details.Verifications.map((v)=>{return(<div>{v}</div>)})}
+								<strong>DonorAddress : </strong>{props.details.owner_address}
+								<br/>
+								<strong>Distance : </strong>{parseInt(haversine({ lat: parseFloat(props.lat), lng: parseFloat(props.lng)}, { lat: props.details.latitude, lng: props.details.longitude})/1000)}<strong> KM</strong>
+								<br/>
+								<strong>ContactNumber : </strong>{props.details.contactNumber}
+								<br/>
+							</div>
+						</InfoWindow>
+					)}
+				</Marker>
+				</div>) : (<div>
+					{props.details.map((marker,i)=>{
+						console.log(marker)
+					return(
+				<Marker
+					icon={
+						marker.type === 'Oxygen Cylinders' ? cylinder : 
+						marker.type === 'ICU Beds' ? beds : 
+						marker.type === 'Private Transport' ? transport : 
+						marker.type === 'Ambulance' ? ambulance : 
+						marker.type === 'Plasma' ? blood : 
+						marker.type === 'Vaccine' ? vaccine : 
+					''}
+					key={marker.owner_id}
+					position={{ lat: marker.latitude, lng: marker.longitude }}
+					onClick={() => props.onToggleOpen(marker.owner_id)}	
+				>
+					<Polyline
+						path={[
+							{ lat: parseFloat(props.lat), lng: parseFloat(props.lng) },
+							{ lat:  marker.latitude, lng: marker.longitude }
+						]}
+						geodesic={true}
+						options={{
+							strokeColor: "#ff2527",
+							strokeOpacity: 0.75,
+							strokeWeight: 2,
+							icons: [
+								{
+									icon: vaccine,
+									offset: "0",
+									repeat: "20px"
+								}
+							]
+						}}
+					/>
+					{props.isOpen[marker.owner_id] && (
+						<InfoWindow onCloseClick={props.onToggleOpen}>
+							<div>
+								<strong>DonorID : </strong>{marker.owner_id}
+								<br/>
+								<strong>Name : </strong>{marker.owner_name}
+								<br/>
+								<strong>Type : </strong>{marker.type}
+								<br/>
+								<strong>UploadDate : </strong>{marker.upload_date}
+								<br/>
+								<strong>Verifications : </strong>{marker.Verifications.map((v)=>{return(<div>{v}</div>)})}
+								<strong>DonorAddress : </strong>{marker.owner_address}
+								<br/>
+								<strong>Distance : </strong>{parseInt(haversine({ lat: parseFloat(props.lat), lng: parseFloat(props.lng)}, { lat: marker.latitude, lng: marker.longitude})/1000)}<strong> KM</strong>
+								<br/>
+								<strong>ContactNumber : </strong>{marker.contactNumber}
+								<br/>
+							</div>
+						</InfoWindow>
+					)}
+				</Marker>
+				)
+			})}
+				</div>)}
+			</div>)}
 		</MarkerClusterer>
 	</GoogleMap>
 ))
 function DemoApp(props) {
     const [lat,setLat] = useState(0);
-    const [lon,setLon] = useState(0);
-	const [markers,setMarkers] = useState([]);
+    const [lng,setLng] = useState(0);
 	useEffect(() => {
 		var options = {
 			enableHighAccuracy: true,
@@ -184,7 +302,7 @@ function DemoApp(props) {
 		function success(pos) {
 			var crd = pos.coords;
 			setLat(crd.latitude.toString())
-			setLon(crd.longitude.toString())
+			setLng(crd.longitude.toString())
 			return;
 		}
 		function error(err) {
@@ -209,7 +327,9 @@ function DemoApp(props) {
 			<MapWithAMarkerClusterer
 					details={props.details}
 					volunteers={props.volunteers}
-				lat={props.lat} lng={props.lng} />
+					lat={lat} lng={lng} 
+					types={props.types}
+				/>
 		</div>)
 
 }
