@@ -342,7 +342,7 @@ function VolunteerAvailability() {
                         </div>)}
                     </div>) : 
                     volunteerOption === 'volunteers' ? (<div>
-                        volunteer
+                        <VolunteerMap details={details} lat={parseFloat(lat)} lng={parseFloat(lng)} volunteers={volunteers} types={types}/>
                     </div>) :
                 (<div></div>)}
                 <NavLink to="/volunteer-requirements"><Button color="primary" variant="contained">Go Back</Button></NavLink>
