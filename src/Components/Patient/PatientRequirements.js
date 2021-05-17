@@ -213,6 +213,7 @@ getCoordintes()
             {id : '12' , value : 'Grocery' },
             {id : '13' , value : 'Doctors' },
             {id : '14' , value : 'Covid Assistance' },
+            {id:'15' , value : 'Medical Stores'}
         ];
         var finalList = [];
         const handleInput = (option) =>{
