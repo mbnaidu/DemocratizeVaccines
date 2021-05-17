@@ -207,14 +207,16 @@ function PatientAvailability() {
     const [verified,setVerified] = useState([]);
     const [notVerified,setNotVerified] = useState([]);
     useEffect(() => {
-        setDetails(DATA);
         {DATA.map((m)=>{
+            if(list.includes(m.type)){
+                details.push(m)
             return(
                 <div>
                     {m.Verifications.length > 0 ? verified.push(m) : notVerified.push(m)}
                     {m.type === 'Oxygen Cylinders' ? (oxygen.push(m)) : m.type === 'ICU Beds' ? (ICUbeds.push(m)) : m.type === 'Private Transport' ? (privates.push(m)) : m.type === 'Ambulance' ? (ambulances.push(m)) : m.type === 'Plasma' ? (plasmas.push(m)) : m.type === 'Vaccine' ? (vaccines.push(m)) :  ''}
                 </div>
             )
+            }
         })}
     }, []);
     return (
