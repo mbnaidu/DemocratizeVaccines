@@ -1,4 +1,4 @@
-import { Button, Card, CardActions, CardContent, CardHeader, Checkbox, FormControl, FormControlLabel, FormLabel, Grid, makeStyles, Radio, RadioGroup, Slider, TextField, Typography, withStyles } from '@material-ui/core'
+import { Button, Card, CardActions, CardContent, Checkbox, FormControl, FormControlLabel, Grid, makeStyles, Radio, RadioGroup, Slider, TextField, Typography, withStyles } from '@material-ui/core'
 import { AccountCircle } from '@material-ui/icons';
 import React, { useEffect, useState } from 'react'
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
@@ -11,13 +11,13 @@ import { green } from '@material-ui/core/colors';
 
 
 const GreenRadio = withStyles({
-  root: {
-    color: green[400],
-    '&$checked': {
-      color: green[600],
+    root: {
+        color: green[400],
+        '&$checked': {
+        color: green[600],
+        },
     },
-  },
-  checked: {},
+    checked: {},
 })((props) => <Radio color="default" {...props} />);
 const useStyles = makeStyles((theme) => ({
     login: {

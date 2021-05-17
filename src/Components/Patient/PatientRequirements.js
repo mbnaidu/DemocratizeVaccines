@@ -241,7 +241,7 @@ getCoordintes()
         setExpanded(isExpanded ? panel : false);
     };
     return (
-        <nav className="glass">
+        <div>
             {/* MODELS */}
             <div>
                 <Modal show={show1}>
@@ -352,7 +352,7 @@ getCoordintes()
                     </AccordionDetails>
                 </Accordion>
             </div>
-        </nav>
+        </div>
     )
 }
 

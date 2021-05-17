@@ -221,7 +221,6 @@ function PatientAvailability() {
     }, []);
     return (
         <div>
-            <nav className="glass">
                 <div> 
                     <Modal show={show1}>
                         <ModalBody>
@@ -324,7 +323,6 @@ function PatientAvailability() {
                         </ModalFooter>
                     </Modal>
                 </div>
-                <br/><br/><br/><br/><br/><br/><br/><br/>
                 {login ? signup ? (<div>
                     {generate === "Generate" ? (
 							<div>
@@ -986,7 +984,6 @@ function PatientAvailability() {
                     <Button  variant="contained" color="primary" onClick={()=>{setTwitter(true)}}>Show From Twitter</Button>
                     </div>
                 </div>)}
-            </nav>
         </div>
     )
 }

@@ -27,6 +27,7 @@
     "react-google-maps": "^9.4.5",
     "react-router-dom": "5.1.2",
     "react-scripts": "^3.4.3",
+    "react-spring-3d-carousel": "^1.2.1",
     "react-typing-effect": "^2.0.2",
     "recompose": "^0.30.0",
     "styled-components": "^5.2.0",
