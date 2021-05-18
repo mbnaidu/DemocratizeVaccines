@@ -9,6 +9,8 @@ import DonorAvailability from './Components/Donor/DonorAvailability'
 import PatientAvailability from './Components/Patient/PatientAvailability'
 import VolunteerAvailability from './Components/Volunteer/VolunteerAvailability';
 import VolunteerRequirements from './Components/Volunteer/VolunteerRequirements';
+import 'semantic-ui-css/semantic.min.css'
+
 
 function App() {
 	return (

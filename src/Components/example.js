@@ -86,7 +86,7 @@ export default class Example extends Component {
         return (
             <div>
                 <img src={logo} alt="logo" height="100px" style={{marginLeft:"140px"}}/>
-                <div style={{ width: "160%", height: "280px", marginTop: "10%" }}>
+                <div style={{ width: "160%", height: "280px", marginTop: "80%" }}>
                     <Carousel
                     slides={this.slides}
                     goToSlide={this.state.goToSlide}

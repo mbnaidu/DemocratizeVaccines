@@ -61,7 +61,6 @@ const MapWithAMarkerClusterer = compose(
 			gridSize={60}
 			label={"hi"}
 		>	
-		{console.log(props.details)}
 		{props.volunteers.map((v,key=v.owner_id)=>{
 			if(parseInt(haversine({ lat: parseFloat(props.lat), lng: parseFloat(props.lon)}, { lat: v.latitude, lng: v.longitude})/1000) > 100){
 				return(
@@ -105,7 +104,6 @@ const MapWithAMarkerClusterer = compose(
 			/>
 			{/* parseInt(haversine({ lat: parseFloat(props.lat), lng: parseFloat(props.lon)}, { lat: marker.latitude, lng: marker.longitude})/1000) */}
 			{props.details.map((marker,i)=>{
-				if(props.type.includes(marker.type) ){
 					return(
 				<Marker
 					icon={
@@ -169,7 +167,6 @@ const MapWithAMarkerClusterer = compose(
 					)}
 				</Marker>
 				)
-				}
 			})}
 		</MarkerClusterer>
 	</GoogleMap>
@@ -180,7 +177,6 @@ function DemoApp(props) {
 	const [markers,setMarkers] = useState([]);
 	const [array,setArray] = useState();
 	useEffect(() => {
-		setArray(props.location.state.finallist);
 		var options = {
 			enableHighAccuracy: true,
 			timeout: 5000,
