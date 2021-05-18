@@ -121,7 +121,7 @@ function VolunteerRequirements() {
     const [type,setType] = useState('');
     return (
         <div>
-            <nav className="glass">
+            <div>
                 {select ? (<div>
                     <Card className={classes.login}>
                         <CardContent >
@@ -254,7 +254,7 @@ function VolunteerRequirements() {
                                 </div>
                             </Card>
                 </div>))}
-			</nav>
+			</div>
         </div>
     )
 }

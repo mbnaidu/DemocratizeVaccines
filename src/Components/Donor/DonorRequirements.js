@@ -84,7 +84,7 @@ function DonorRequirements() {
             }
         }
     return (
-        <nav className="glass">
+        <div>
             {signup ? (<div>
                 {generate === "Generate" ? (
 							<div>
@@ -161,7 +161,7 @@ function DonorRequirements() {
                             </FormControl>
                         </div>
             </div>))}
-        </nav>
+        </div>
     )
 }
 

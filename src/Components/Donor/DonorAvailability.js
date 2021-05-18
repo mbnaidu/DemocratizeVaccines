@@ -332,7 +332,7 @@ export default function DonorAvailability() {
                     </ModalFooter>
                 </Modal>
             </div>
-            <nav className="glass">
+            <div>
                 <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
                 <div>
                     {list.map((l)=>{
@@ -355,7 +355,7 @@ export default function DonorAvailability() {
                     })}
                 </div>
                 <NavLink to='/'><Button color="primary" variant="contained">HOME</Button></NavLink>
-            </nav>
+            </div>
         </div>
     )
 }

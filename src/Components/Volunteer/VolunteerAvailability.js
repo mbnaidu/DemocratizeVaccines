@@ -75,7 +75,7 @@ function VolunteerAvailability() {
         const [types,setTypes] = useState('');
     return (
         <div>
-            <nav className="glass">
+            <div>
                 {
                     type === 'patient' ? (<div>
                         {volunteerOption === 'volunteers' ? (<div>
@@ -483,7 +483,7 @@ function VolunteerAvailability() {
                     </div>) :
                 (<div></div>)}
                 <NavLink to="/volunteer-requirements"><Button color="primary" variant="contained">Home</Button></NavLink>
-            </nav>
+            </div>
         </div>
     )
 }
