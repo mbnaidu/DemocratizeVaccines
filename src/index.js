@@ -5,8 +5,6 @@ import {BrowserRouter as Router,Route,} from "react-router-dom";
 import Home from './Home'
 import DonorRequirements from './Components/Donor/DonorRequirements'
 import PatientRequirements from './Components/Patient/PatientRequirements'
-import DonorAvailability from './Components/Donor/DonorAvailability'
-import PatientAvailability from './Components/Patient/PatientAvailability'
 import VolunteerAvailability from './Components/Volunteer/VolunteerAvailability';
 import VolunteerRequirements from './Components/Volunteer/VolunteerRequirements';
 import 'semantic-ui-css/semantic.min.css'
@@ -29,12 +27,6 @@ function App() {
 				</Route>
 				<Route exact path="/volunteer-requirements">
 					<VolunteerRequirements />
-				</Route>
-				<Route exact path="/donor-availability">
-					<DonorAvailability />
-				</Route>
-				<Route exact path="/patient-availability">
-					<PatientAvailability />
 				</Route>
 				<Route exact path="/volunteer-availability">
 					<VolunteerAvailability />

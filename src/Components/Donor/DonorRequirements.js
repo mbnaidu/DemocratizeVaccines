@@ -82,7 +82,6 @@ function DonorRequirements() {
             const [ambulanceAvailability,setAmbulanceAvailability] = useState('');
             const [ambulanceVerifiedOn,setAmbulanceVerifiedOn] = useState('');
             const [ambulanceVerifiedBy,setAmbulanceVerifiedBy] = useState('');
-            const [ambulanceCostPerKm,setAmbulanceCostPerKm] = useState('');
         // Private
             const [privateTransportAvailability,setPrivateTransportAvailability] = useState('');
             const [privateTransportVerifiedOn,setPrivateTransportVerifiedOn] = useState('');
@@ -98,12 +97,6 @@ function DonorRequirements() {
             const [bloodVerifiedOn,setBloodVerifiedOn] = useState('');
             const [bloodVerifiedBy,setBloodVerifiedBy] = useState('');
             const [bloodPrice,setBloodPrice] = useState('');    
-    const [oxygenOpen,setOxygenOpen] = useState(false);
-    const [ICUBeds,setICUBeds] = useState(false);
-    const [ambulance,setAmbulance] = useState(false);
-    const [privateTransport,setPrivateTransport] = useState(false);
-    const [plasma,setPlasma] = useState(false);
-    const [vaccine,setVaccine] = useState(false);
     const [setUp,setSetUP] = useState(false);
     // getting donor long,lati and address
     const [longLatt,setLongLatt] = useState('');
@@ -244,6 +237,12 @@ function DonorRequirements() {
         const handleAccordionChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
+     const [oxygenOpen,setOxygenOpen] = useState(false);
+    const [ICUBeds,setICUBeds] = useState(false);
+    const [ambulance,setAmbulance] = useState(false);
+    const [privateTransport,setPrivateTransport] = useState(false);
+    const [plasma,setPlasma] = useState(false);
+    const [vaccine,setVaccine] = useState(false);
     const [oxygenMap,setOxygenMap] = useState(false);
     const [ICUMap,setICUMap] = useState(false);
     const [ambulanceMap,setAmbulanceMap] = useState(false);
@@ -331,94 +330,563 @@ function DonorRequirements() {
                         <Collapse isOpen={oxygenOpen}>
                             {oxygenMap ? (<div>
                                 <DonorMap lat={lat} lng={lng}/>
+                                <Button color="primary" variant="contained" onClick={()=>{setOxygenMap(false)}}>CLOSE</Button>
                             </div>) : (<div>
                                 <div>
-                                <div className="row">
-                                    <div className="column">
-                                        <Grid container spacing={1} alignItems="flex-end">
-                                            <Grid item>
-                                                <TextField id="input-with-icon-grid" label="UserID" value={userID} disabled/>
+                                    <div className="row">
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" label="UserID" value={userID} disabled/>
+                                                </Grid>
                                             </Grid>
-                                        </Grid>
-                                    </div>
-                                    <div className="column">
-                                        <Grid container spacing={1} alignItems="flex-end">
-                                            <Grid item>
-                                                <TextField id="input-with-icon-grid" label="UserName" value={userName} disabled/>
+                                        </div>
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" label="UserName" value={userName} disabled/>
+                                                </Grid>
                                             </Grid>
-                                        </Grid>
-                                    </div>
-                                </div>
-                                <div className="row">
-                                    <div className="column">
-                                        <Grid container spacing={0} alignItems="flex-end">
-                                            <Grid item>
-                                                <TextField id="input-with-icon-grid" value={uploadDate} disabled />
-                                            </Grid>
-                                        </Grid>
-                                    </div>
-                                    <div className="column">
-                                        <Grid container spacing={1} alignItems="flex-end">
-                                            <Grid item>
-                                                <TextField id="input-with-icon-grid"  value={address} disabled />
-                                            </Grid>
-                                        </Grid>
-                                    </div>
-                                </div>
-                                <div className="row">
-                                    <div className="column">
-                                        <Grid container spacing={1} alignItems="flex-end">
-                                            <Grid item>
-                                                <TextField id="input-with-icon-grid" 
-                                                    label='Verified ON'
-                                                    type="text" 
-                                                    value={oxygenVerifiedOn} 
-                                                    onChange={event => setOxygenVerifiedOn(event.target.value)}
-                                                    disabled
-                                                    />
-                                            </Grid>
-                                        </Grid>
-                                    </div>
-                                    <div className="column">
-                                        <Grid container spacing={1} alignItems="flex-end">
-                                            <Grid item>
-                                                <TextField id="input-with-icon-grid" 
-                                                    label='Verified By'
-                                                    type="text" 
-                                                    value={oxygenVerifiedBy} 
-                                                    onChange={event => setOxygenVerifiedBy(event.target.value)}
-                                                    disabled
-                                                    />
-                                            </Grid>
-                                        </Grid>
+                                        </div>
                                     </div>
                                     <div className="row">
-                    <div className="column">
-                        <Grid container spacing={1} alignItems="flex-end">
-                            <Grid item>
-                                <TextField id="input-with-icon-grid" 
-                                    label={'Available Cylinders'} 
-                                    type="text" 
-                                    value={oxygenAvailability} 
-                                    onChange={event => setOxygenAvailability(event.target.value)}
-                                />
-                            </Grid>
-                        </Grid>
-                    </div>
-                    <div className="column">
-                        <Grid container spacing={1} alignItems="flex-end">
-                            <Grid item>
-                                <TextField id="input-with-icon-grid" 
-                                    label='Cost per Cylinder'
-                                    type="text" 
-                                    value={oxygenPrice} 
-                                    onChange={ event => setOxygenPrice(event.target.value)}
-                                    />
-                            </Grid>
-                        </Grid>
-                    </div>
-                </div>
-                <Button color="secondary" variant="contained" onClick={()=>setOxygenMap(true)}>Change Address</Button>
+                                        <div className="column">
+                                            <Grid container spacing={0} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" value={uploadDate} disabled />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid"  value={address} disabled />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" 
+                                                        label='Verified ON'
+                                                        type="text" 
+                                                        value={oxygenVerifiedOn} 
+                                                        onChange={event => setOxygenVerifiedOn(event.target.value)}
+                                                        disabled
+                                                        />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" 
+                                                        label='Verified By'
+                                                        type="text" 
+                                                        value={oxygenVerifiedBy} 
+                                                        onChange={event => setOxygenVerifiedBy(event.target.value)}
+                                                        disabled
+                                                        />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                    <div className="row">
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" 
+                                                        label={'Available Cylinders'} 
+                                                        type="text" 
+                                                        value={oxygenAvailability} 
+                                                        onChange={event => setOxygenAvailability(event.target.value)}
+                                                    />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" 
+                                                        label='Cost per Cylinder'
+                                                        type="text" 
+                                                        value={oxygenPrice} 
+                                                        onChange={ event => setOxygenPrice(event.target.value)}
+                                                        />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                    </div>
+                                    <Button color="secondary" variant="contained" onClick={()=>setOxygenMap(true)}>Change Address</Button>
+                                </div>
+                                </div>
+                            </div>)}
+                        </Collapse>
+                        <Collapse isOpen={ICUBeds}>
+                            {ICUMap ? (<div>
+                                <DonorMap lat={lat} lng={lng}/>
+                                <Button color="primary" variant="contained" onClick={()=>{setICUMap(false)}}>CLOSE</Button>
+                            </div>) : (<div>
+                                <div>
+                                    <div className="row">
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" label="UserID" value={userID} disabled/>
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" label="UserName" value={userName} disabled/>
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="column">
+                                            <Grid container spacing={0} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" value={uploadDate} disabled />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid"  value={address} disabled />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" 
+                                                        label='Verified ON'
+                                                        type="text" 
+                                                        value={bedVerifiedOn} 
+                                                        onChange={event => setBedVerifiedOn(event.target.value)}
+                                                        disabled
+                                                        />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" 
+                                                        label='Verified By'
+                                                        type="text" 
+                                                        value={bedVerifiedBy} 
+                                                        onChange={event => setBedVerifiedBy(event.target.value)}
+                                                        disabled
+                                                        />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                    <div className="row">
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" 
+                                                        label={'Available Beds'} 
+                                                        type="text" 
+                                                        value={bedAvailability} 
+                                                        onChange={event => setBedAvailability(event.target.value)}
+                                                    />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" 
+                                                        label='Cost per Single Bed'
+                                                        type="text" 
+                                                        value={bedPrice} 
+                                                        onChange={ event => setBedPrice(event.target.value)}
+                                                        />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                    </div>
+                                    <Button color="secondary" variant="contained" onClick={()=>setICUMap(true)}>Change Address</Button>
+                                </div>
+                                </div>
+                            </div>)}
+                        </Collapse>
+                        <Collapse isOpen={ambulance}>
+                            {ambulanceMap ? (<div>
+                                <DonorMap lat={lat} lng={lng}/>
+                                <Button color="primary" variant="contained" onClick={()=>{setAmbulanceMap(false)}}>CLOSE</Button>
+                            </div>) : (<div>
+                                <div>
+                                    <div className="row">
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" label="UserID" value={userID} disabled/>
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" label="UserName" value={userName} disabled/>
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="column">
+                                            <Grid container spacing={0} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" value={uploadDate} disabled />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid"  value={address} disabled />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" 
+                                                        label='Verified ON'
+                                                        type="text" 
+                                                        value={ambulanceVerifiedOn} 
+                                                        onChange={event => setAmbulanceVerifiedOn(event.target.value)}
+                                                        disabled
+                                                        />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" 
+                                                        label='Verified By'
+                                                        type="text" 
+                                                        value={ambulanceVerifiedBy} 
+                                                        onChange={event => setAmbulanceVerifiedBy(event.target.value)}
+                                                        disabled
+                                                        />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                    <div className="row">
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" 
+                                                        label={'Available Vehicles'} 
+                                                        type="text" 
+                                                        value={ambulanceAvailability} 
+                                                        onChange={event => setAmbulanceAvailability(event.target.value)}
+                                                    />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                    </div>
+                                    <Button color="secondary" variant="contained" onClick={()=>setAmbulanceMap(true)}>Change Address</Button>
+                                </div>
+                                </div>
+                            </div>)}
+                        </Collapse>
+                        <Collapse isOpen={privateTransport}>
+                            {privateMap ? (<div>
+                                <DonorMap lat={lat} lng={lng}/>
+                                <Button color="primary" variant="contained" onClick={()=>{setPrivateMap(false)}}>CLOSE</Button>
+                            </div>) : (<div>
+                                <div>
+                                    <div className="row">
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" label="UserID" value={userID} disabled/>
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" label="UserName" value={userName} disabled/>
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="column">
+                                            <Grid container spacing={0} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" value={uploadDate} disabled />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid"  value={address} disabled />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" 
+                                                        label='Verified ON'
+                                                        type="text" 
+                                                        value={privateTransportVerifiedOn} 
+                                                        onChange={event => setPrivateTransportVerifiedOn(event.target.value)}
+                                                        disabled
+                                                        />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" 
+                                                        label='Verified By'
+                                                        type="text" 
+                                                        value={privateTransportVerifiedBy} 
+                                                        onChange={event => setPrivateTransportVerifiedBy(event.target.value)}
+                                                        disabled
+                                                        />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                    <div className="row">
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" 
+                                                        label={'Available Vehicles'} 
+                                                        type="text" 
+                                                        value={privateTransportAvailability} 
+                                                        onChange={event => setPrivateTransportAvailability(event.target.value)}
+                                                    />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" 
+                                                        label='Cost per km'
+                                                        type="text" 
+                                                        value={privateTransportCostPerKm} 
+                                                        onChange={ event => setPrivateTransportCostPerKm(event.target.value)}
+                                                        />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                    </div>
+                                    <Button color="secondary" variant="contained" onClick={()=>setPrivateMap(true)}>Change Address</Button>
+                                </div>
+                                </div>
+                            </div>)}
+                        </Collapse>
+                        <Collapse isOpen={plasma}>
+                            {plasmaMap ? (<div>
+                                <DonorMap lat={lat} lng={lng}/>
+                                <Button color="primary" variant="contained" onClick={()=>{setPlasmaMap(false)}}>CLOSE</Button>
+                            </div>) : (<div>
+                                <div>
+                                    <div className="row">
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" label="UserID" value={userID} disabled/>
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" label="UserName" value={userName} disabled/>
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="column">
+                                            <Grid container spacing={0} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" value={uploadDate} disabled />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid"  value={address} disabled />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" 
+                                                        label='Verified ON'
+                                                        type="text" 
+                                                        value={bloodVerifiedOn} 
+                                                        onChange={event => setBloodVerifiedOn(event.target.value)}
+                                                        disabled
+                                                        />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" 
+                                                        label='Verified By'
+                                                        type="text" 
+                                                        value={bloodVerifiedBy} 
+                                                        onChange={event => setBloodVerifiedBy(event.target.value)}
+                                                        disabled
+                                                        />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                    <div className="row">
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" 
+                                                        label={'Available Bloods Groups'} 
+                                                        type="text" 
+                                                        value={bloodAvailability} 
+                                                        onChange={event => setBloodAvailability(event.target.value)}
+                                                    />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" 
+                                                        label='Cost per ...'
+                                                        type="text" 
+                                                        value={bloodPrice} 
+                                                        onChange={ event => setBloodPrice(event.target.value)}
+                                                        />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                    </div>
+                                    <Button color="secondary" variant="contained" onClick={()=>setPlasmaMap(true)}>Change Address</Button>
+                                </div>
+                                </div>
+                            </div>)}
+                        </Collapse>
+                        <Collapse isOpen={vaccine}>
+                            {vaccineMap ? (<div>
+                                <DonorMap lat={lat} lng={lng}/>
+                                <Button color="primary" variant="contained" onClick={()=>{setVaccineMap(false)}}>CLOSE</Button>
+                            </div>) : (<div>
+                                <div>
+                                    <div className="row">
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" label="UserID" value={userID} disabled/>
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" label="UserName" value={userName} disabled/>
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="column">
+                                            <Grid container spacing={0} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" value={uploadDate} disabled />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid"  value={address} disabled />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" 
+                                                        label='Verified ON'
+                                                        type="text" 
+                                                        value={vaccineVerifiedOn} 
+                                                        onChange={event => setVaccineVerifiedOn(event.target.value)}
+                                                        disabled
+                                                        />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" 
+                                                        label='Verified By'
+                                                        type="text" 
+                                                        value={vaccineVerifiedBy} 
+                                                        onChange={event => setVaccineVerifiedBy(event.target.value)}
+                                                        disabled
+                                                        />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                    <div className="row">
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" 
+                                                        label={'Available Vaccine types'} 
+                                                        type="text" 
+                                                        value={vaccineAvailability} 
+                                                        onChange={event => setVaccineAvailability(event.target.value)}
+                                                    />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" 
+                                                        label='Cost per Single Vaccine'
+                                                        type="text" 
+                                                        value={vaccinePrice} 
+                                                        onChange={ event => setVaccinePrice(event.target.value)}
+                                                        />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                    </div>
+                                    <Button color="secondary" variant="contained" onClick={()=>setVaccineMap(true)}>Change Address</Button>
                                 </div>
                                 </div>
                             </div>)}
