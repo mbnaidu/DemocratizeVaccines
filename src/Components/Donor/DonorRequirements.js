@@ -1,14 +1,13 @@
-import { Button, Checkbox, FormControl, FormControlLabel, FormGroup, Card, CardActions, CardContent, FormLabel, Grid, Icon, Input, TextField } from '@material-ui/core'
+import { Button,Card,Grid, Icon, Input, TextField } from '@material-ui/core'
 import { AccountCircle } from '@material-ui/icons'
 import React, { useEffect, useState } from 'react'
 import { NavLink} from 'react-router-dom'
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
-import {Menu,Segment,Sidebar, Reveal, Image, Header, Placeholder, TableBody, TableHeaderCell, TableRow, TableHeader, Table, MenuItem, Label, CardHeader} from 'semantic-ui-react';
+import {Menu,Segment,Sidebar} from 'semantic-ui-react';
 import HomeIcon from '@material-ui/icons/Home';
 import PersonIcon from '@material-ui/icons/Person';
 import {  CardBody, CardFooter, Collapse} from 'reactstrap';
 import cylinderImage from '../../Img/cylinder.png';
-import userImage from '../../Img/user.png';
 import bedImage from '../../Img/bed.png';
 import ambulanceImage from '../../Img/ambulance.png';
 import transportImage from '../../Img/transport.png';
@@ -32,42 +31,60 @@ function exampleReducer(state, action) {
 
 function DonorRequirements() {
     const [lat,setLat] = useState('');
+            const [donorAddress,setdonorAddress] = useState('')
+
             const [lng,setLng] = useState('');
             // setting modal
             useEffect(() => {
-                    var options = {
-                        enableHighAccuracy: true,
-                        timeout: 5000,
-                        maximumAge: 0
-                    };
-                    function success(pos) {
-                        var crd = pos.coords;
-                        setLat(crd.latitude)
-                        setLng(crd.longitude)
-                        return;
-                    }
-                    function error(err) {
-                        console.warn(`ERROR(${err.code}): ${err.message}`);
-                    }
-                    navigator.geolocation.getCurrentPosition(success, error, options);
-                    var k = 0;
-                    const url = [
-                    // Length issue
-                    `https://gist.githubusercontent.com`,
-                    `/farrrr/dfda7dd7fccfec5474d3`,
-                    `/raw/758852bbc1979f6c4522ab4e92d1c92cba8fb0dc/data.json`
-                    ].join('')
+                const getCoordintes = ()=> {
+        var options = {
+            enableHighAccuracy: true,
+            timeout: 5000,
+            maximumAge: 0
+        };
+        function success(pos) {
+            var crd = pos.coords;
+            var lat = crd.latitude.toString();
+            var lng = crd.longitude.toString();
+            var coordinates = [lat, lng];
+            setLat(lat);setLng(lng);
+            getCity(coordinates);
+            return;
+        }
+        function error(err) {
+            console.warn(`ERROR(${err.code}): ${err.message}`);
+        }
+        navigator.geolocation.getCurrentPosition(success, error, options);
+    }
+    // Step 2: Get city name
+    const getCity = (coordinates) =>{
+        var xhr = new XMLHttpRequest();
+        var lat = coordinates[0];
+        var lng = coordinates[1];
 
-                    fetch(url)
-                    .then(res => res.json())
-                    .then(data => {
-                    })
-                }, [])
+        // Paste your LocationIQ token below.
+        xhr.open('GET', "https://us1.locationiq.com/v1/reverse.php?key=pk.a38452a5c36ea022c35226791e032ecd&lat=" +
+        lat + "&lon=" + lng + "&format=json", true);
+        xhr.send();
+        xhr.onreadystatechange = processRequest;
+        xhr.addEventListener("readystatechange", processRequest, false);
+
+        function processRequest(e) {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                setdonorAddress(response.display_name)
+                return;
+            }
+        }
+    }
+    getCoordintes()
+                }, []);console.log(donorAddress)
     // VARIABLES
-            const [userID,setUserID] = useState('USER ID');
-            const [userName,setUserName] = useState('USER NAME');
-            const [uploadDate,setUploadDate] = useState('UPLOADED DATE');
-            const [address,setAddress] = useState('DEFAULT ADDRESS');
+            var tempDate = new Date();
+            var date = tempDate.getFullYear() + '-' + (tempDate.getMonth()+1) + '-' + tempDate.getDate() +' '+ tempDate.getHours()+':'+ tempDate.getMinutes()+':'+ tempDate.getSeconds();
+            const [userID,setUserID] = useState('');
+            const [userName,setUserName] = useState('');
+            const [uploadDate,setUploadDate] = useState(date);
     // Oxygen
             const [oxygenAvailability,setOxygenAvailability] = useState('');
             const [oxygenVerifiedOn,setOxygenVerifiedOn] = useState('');
@@ -100,51 +117,6 @@ function DonorRequirements() {
     const [setUp,setSetUP] = useState(false);
     // getting donor long,lati and address
     const [longLatt,setLongLatt] = useState('');
-    const [donorAddress,setdonorAddress] = useState('')
-        useEffect(() => {
-            const getCoordintes = ()=> {
-        var options = {
-            enableHighAccuracy: true,
-            timeout: 5000,
-            maximumAge: 0
-        };
-        function success(pos) {
-            var crd = pos.coords;
-            var lat = crd.latitude.toString();
-            var lng = crd.longitude.toString();
-            var coordinates = [lat, lng];
-            setLongLatt(`Latitude: ${lat}, Longitude: ${lng}`)
-            getCity(coordinates);
-            return;
-        }
-        function error(err) {
-            console.warn(`ERROR(${err.code}): ${err.message}`);
-        }
-        navigator.geolocation.getCurrentPosition(success, error, options);
-    }
-    // Step 2: Get city name
-    const getCity = (coordinates) =>{
-        var xhr = new XMLHttpRequest();
-        var lat = coordinates[0];
-        var lng = coordinates[1];
-
-        // Paste your LocationIQ token below.
-        xhr.open('GET', "https://us1.locationiq.com/v1/reverse.php?key=pk.a38452a5c36ea022c35226791e032ecd&lat=" +
-        lat + "&lon=" + lng + "&format=json", true);
-        xhr.send();
-        xhr.onreadystatechange = processRequest;
-        xhr.addEventListener("readystatechange", processRequest, false);
-
-        function processRequest(e) {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                var response = JSON.parse(xhr.responseText);
-                setdonorAddress(response.display_name)
-                return;
-            }
-        }
-    }
-    getCoordintes()
-        }, [])
     const [login,setLogin] = useState(true);
     const [signup,setSignup] = useState(false);
     const [generate,setGenerate] = useState("Generate");
@@ -152,29 +124,7 @@ function DonorRequirements() {
     const [pass,setPass] = useState('');
     const [phoneNumber,setPhoneNumber] = useState('');
     const [code,setCode] = useState('');
-    const names = [
-            {id : 1 , value : 'Oxygen Cylinder' },
-            {id : 2 , value : 'ICU Bed' },
-            {id : 3 , value : 'Ambulance' },
-            {id : 4 , value : 'Private Transport' },
-            {id : 5 , value : 'Vaccine' },
-            {id : 6 , value : 'Plasma' },
-        ];
-        var finalList = [];
-        const handleInput = (option) =>{
-            let index = finalList.indexOf(option)
-            if(index > -1){
-                finalList.splice(index, 1);
-            }
-            else{
-                finalList.push(option)
-            }
-        }
-    // 
-    const [expanded, setExpanded] = React.useState(false);
-    const handleChange = (panel) => (event, isExpanded) => {
-        setExpanded(isExpanded ? panel : false);
-    };
+
     const [state, dispatch] = React.useReducer(exampleReducer, {
         animation: 'overlay',
         visible: false,
@@ -234,10 +184,7 @@ function DonorRequirements() {
     </Sidebar>
     
 )
-        const handleAccordionChange = (panel) => (event, isExpanded) => {
-        setExpanded(isExpanded ? panel : false);
-    };
-     const [oxygenOpen,setOxygenOpen] = useState(false);
+    const [oxygenOpen,setOxygenOpen] = useState(false);
     const [ICUBeds,setICUBeds] = useState(false);
     const [ambulance,setAmbulance] = useState(false);
     const [privateTransport,setPrivateTransport] = useState(false);
@@ -360,7 +307,7 @@ function DonorRequirements() {
                                         <div className="column">
                                             <Grid container spacing={1} alignItems="flex-end">
                                                 <Grid item>
-                                                    <TextField id="input-with-icon-grid"  value={address} disabled />
+                                                    <TextField id="input-with-icon-grid"  value={donorAddress} disabled />
                                                 </Grid>
                                             </Grid>
                                         </div>
@@ -456,7 +403,7 @@ function DonorRequirements() {
                                         <div className="column">
                                             <Grid container spacing={1} alignItems="flex-end">
                                                 <Grid item>
-                                                    <TextField id="input-with-icon-grid"  value={address} disabled />
+                                                    <TextField id="input-with-icon-grid"  value={donorAddress} disabled />
                                                 </Grid>
                                             </Grid>
                                         </div>
@@ -552,7 +499,7 @@ function DonorRequirements() {
                                         <div className="column">
                                             <Grid container spacing={1} alignItems="flex-end">
                                                 <Grid item>
-                                                    <TextField id="input-with-icon-grid"  value={address} disabled />
+                                                    <TextField id="input-with-icon-grid"  value={donorAddress} disabled />
                                                 </Grid>
                                             </Grid>
                                         </div>
@@ -636,7 +583,7 @@ function DonorRequirements() {
                                         <div className="column">
                                             <Grid container spacing={1} alignItems="flex-end">
                                                 <Grid item>
-                                                    <TextField id="input-with-icon-grid"  value={address} disabled />
+                                                    <TextField id="input-with-icon-grid"  value={donorAddress} disabled />
                                                 </Grid>
                                             </Grid>
                                         </div>
@@ -732,7 +679,7 @@ function DonorRequirements() {
                                         <div className="column">
                                             <Grid container spacing={1} alignItems="flex-end">
                                                 <Grid item>
-                                                    <TextField id="input-with-icon-grid"  value={address} disabled />
+                                                    <TextField id="input-with-icon-grid"  value={donorAddress} disabled />
                                                 </Grid>
                                             </Grid>
                                         </div>
@@ -828,7 +775,7 @@ function DonorRequirements() {
                                         <div className="column">
                                             <Grid container spacing={1} alignItems="flex-end">
                                                 <Grid item>
-                                                    <TextField id="input-with-icon-grid"  value={address} disabled />
+                                                    <TextField id="input-with-icon-grid"  value={donorAddress} disabled />
                                                 </Grid>
                                             </Grid>
                                         </div>
