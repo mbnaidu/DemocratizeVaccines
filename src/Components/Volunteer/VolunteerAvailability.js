@@ -74,8 +74,7 @@ function VolunteerAvailability() {
         const [lng,setLng] = useState('');
         const [types,setTypes] = useState('');
     return (
-        <div>
-            <div>
+        <div style={{margin:"10px",width:"300px"}}>
                 {
                     type === 'patient' ? (<div>
                         {volunteerOption === 'volunteers' ? (<div>
@@ -484,7 +483,6 @@ function VolunteerAvailability() {
                 (<div></div>)}
                 <NavLink to="/volunteer-requirements"><Button color="primary" variant="contained">Home</Button></NavLink>
             </div>
-        </div>
     )
 }
 
