@@ -16,6 +16,11 @@ import bloodImage from '../../Img/blood.png';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import MenuIcon from '@material-ui/icons/Menu';
 import DonorMap from '../Maps/DonorMap';
+import axios from 'axios';
+import {SearchBox} from 'react-google-maps/lib/components/places/SearchBox'
+import {Marker,GoogleMap,withScriptjs,withGoogleMap,InfoWindow,Polyline} from 'react-google-maps'
+import { compose, lifecycle, withProps } from 'recompose';
+const _ = require("lodash");
 
 function exampleReducer(state, action) {
     switch (action.type) {
@@ -78,7 +83,7 @@ function DonorRequirements() {
         }
     }
     getCoordintes()
-                }, []);console.log(donorAddress)
+                }, []);
     // VARIABLES
             var tempDate = new Date();
             var date = tempDate.getFullYear() + '-' + (tempDate.getMonth()+1) + '-' + tempDate.getDate() +' '+ tempDate.getHours()+':'+ tempDate.getMinutes()+':'+ tempDate.getSeconds();
@@ -116,7 +121,6 @@ function DonorRequirements() {
             const [bloodPrice,setBloodPrice] = useState('');    
     const [setUp,setSetUP] = useState(false);
     // getting donor long,lati and address
-    const [longLatt,setLongLatt] = useState('');
     const [login,setLogin] = useState(true);
     const [signup,setSignup] = useState(false);
     const [generate,setGenerate] = useState("Generate");
@@ -196,6 +200,172 @@ function DonorRequirements() {
     const [privateMap,setPrivateMap] = useState(false);
     const [plasmaMap,setPlasmaMap] = useState(false);
     const [vaccineMap,setVaccineMap] = useState(false);
+    const sendSignUpDetails = () =>{
+        const data = {
+            "username":'madh',
+            "password":'password',
+            "latitude":lat,
+            "longitude":lng,
+            "address":donorAddress,
+            "isDonor": true,
+        }
+        axios.post('http://localhost:3010/donorsignup', {data}).then(
+            function(res) {
+                if(res.data) {
+                }
+            }
+        )
+    }
+    const sendLoginDetails = () => {
+        const data = {
+            "username":userId,
+            "password":pass
+        }
+        axios.post('http://localhost:3010/donorlogin', {data}).then(
+            function(res) {
+                if(res.data.msg) {
+                    alert(res.data.msg);
+                } else {
+                    setLogin(false);
+                }
+            }
+        )
+    }
+    const sendDetails = (d,p) =>{
+        const data = {
+                "latitude":lat,
+                "longitude":lng,
+                "address":donorAddress,
+                "id":'1213',
+                "latitude1":lat1,
+                "longitude1":lng1,
+                "address1": donorAddress1,
+                "has":d,
+                "price":p,
+            }
+            axios.post('http://localhost:3010/adddonordata', {data}).then(
+                function(res) {
+                    if(res.data) {
+                    }
+                }
+            )
+    }
+    const deleteData = () => {
+        const id= '60a51074bfc48d4ef02fef53';
+    axios.delete('http://localhost:3010/'+id)
+        .then(response => { console.log(response.data)});
+    }
+    const getData = () => {
+        const data = {
+            id:"1213"
+        }
+        axios.get('http://localhost:3010/'+'60a4e7ee471dd2236c17893d')
+            .then(response => {
+                console.log(response.data) 
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+    }
+    const [lat1,setLat1] = useState('');
+    const [donorAddress1,setdonorAddress1] = useState('')
+    const [lng1,setLng1] = useState('');
+    const google = window.google = window.google ? window.google : {}
+    const MapWithASearchBox = compose(
+        withProps({
+            googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyCSozCpAn3_xhiippC2_03Gd524yLtwu4E&v=3.exp&libraries=geometry,drawing,places",
+            loadingElement: <div style={{ height: `100%` }} />,
+            containerElement: <div style={{ height: `400px` }} />,
+            mapElement: <div style={{ height: `100%` }} />,
+        }),
+        lifecycle({
+            componentWillMount() {
+            const refs = {}
+            this.setState({
+                bounds: null,
+                center: {
+                lat: 41.9, lng: -87.624
+                },
+                markers: [],
+                onMapMounted: ref => {
+                refs.map = ref;
+                },
+                onBoundsChanged: () => {
+                this.setState({
+                    bounds: refs.map.getBounds(),
+                    center: refs.map.getCenter(),
+                })
+                },
+                onSearchBoxMounted: ref => {
+                refs.searchBox = ref;
+                },
+                onPlacesChanged: () => {
+                const places = refs.searchBox.getPlaces();
+                const bounds = new google.maps.LatLngBounds();
+                places.forEach(place => {
+                    if (place.geometry.viewport) {
+                    bounds.union(place.geometry.viewport)
+                    } else {
+                    bounds.extend(place.geometry.location)
+                    }
+                });
+                const nextMarkers = places.map(place => ({
+                    position: place.geometry.location,
+                }));
+                places.map((p)=>{
+                    setLat1(p.geometry.viewport.La.g)
+                    setLng1(p.geometry.viewport.Ua.g)
+                    setdonorAddress1(p.formatted_address)
+                })
+                const nextCenter = _.get(nextMarkers, '0.position', this.state.center);
+                this.setState({
+                    center: nextCenter,
+                    markers: nextMarkers,
+                });
+                // refs.map.fitBounds(bounds);
+                },
+            })
+            },
+        }),
+        withScriptjs,
+        withGoogleMap
+        )(props =>
+        <GoogleMap
+            ref={props.onMapMounted}
+            defaultZoom={15}
+            center={props.center}
+            onBoundsChanged={props.onBoundsChanged}
+        >
+            <SearchBox
+            ref={props.onSearchBoxMounted}
+            bounds={props.bounds}
+            controlPosition={google.maps.ControlPosition.TOP_LEFT}
+            onPlacesChanged={props.onPlacesChanged}
+            >
+            <input
+                type="text"
+                placeholder="Hit Enter After Search"
+                style={{
+                boxSizing: `border-box`,
+                border: `1px solid transparent`,
+                width: `240px`,
+                height: `32px`,
+                marginTop: `60px`,
+                marginLeft:`-100px`,
+                padding: `0 12px`,
+                borderRadius: `3px`,
+                boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
+                fontSize: `14px`,
+                outline: `none`,
+                textOverflow: `ellipses`,
+                }}
+            />
+            </SearchBox>
+            {props.markers.map((marker, index) =>
+            <Marker key={index} position={marker.position} />
+            )}
+        </GoogleMap>
+        );
     return (
         <div>
             {signup ? (<div>
@@ -235,8 +405,8 @@ function DonorRequirements() {
                                             <TextField id="input-with-icon-grid" label="Password" type="password" value={pass} onChange={event => setPass(event.target.value)}/>
                                         </Grid>
                                     </Grid><br/><br/>
-                                    <Button color="primary" variant="outlined" onClick={()=>{setLogin(false);}}>Login</Button>{' '}
-                                    <Button color="secondary" variant="contained" onClick={()=>{setSignup(true);}}>Sign Up</Button>
+                                    <Button color="primary" variant="outlined" onClick={()=>{sendLoginDetails();console.log(userId,pass)}}>Login</Button>{' '}
+                                    <Button color="secondary" variant="contained" onClick={()=>{setSignup(true);sendSignUpDetails();}}>Sign Up</Button>
                                 </div>
             </div>) : (<div>
                     <div className="sideBar_pusher">
@@ -259,7 +429,7 @@ function DonorRequirements() {
                         <Collapse isOpen={setUp}>
                                 <Card>
                                     <CardFooter>
-                                        <Button color="primary" variant="contained" size="large"><bold>User Details</bold></Button>
+                                        <Button color="primary" variant="contained" size="large" onClick={()=>{getData()}}><bold>User Details</bold></Button>
                                     </CardFooter>
                                     <CardBody>
                                         <strong>User ID : </strong><br/>
@@ -268,15 +438,17 @@ function DonorRequirements() {
                                         <strong>Residental Address : </strong><br/>
                                         <strong>Contact Number : </strong><br/>
                                         <strong>Recent Interactions : </strong><br/>
+                                        <Button color="primary" variant="contained" onClick={()=>{deleteData()}}>DELETE</Button>
                                     </CardBody>
                                     <CardFooter>
                                         <Button color="primary" variant="contained">Change Address</Button>
+                                        <Button color="primary" variant="contained" onClick={()=>{sendDetails()}}>Submit</Button>
                                     </CardFooter>
                                 </Card>
                         </Collapse>
                         <Collapse isOpen={oxygenOpen}>
                             {oxygenMap ? (<div>
-                                <DonorMap lat={lat} lng={lng}/>
+                                {MapWithASearchBox()}
                                 <Button color="primary" variant="contained" onClick={()=>{setOxygenMap(false)}}>CLOSE</Button>
                             </div>) : (<div>
                                 <div>
@@ -311,31 +483,10 @@ function DonorRequirements() {
                                                 </Grid>
                                             </Grid>
                                         </div>
-                                    </div>
-                                    <div className="row">
                                         <div className="column">
                                             <Grid container spacing={1} alignItems="flex-end">
                                                 <Grid item>
-                                                    <TextField id="input-with-icon-grid" 
-                                                        label='Verified ON'
-                                                        type="text" 
-                                                        value={oxygenVerifiedOn} 
-                                                        onChange={event => setOxygenVerifiedOn(event.target.value)}
-                                                        disabled
-                                                        />
-                                                </Grid>
-                                            </Grid>
-                                        </div>
-                                        <div className="column">
-                                            <Grid container spacing={1} alignItems="flex-end">
-                                                <Grid item>
-                                                    <TextField id="input-with-icon-grid" 
-                                                        label='Verified By'
-                                                        type="text" 
-                                                        value={oxygenVerifiedBy} 
-                                                        onChange={event => setOxygenVerifiedBy(event.target.value)}
-                                                        disabled
-                                                        />
+                                                    <TextField id="input-with-icon-grid"  placeholder="New Address" value={donorAddress1} disabled />
                                                 </Grid>
                                             </Grid>
                                         </div>
@@ -365,14 +516,16 @@ function DonorRequirements() {
                                             </Grid>
                                         </div>
                                     </div>
+                                    
                                     <Button color="secondary" variant="contained" onClick={()=>setOxygenMap(true)}>Change Address</Button>
+                                    <Button color="primary" variant="contained" onClick={()=>{sendDetails('Oxygen Cylinders',oxygenPrice)}}>Submit</Button>
                                 </div>
                                 </div>
                             </div>)}
                         </Collapse>
                         <Collapse isOpen={ICUBeds}>
                             {ICUMap ? (<div>
-                                <DonorMap lat={lat} lng={lng}/>
+                                {MapWithASearchBox()}
                                 <Button color="primary" variant="contained" onClick={()=>{setICUMap(false)}}>CLOSE</Button>
                             </div>) : (<div>
                                 <div>
@@ -407,34 +560,15 @@ function DonorRequirements() {
                                                 </Grid>
                                             </Grid>
                                         </div>
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid"  placeholder="New Address" value={donorAddress1} disabled />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
                                     </div>
                                     <div className="row">
-                                        <div className="column">
-                                            <Grid container spacing={1} alignItems="flex-end">
-                                                <Grid item>
-                                                    <TextField id="input-with-icon-grid" 
-                                                        label='Verified ON'
-                                                        type="text" 
-                                                        value={bedVerifiedOn} 
-                                                        onChange={event => setBedVerifiedOn(event.target.value)}
-                                                        disabled
-                                                        />
-                                                </Grid>
-                                            </Grid>
-                                        </div>
-                                        <div className="column">
-                                            <Grid container spacing={1} alignItems="flex-end">
-                                                <Grid item>
-                                                    <TextField id="input-with-icon-grid" 
-                                                        label='Verified By'
-                                                        type="text" 
-                                                        value={bedVerifiedBy} 
-                                                        onChange={event => setBedVerifiedBy(event.target.value)}
-                                                        disabled
-                                                        />
-                                                </Grid>
-                                            </Grid>
-                                        </div>
                                     <div className="row">
                                         <div className="column">
                                             <Grid container spacing={1} alignItems="flex-end">
@@ -461,14 +595,16 @@ function DonorRequirements() {
                                             </Grid>
                                         </div>
                                     </div>
+                                    
                                     <Button color="secondary" variant="contained" onClick={()=>setICUMap(true)}>Change Address</Button>
+                                    <Button color="primary" variant="contained" onClick={()=>{sendDetails('ICU Beds',bedPrice)}}>Submit</Button>
                                 </div>
                                 </div>
                             </div>)}
                         </Collapse>
                         <Collapse isOpen={ambulance}>
                             {ambulanceMap ? (<div>
-                                <DonorMap lat={lat} lng={lng}/>
+                                {MapWithASearchBox()}
                                 <Button color="primary" variant="contained" onClick={()=>{setAmbulanceMap(false)}}>CLOSE</Button>
                             </div>) : (<div>
                                 <div>
@@ -503,34 +639,15 @@ function DonorRequirements() {
                                                 </Grid>
                                             </Grid>
                                         </div>
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid"  placeholder="New Address" value={donorAddress1} disabled />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
                                     </div>
                                     <div className="row">
-                                        <div className="column">
-                                            <Grid container spacing={1} alignItems="flex-end">
-                                                <Grid item>
-                                                    <TextField id="input-with-icon-grid" 
-                                                        label='Verified ON'
-                                                        type="text" 
-                                                        value={ambulanceVerifiedOn} 
-                                                        onChange={event => setAmbulanceVerifiedOn(event.target.value)}
-                                                        disabled
-                                                        />
-                                                </Grid>
-                                            </Grid>
-                                        </div>
-                                        <div className="column">
-                                            <Grid container spacing={1} alignItems="flex-end">
-                                                <Grid item>
-                                                    <TextField id="input-with-icon-grid" 
-                                                        label='Verified By'
-                                                        type="text" 
-                                                        value={ambulanceVerifiedBy} 
-                                                        onChange={event => setAmbulanceVerifiedBy(event.target.value)}
-                                                        disabled
-                                                        />
-                                                </Grid>
-                                            </Grid>
-                                        </div>
                                     <div className="row">
                                         <div className="column">
                                             <Grid container spacing={1} alignItems="flex-end">
@@ -545,14 +662,16 @@ function DonorRequirements() {
                                             </Grid>
                                         </div>
                                     </div>
+                                    
                                     <Button color="secondary" variant="contained" onClick={()=>setAmbulanceMap(true)}>Change Address</Button>
+                                    <Button color="primary" variant="contained" onClick={()=>{sendDetails('Ambulance',"free")}}>Submit</Button>
                                 </div>
                                 </div>
                             </div>)}
                         </Collapse>
                         <Collapse isOpen={privateTransport}>
                             {privateMap ? (<div>
-                                <DonorMap lat={lat} lng={lng}/>
+                                {MapWithASearchBox()}
                                 <Button color="primary" variant="contained" onClick={()=>{setPrivateMap(false)}}>CLOSE</Button>
                             </div>) : (<div>
                                 <div>
@@ -587,34 +706,15 @@ function DonorRequirements() {
                                                 </Grid>
                                             </Grid>
                                         </div>
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid"  placeholder="New Address" value={donorAddress1} disabled />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
                                     </div>
                                     <div className="row">
-                                        <div className="column">
-                                            <Grid container spacing={1} alignItems="flex-end">
-                                                <Grid item>
-                                                    <TextField id="input-with-icon-grid" 
-                                                        label='Verified ON'
-                                                        type="text" 
-                                                        value={privateTransportVerifiedOn} 
-                                                        onChange={event => setPrivateTransportVerifiedOn(event.target.value)}
-                                                        disabled
-                                                        />
-                                                </Grid>
-                                            </Grid>
-                                        </div>
-                                        <div className="column">
-                                            <Grid container spacing={1} alignItems="flex-end">
-                                                <Grid item>
-                                                    <TextField id="input-with-icon-grid" 
-                                                        label='Verified By'
-                                                        type="text" 
-                                                        value={privateTransportVerifiedBy} 
-                                                        onChange={event => setPrivateTransportVerifiedBy(event.target.value)}
-                                                        disabled
-                                                        />
-                                                </Grid>
-                                            </Grid>
-                                        </div>
                                     <div className="row">
                                         <div className="column">
                                             <Grid container spacing={1} alignItems="flex-end">
@@ -641,14 +741,16 @@ function DonorRequirements() {
                                             </Grid>
                                         </div>
                                     </div>
+                                    
                                     <Button color="secondary" variant="contained" onClick={()=>setPrivateMap(true)}>Change Address</Button>
+                                    <Button color="primary" variant="contained" onClick={()=>{sendDetails('Private Transport',privateTransportCostPerKm)}}>Submit</Button>
                                 </div>
                                 </div>
                             </div>)}
                         </Collapse>
                         <Collapse isOpen={plasma}>
                             {plasmaMap ? (<div>
-                                <DonorMap lat={lat} lng={lng}/>
+                                {MapWithASearchBox()}
                                 <Button color="primary" variant="contained" onClick={()=>{setPlasmaMap(false)}}>CLOSE</Button>
                             </div>) : (<div>
                                 <div>
@@ -683,34 +785,15 @@ function DonorRequirements() {
                                                 </Grid>
                                             </Grid>
                                         </div>
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid"  placeholder="New Address" value={donorAddress1} disabled />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
                                     </div>
                                     <div className="row">
-                                        <div className="column">
-                                            <Grid container spacing={1} alignItems="flex-end">
-                                                <Grid item>
-                                                    <TextField id="input-with-icon-grid" 
-                                                        label='Verified ON'
-                                                        type="text" 
-                                                        value={bloodVerifiedOn} 
-                                                        onChange={event => setBloodVerifiedOn(event.target.value)}
-                                                        disabled
-                                                        />
-                                                </Grid>
-                                            </Grid>
-                                        </div>
-                                        <div className="column">
-                                            <Grid container spacing={1} alignItems="flex-end">
-                                                <Grid item>
-                                                    <TextField id="input-with-icon-grid" 
-                                                        label='Verified By'
-                                                        type="text" 
-                                                        value={bloodVerifiedBy} 
-                                                        onChange={event => setBloodVerifiedBy(event.target.value)}
-                                                        disabled
-                                                        />
-                                                </Grid>
-                                            </Grid>
-                                        </div>
                                     <div className="row">
                                         <div className="column">
                                             <Grid container spacing={1} alignItems="flex-end">
@@ -737,14 +820,16 @@ function DonorRequirements() {
                                             </Grid>
                                         </div>
                                     </div>
+                                    
                                     <Button color="secondary" variant="contained" onClick={()=>setPlasmaMap(true)}>Change Address</Button>
+                                    <Button color="primary" variant="contained" onClick={()=>{sendDetails('Plasma', bloodPrice)}}>Submit</Button>
                                 </div>
                                 </div>
                             </div>)}
                         </Collapse>
                         <Collapse isOpen={vaccine}>
                             {vaccineMap ? (<div>
-                                <DonorMap lat={lat} lng={lng}/>
+                                {MapWithASearchBox()}
                                 <Button color="primary" variant="contained" onClick={()=>{setVaccineMap(false)}}>CLOSE</Button>
                             </div>) : (<div>
                                 <div>
@@ -779,34 +864,15 @@ function DonorRequirements() {
                                                 </Grid>
                                             </Grid>
                                         </div>
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid"  placeholder="New Address" value={donorAddress1} disabled />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
                                     </div>
                                     <div className="row">
-                                        <div className="column">
-                                            <Grid container spacing={1} alignItems="flex-end">
-                                                <Grid item>
-                                                    <TextField id="input-with-icon-grid" 
-                                                        label='Verified ON'
-                                                        type="text" 
-                                                        value={vaccineVerifiedOn} 
-                                                        onChange={event => setVaccineVerifiedOn(event.target.value)}
-                                                        disabled
-                                                        />
-                                                </Grid>
-                                            </Grid>
-                                        </div>
-                                        <div className="column">
-                                            <Grid container spacing={1} alignItems="flex-end">
-                                                <Grid item>
-                                                    <TextField id="input-with-icon-grid" 
-                                                        label='Verified By'
-                                                        type="text" 
-                                                        value={vaccineVerifiedBy} 
-                                                        onChange={event => setVaccineVerifiedBy(event.target.value)}
-                                                        disabled
-                                                        />
-                                                </Grid>
-                                            </Grid>
-                                        </div>
                                     <div className="row">
                                         <div className="column">
                                             <Grid container spacing={1} alignItems="flex-end">
@@ -833,7 +899,9 @@ function DonorRequirements() {
                                             </Grid>
                                         </div>
                                     </div>
+                                    
                                     <Button color="secondary" variant="contained" onClick={()=>setVaccineMap(true)}>Change Address</Button>
+                                    <Button color="primary" variant="contained" onClick={()=>{sendDetails('Vaccine',vaccinePrice)}}>Submit</Button>
                                 </div>
                                 </div>
                             </div>)}
