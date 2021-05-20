@@ -124,7 +124,7 @@ function DonorRequirements() {
     const [login,setLogin] = useState(true);
     const [signup,setSignup] = useState(false);
     const [generate,setGenerate] = useState("Generate");
-    const [userId,setUserId] = useState('');
+    const [username,setUsername] = useState('');
     const [pass,setPass] = useState('');
     const [phoneNumber,setPhoneNumber] = useState('');
     const [code,setCode] = useState('');
@@ -200,13 +200,16 @@ function DonorRequirements() {
     const [privateMap,setPrivateMap] = useState(false);
     const [plasmaMap,setPlasmaMap] = useState(false);
     const [vaccineMap,setVaccineMap] = useState(false);
+    const [donorId,setDonorId] = useState('');
+    const [donorNumber,setDonorNumber] = useState('');
     const sendSignUpDetails = () =>{
         const data = {
-            "username":'madh',
-            "password":'password',
+            "username":'a',
+            "password":'a',
             "latitude":lat,
             "longitude":lng,
             "address":donorAddress,
+            "contact":'7081960932',
             "isDonor": true,
         }
         axios.post('http://localhost:3010/donorsignup', {data}).then(
@@ -218,7 +221,7 @@ function DonorRequirements() {
     }
     const sendLoginDetails = () => {
         const data = {
-            "username":userId,
+            "username":username,
             "password":pass
         }
         axios.post('http://localhost:3010/donorlogin', {data}).then(
@@ -226,6 +229,7 @@ function DonorRequirements() {
                 if(res.data.msg) {
                     alert(res.data.msg);
                 } else {
+                    setDonorId(res.data.status[0]._id);
                     setLogin(false);
                 }
             }
@@ -236,7 +240,6 @@ function DonorRequirements() {
                 "latitude":lat,
                 "longitude":lng,
                 "address":donorAddress,
-                "id":'1213',
                 "latitude1":lat1,
                 "longitude1":lng1,
                 "address1": donorAddress1,
@@ -252,16 +255,15 @@ function DonorRequirements() {
     }
     const deleteData = () => {
         const id= '60a51074bfc48d4ef02fef53';
-    axios.delete('http://localhost:3010/'+id)
-        .then(response => { console.log(response.data)});
+        axios.delete('http://localhost:3010/'+id)
+            .then(response => { console.log(response.data)});
     }
     const getData = () => {
-        const data = {
-            id:"1213"
-        }
-        axios.get('http://localhost:3010/'+'60a4e7ee471dd2236c17893d')
+        axios.get('http://localhost:3010/'+donorId)
             .then(response => {
-                console.log(response.data) 
+                console.log(response.data)
+                setdonorAddress(response.data.address);
+                setDonorNumber(response.data.contact)
             })
             .catch(function (error) {
                 console.log(error);
@@ -394,7 +396,7 @@ function DonorRequirements() {
                                             <AccountCircle />
                                         </Grid>
                                         <Grid item>
-                                            <TextField id="input-with-icon-grid" label="UserID" value={userId} onChange={event => setUserId(event.target.value)}/>
+                                            <TextField id="input-with-icon-grid" label="Username" value={username} onChange={event => setUsername(event.target.value)}/>
                                         </Grid>
                                     </Grid>
                                     <Grid container spacing={1} alignItems="flex-end">
@@ -405,14 +407,14 @@ function DonorRequirements() {
                                             <TextField id="input-with-icon-grid" label="Password" type="password" value={pass} onChange={event => setPass(event.target.value)}/>
                                         </Grid>
                                     </Grid><br/><br/>
-                                    <Button color="primary" variant="outlined" onClick={()=>{sendLoginDetails();console.log(userId,pass)}}>Login</Button>{' '}
+                                    <Button color="primary" variant="outlined" onClick={()=>{sendLoginDetails()}}>Login</Button>{' '}
                                     <Button color="secondary" variant="contained" onClick={()=>{setSignup(true);sendSignUpDetails();}}>Sign Up</Button>
                                 </div>
             </div>) : (<div>
                     <div className="sideBar_pusher">
                 <Button color="primary" variant="outlined" size="large"
                     onClick={() =>
-                    dispatch({ type: 'CHANGE_ANIMATION', animation: 'scale down' })}>
+                    {dispatch({ type: 'CHANGE_ANIMATION', animation: 'scale down' });getData()}}>
                     <MenuIcon />
                 </Button>
                 <Sidebar.Pushable  as={Segment} style={{ overflow: 'hidden',width:"350px",height:"900px" }} >
@@ -429,20 +431,28 @@ function DonorRequirements() {
                         <Collapse isOpen={setUp}>
                                 <Card>
                                     <CardFooter>
-                                        <Button color="primary" variant="contained" size="large" onClick={()=>{getData()}}><bold>User Details</bold></Button>
+                                        <Button color="primary" variant="contained" size="large"><bold>User Details</bold></Button>
                                     </CardFooter>
                                     <CardBody>
-                                        <strong>User ID : </strong><br/>
-                                        <strong>UserName : </strong><br/>
-                                        <strong>Permanent Address</strong><br/>
-                                        <strong>Residental Address : </strong><br/>
-                                        <strong>Contact Number : </strong><br/>
-                                        <strong>Recent Interactions : </strong><br/>
-                                        <Button color="primary" variant="contained" onClick={()=>{deleteData()}}>DELETE</Button>
+                                        <strong>User ID : </strong>{donorId}<br/>
+                                        <strong>UserName : </strong>{username}<br/>
+                                        <strong>Permanent Address </strong>{donorAddress}<br/>
+                                        <strong>Contact Number : </strong>{donorNumber}<br/>
                                     </CardBody>
                                     <CardFooter>
-                                        <Button color="primary" variant="contained">Change Address</Button>
-                                        <Button color="primary" variant="contained" onClick={()=>{sendDetails()}}>Submit</Button>
+                                    </CardFooter>
+                                </Card>
+                                <Card>
+                                    <CardFooter>
+                                        <Button color="primary" variant="contained" size="large"><bold>User Data</bold></Button>
+                                    </CardFooter>
+                                    <CardBody>
+                                        <strong>User ID : </strong>{donorId}<br/>
+                                        <strong>UserName : </strong>{username}<br/>
+                                        <strong>Permanent Address </strong>{donorAddress}<br/>
+                                        <strong>Contact Number : </strong>{donorNumber}<br/>
+                                    </CardBody>
+                                    <CardFooter>
                                     </CardFooter>
                                 </Card>
                         </Collapse>
@@ -456,14 +466,14 @@ function DonorRequirements() {
                                         <div className="column">
                                             <Grid container spacing={1} alignItems="flex-end">
                                                 <Grid item>
-                                                    <TextField id="input-with-icon-grid" label="UserID" value={userID} disabled/>
+                                                    <TextField id="input-with-icon-grid" label="UserID" value={donorId} disabled/>
                                                 </Grid>
                                             </Grid>
                                         </div>
                                         <div className="column">
                                             <Grid container spacing={1} alignItems="flex-end">
                                                 <Grid item>
-                                                    <TextField id="input-with-icon-grid" label="UserName" value={userName} disabled/>
+                                                    <TextField id="input-with-icon-grid" label="UserName" value={username} disabled/>
                                                 </Grid>
                                             </Grid>
                                         </div>
@@ -533,14 +543,14 @@ function DonorRequirements() {
                                         <div className="column">
                                             <Grid container spacing={1} alignItems="flex-end">
                                                 <Grid item>
-                                                    <TextField id="input-with-icon-grid" label="UserID" value={userID} disabled/>
+                                                    <TextField id="input-with-icon-grid" label="UserID" value={donorId} disabled/>
                                                 </Grid>
                                             </Grid>
                                         </div>
                                         <div className="column">
                                             <Grid container spacing={1} alignItems="flex-end">
                                                 <Grid item>
-                                                    <TextField id="input-with-icon-grid" label="UserName" value={userName} disabled/>
+                                                    <TextField id="input-with-icon-grid" label="UserName" value={username} disabled/>
                                                 </Grid>
                                             </Grid>
                                         </div>
@@ -612,14 +622,14 @@ function DonorRequirements() {
                                         <div className="column">
                                             <Grid container spacing={1} alignItems="flex-end">
                                                 <Grid item>
-                                                    <TextField id="input-with-icon-grid" label="UserID" value={userID} disabled/>
+                                                    <TextField id="input-with-icon-grid" label="UserID" value={donorId} disabled/>
                                                 </Grid>
                                             </Grid>
                                         </div>
                                         <div className="column">
                                             <Grid container spacing={1} alignItems="flex-end">
                                                 <Grid item>
-                                                    <TextField id="input-with-icon-grid" label="UserName" value={userName} disabled/>
+                                                    <TextField id="input-with-icon-grid" label="UserName" value={username} disabled/>
                                                 </Grid>
                                             </Grid>
                                         </div>
@@ -679,14 +689,14 @@ function DonorRequirements() {
                                         <div className="column">
                                             <Grid container spacing={1} alignItems="flex-end">
                                                 <Grid item>
-                                                    <TextField id="input-with-icon-grid" label="UserID" value={userID} disabled/>
+                                                    <TextField id="input-with-icon-grid" label="UserID" value={donorId} disabled/>
                                                 </Grid>
                                             </Grid>
                                         </div>
                                         <div className="column">
                                             <Grid container spacing={1} alignItems="flex-end">
                                                 <Grid item>
-                                                    <TextField id="input-with-icon-grid" label="UserName" value={userName} disabled/>
+                                                    <TextField id="input-with-icon-grid" label="UserName" value={username} disabled/>
                                                 </Grid>
                                             </Grid>
                                         </div>
@@ -758,14 +768,14 @@ function DonorRequirements() {
                                         <div className="column">
                                             <Grid container spacing={1} alignItems="flex-end">
                                                 <Grid item>
-                                                    <TextField id="input-with-icon-grid" label="UserID" value={userID} disabled/>
+                                                    <TextField id="input-with-icon-grid" label="UserID" value={donorId} disabled/>
                                                 </Grid>
                                             </Grid>
                                         </div>
                                         <div className="column">
                                             <Grid container spacing={1} alignItems="flex-end">
                                                 <Grid item>
-                                                    <TextField id="input-with-icon-grid" label="UserName" value={userName} disabled/>
+                                                    <TextField id="input-with-icon-grid" label="UserName" value={username} disabled/>
                                                 </Grid>
                                             </Grid>
                                         </div>
@@ -837,14 +847,14 @@ function DonorRequirements() {
                                         <div className="column">
                                             <Grid container spacing={1} alignItems="flex-end">
                                                 <Grid item>
-                                                    <TextField id="input-with-icon-grid" label="UserID" value={userID} disabled/>
+                                                    <TextField id="input-with-icon-grid" label="UserID" value={donorId} disabled/>
                                                 </Grid>
                                             </Grid>
                                         </div>
                                         <div className="column">
                                             <Grid container spacing={1} alignItems="flex-end">
                                                 <Grid item>
-                                                    <TextField id="input-with-icon-grid" label="UserName" value={userName} disabled/>
+                                                    <TextField id="input-with-icon-grid" label="UserName" value={username} disabled/>
                                                 </Grid>
                                             </Grid>
                                         </div>
