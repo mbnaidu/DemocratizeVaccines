@@ -28,6 +28,7 @@ import transportImage from '../../Img/transport.png';
 import vaccineImage from '../../Img/vaccine.png';
 import bloodImage from '../../Img/blood.png';
 import { Dropdown } from 'bootstrap';
+import axios from 'axios';
 
 
 
@@ -98,6 +99,41 @@ function PatientRequirements() {
     const[requiredAddress,setRequiredAddress] = useState([]);
     const [lng,setLng] = useState([]);
     const [lat,setLat] = useState([]);
+    const [DATAs,setDATAs] = useState(false);
+    const sendSignUpDetails = () =>{
+        const data = {
+            "username":username,
+            "password":password,
+            "latitude":finalLat,
+            "longitude":finalLng,
+            "address":patientAddress,
+            "contact":'7081960932',
+            "isPatient": true,
+        }
+        axios.post('http://localhost:3010/patientsignup', {data}).then(
+            function(res) {
+                if(res.data) {
+                }
+            }
+        )
+    }
+    const sendLoginDetails = () => {
+        const data = {
+            "username":userId,
+            "password":pass,
+        }
+        axios.post('http://localhost:3010/patientlogin', {data}).then(
+            function(res) {
+                if(res.data.msg) {
+                    alert(res.data.msg);
+                } else {
+                    alert("successfully logged in");
+                    setSignup(false);
+                    setDATAs(true);
+                }
+            }
+        )
+    }
     const google = window.google = window.google ? window.google : {}
     const MapWithASearchBox = compose(
     withProps({
@@ -252,23 +288,6 @@ getCoordintes()
             {id : '5' , value : 'Vaccine' },
             {id : '6' , value : 'Plasma' },
         ];
-        const home = [
-            {id : '11' , value : 'Electrician' },
-            {id : '12' , value : 'Grocery' },
-            {id : '13' , value : 'Doctors' },
-            {id : '14' , value : 'Covid Assistance' },
-            {id:'15' , value : 'Medical Stores'}
-        ];
-        var finalList = [];
-        const handleInput = (option) =>{
-            let index = finalList.indexOf(option)
-            if(index > -1){
-                finalList.splice(index, 1);
-            }
-            else{
-                finalList.push(option)
-            }
-        }
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(false);
     const handleChange = (panel) => (event, isExpanded) => {
@@ -452,8 +471,8 @@ getCoordintes()
     const [login,setLogin] = useState(false);
     const [signup,setSignup] = useState(false);
     const [generate,setGenerate] = useState("Generate");
-    const [userId,setUserId] = useState(0);
-    const [pass,setPass] = useState('');
+    const [username,setUsername] = useState('');
+    const [password,setPassword] = useState('');
     const [phoneNumber,setPhoneNumber] = useState('');
     const [code,setCode] = useState('');
 
@@ -492,7 +511,8 @@ getCoordintes()
     const [privateMap,setPrivateMap] = useState(false);
     const [plasmaMap,setPlasmaMap] = useState(false);
     const [vaccineMap,setVaccineMap] = useState(false);
-    
+    const [userId,setUserId] = useState('');
+    const [pass,setPass] = useState('')
     return (
             <div className="sideBar_pusher">
                 <Button color="primary" variant="outlined" size="large"
@@ -511,6 +531,59 @@ getCoordintes()
                 <Sidebar.Pusher >
                     <Segment basic>
                     <div>
+                        <div>
+                            <Modal show={signup}>
+                                <ModalHeader>LOGIN TO CONTINUE....</ModalHeader>
+                                <ModalBody>
+                                    {login ? (<div>
+                                        <div className="center"> 
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <AccountCircle />
+                                                </Grid>
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" label="Username" value={username} onChange={event => setUsername(event.target.value)}/>
+                                                </Grid>
+                                            </Grid>
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <VpnKeyIcon />
+                                                </Grid>
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" label="Password" type="password" value={password} onChange={event => setPassword(event.target.value)}/>
+                                                </Grid>
+                                            </Grid>
+                                            <br/><br/>
+                                            <Button color="secondary" variant="contained" onClick={()=>{setLogin(false);sendSignUpDetails();}}>Sign Up</Button>
+                                        </div>
+                                    </div>) : (<div>
+                                        <div className="center"> 
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <AccountCircle />
+                                                </Grid>
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" label="Username" value={userId} onChange={event => setUserId(event.target.value)}/>
+                                                </Grid>
+                                            </Grid>
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <VpnKeyIcon />
+                                                </Grid>
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" label="Password" type="password" value={pass} onChange={event => setPass(event.target.value)}/>
+                                                </Grid>
+                                            </Grid><br/><br/>
+                                            <Button color="primary" variant="outlined" onClick={()=>{sendLoginDetails()}}>Login</Button>{' '}
+                                            <Button color="secondary" variant="contained" onClick={()=>{setLogin(true);}}>Sign Up</Button>
+                                        </div>
+                                    </div>)}
+                                </ModalBody>
+                                <ModalFooter>
+                                    <Button color="primary" variant="contained" onClick={()=>{setSignup(false)}}>Close</Button>
+                                </ModalFooter>
+                            </Modal>
+                        </div>
                         <Collapse isOpen={setUp}>
                             {showMap ? (<div>
                                 <DonorMap lat={lat} lng={lng} />
@@ -567,10 +640,10 @@ getCoordintes()
                                                             return(
                                                                 <TableRow hover role="checkbox">
                                                                     <TableCell padding="checkbox">
-                                                                        {userId !== 0 ? (<div>
+                                                                        {DATAs ? (<div>
                                                                             <Button color="primary" variant="outlined" >Contact Number : {o.contactNumber}</Button>
                                                                         </div>) : (<div>
-                                                                            <Button color="primary" variant="outlined" size="small">Get</Button>
+                                                                            <Button color="primary" variant="outlined" size="small" onClick={()=>{setSignup(true)}}>Get</Button>
                                                                         </div>)}
                                                                     </TableCell>
                                                                     <TableCell scope="row" padding="none"><strong>User Id : </strong>{o.owner_id}</TableCell>
@@ -593,10 +666,10 @@ getCoordintes()
                                                             return(
                                                                 <TableRow hover role="checkbox">
                                                                     <TableCell padding="checkbox">
-                                                                        {userId !== 0 ? (<div>
+                                                                        {DATAs ? (<div>
                                                                             <Button color="primary" variant="outlined" >Contact Number : {o.contactNumber}</Button>
                                                                         </div>) : (<div>
-                                                                            <Button color="primary" variant="outlined" size="small">Get</Button>
+                                                                            <Button color="primary" variant="outlined" size="small" onClick={()=>{setSignup(true)}}>Get</Button>
                                                                         </div>)}
                                                                     </TableCell>
                                                                     <TableCell scope="row" padding="none"><strong>User Id : </strong>{o.owner_id}</TableCell>
@@ -619,10 +692,10 @@ getCoordintes()
                                                             return(
                                                                 <TableRow hover role="checkbox">
                                                                     <TableCell padding="checkbox">
-                                                                        {userId !== 0 ? (<div>
+                                                                        {DATAs ? (<div>
                                                                             <Button color="primary" variant="outlined" >Contact Number : {o.contactNumber}</Button>
                                                                         </div>) : (<div>
-                                                                            <Button color="primary" variant="outlined" size="small">Get</Button>
+                                                                            <Button color="primary" variant="outlined" size="small" onClick={()=>{setSignup(true)}}>Get</Button>
                                                                         </div>)}
                                                                     </TableCell>
                                                                     <TableCell scope="row" padding="none"><strong>User Id : </strong>{o.owner_id}</TableCell>
@@ -682,10 +755,10 @@ getCoordintes()
                                                                         return(
                                                                             <TableRow hover role="checkbox">
                                                                                 <TableCell padding="checkbox">
-                                                                                    {userId !== 0 ? (<div>
+                                                                                    {DATAs ? (<div>
                                                                                         <Button color="primary" variant="outlined" >Contact Number : {o.contactNumber}</Button>
                                                                                     </div>) : (<div>
-                                                                                        <Button color="primary" variant="outlined" size="small">Get</Button>
+                                                                                        <Button color="primary" variant="outlined" size="small" onClick={()=>{setSignup(true)}}>Get</Button>
                                                                                     </div>)}
                                                                                 </TableCell>
                                                                                 <TableCell scope="row" padding="none"><strong>User Id : </strong>{o.owner_id}</TableCell>
@@ -708,10 +781,10 @@ getCoordintes()
                                                                         return(
                                                                             <TableRow hover role="checkbox">
                                                                                 <TableCell padding="checkbox">
-                                                                                    {userId !== 0 ? (<div>
+                                                                                    {DATAs ? (<div>
                                                                                         <Button color="primary" variant="outlined" >Contact Number : {o.contactNumber}</Button>
                                                                                     </div>) : (<div>
-                                                                                        <Button color="primary" variant="outlined" size="small">Get</Button>
+                                                                                        <Button color="primary" variant="outlined" size="small" onClick={()=>{setSignup(true)}}>Get</Button>
                                                                                     </div>)}
                                                                                 </TableCell>
                                                                                 <TableCell scope="row" padding="none"><strong>User Id : </strong>{o.owner_id}</TableCell>
@@ -734,10 +807,10 @@ getCoordintes()
                                                                         return(
                                                                             <TableRow hover role="checkbox">
                                                                                 <TableCell padding="checkbox">
-                                                                                    {userId !== 0 ? (<div>
+                                                                                    {DATAs ? (<div>
                                                                                         <Button color="primary" variant="outlined" >Contact Number : {o.contactNumber}</Button>
                                                                                     </div>) : (<div>
-                                                                                        <Button color="primary" variant="outlined" size="small">Get</Button>
+                                                                                        <Button color="primary" variant="outlined" size="small" onClick={()=>{setSignup(true)}}>Get</Button>
                                                                                     </div>)}
                                                                                 </TableCell>
                                                                                 <TableCell scope="row" padding="none"><strong>User Id : </strong>{o.owner_id}</TableCell>
@@ -797,10 +870,10 @@ getCoordintes()
                                                                         return(
                                                                             <TableRow hover role="checkbox">
                                                                                 <TableCell padding="checkbox">
-                                                                                    {userId !== 0 ? (<div>
+                                                                                    {DATAs ? (<div>
                                                                                         <Button color="primary" variant="outlined" >Contact Number : {o.contactNumber}</Button>
                                                                                     </div>) : (<div>
-                                                                                        <Button color="primary" variant="outlined" size="small">Get</Button>
+                                                                                        <Button color="primary" variant="outlined" size="small" onClick={()=>{setSignup(true)}}>Get</Button>
                                                                                     </div>)}
                                                                                 </TableCell>
                                                                                 <TableCell scope="row" padding="none"><strong>User Id : </strong>{o.owner_id}</TableCell>
@@ -823,10 +896,10 @@ getCoordintes()
                                                                         return(
                                                                             <TableRow hover role="checkbox">
                                                                                 <TableCell padding="checkbox">
-                                                                                    {userId !== 0 ? (<div>
+                                                                                    {DATAs ? (<div>
                                                                                         <Button color="primary" variant="outlined" >Contact Number : {o.contactNumber}</Button>
                                                                                     </div>) : (<div>
-                                                                                        <Button color="primary" variant="outlined" size="small">Get</Button>
+                                                                                        <Button color="primary" variant="outlined" size="small" onClick={()=>{setSignup(true)}}>Get</Button>
                                                                                     </div>)}
                                                                                 </TableCell>
                                                                                 <TableCell scope="row" padding="none"><strong>User Id : </strong>{o.owner_id}</TableCell>
@@ -849,10 +922,10 @@ getCoordintes()
                                                                         return(
                                                                             <TableRow hover role="checkbox">
                                                                                 <TableCell padding="checkbox">
-                                                                                    {userId !== 0 ? (<div>
+                                                                                    {DATAs ? (<div>
                                                                                         <Button color="primary" variant="outlined" >Contact Number : {o.contactNumber}</Button>
                                                                                     </div>) : (<div>
-                                                                                        <Button color="primary" variant="outlined" size="small">Get</Button>
+                                                                                        <Button color="primary" variant="outlined" size="small" onClick={()=>{setSignup(true)}}>Get</Button>
                                                                                     </div>)}
                                                                                 </TableCell>
                                                                                 <TableCell scope="row" padding="none"><strong>User Id : </strong>{o.owner_id}</TableCell>
@@ -912,10 +985,10 @@ getCoordintes()
                                                                         return(
                                                                             <TableRow hover role="checkbox">
                                                                                 <TableCell padding="checkbox">
-                                                                                    {userId !== 0 ? (<div>
+                                                                                    {DATAs ? (<div>
                                                                                         <Button color="primary" variant="outlined" >Contact Number : {o.contactNumber}</Button>
                                                                                     </div>) : (<div>
-                                                                                        <Button color="primary" variant="outlined" size="small">Get</Button>
+                                                                                        <Button color="primary" variant="outlined" size="small" onClick={()=>{setSignup(true)}}>Get</Button>
                                                                                     </div>)}
                                                                                 </TableCell>
                                                                                 <TableCell scope="row" padding="none"><strong>User Id : </strong>{o.owner_id}</TableCell>
@@ -938,10 +1011,10 @@ getCoordintes()
                                                                         return(
                                                                             <TableRow hover role="checkbox">
                                                                                 <TableCell padding="checkbox">
-                                                                                    {userId !== 0 ? (<div>
+                                                                                    {DATAs ? (<div>
                                                                                         <Button color="primary" variant="outlined" >Contact Number : {o.contactNumber}</Button>
                                                                                     </div>) : (<div>
-                                                                                        <Button color="primary" variant="outlined" size="small">Get</Button>
+                                                                                        <Button color="primary" variant="outlined" size="small" onClick={()=>{setSignup(true)}}>Get</Button>
                                                                                     </div>)}
                                                                                 </TableCell>
                                                                                 <TableCell scope="row" padding="none"><strong>User Id : </strong>{o.owner_id}</TableCell>
@@ -964,10 +1037,10 @@ getCoordintes()
                                                                         return(
                                                                             <TableRow hover role="checkbox">
                                                                                 <TableCell padding="checkbox">
-                                                                                    {userId !== 0 ? (<div>
+                                                                                    {DATAs ? (<div>
                                                                                         <Button color="primary" variant="outlined" >Contact Number : {o.contactNumber}</Button>
                                                                                     </div>) : (<div>
-                                                                                        <Button color="primary" variant="outlined" size="small">Get</Button>
+                                                                                        <Button color="primary" variant="outlined" size="small" onClick={()=>{setSignup(true)}}>Get</Button>
                                                                                     </div>)}
                                                                                 </TableCell>
                                                                                 <TableCell scope="row" padding="none"><strong>User Id : </strong>{o.owner_id}</TableCell>
@@ -1027,10 +1100,10 @@ getCoordintes()
                                                                         return(
                                                                             <TableRow hover role="checkbox">
                                                                                 <TableCell padding="checkbox">
-                                                                                    {userId !== 0 ? (<div>
+                                                                                    {DATAs ? (<div>
                                                                                         <Button color="primary" variant="outlined" >Contact Number : {o.contactNumber}</Button>
                                                                                     </div>) : (<div>
-                                                                                        <Button color="primary" variant="outlined" size="small">Get</Button>
+                                                                                        <Button color="primary" variant="outlined" size="small" onClick={()=>{setSignup(true)}}>Get</Button>
                                                                                     </div>)}
                                                                                 </TableCell>
                                                                                 <TableCell scope="row" padding="none"><strong>User Id : </strong>{o.owner_id}</TableCell>
@@ -1053,10 +1126,10 @@ getCoordintes()
                                                                         return(
                                                                             <TableRow hover role="checkbox">
                                                                                 <TableCell padding="checkbox">
-                                                                                    {userId !== 0 ? (<div>
+                                                                                    {DATAs ? (<div>
                                                                                         <Button color="primary" variant="outlined" >Contact Number : {o.contactNumber}</Button>
                                                                                     </div>) : (<div>
-                                                                                        <Button color="primary" variant="outlined" size="small">Get</Button>
+                                                                                        <Button color="primary" variant="outlined" size="small" onClick={()=>{setSignup(true)}}>Get</Button>
                                                                                     </div>)}
                                                                                 </TableCell>
                                                                                 <TableCell scope="row" padding="none"><strong>User Id : </strong>{o.owner_id}</TableCell>
@@ -1079,10 +1152,10 @@ getCoordintes()
                                                                         return(
                                                                             <TableRow hover role="checkbox">
                                                                                 <TableCell padding="checkbox">
-                                                                                    {userId !== 0 ? (<div>
+                                                                                    {DATAs ? (<div>
                                                                                         <Button color="primary" variant="outlined" >Contact Number : {o.contactNumber}</Button>
                                                                                     </div>) : (<div>
-                                                                                        <Button color="primary" variant="outlined" size="small">Get</Button>
+                                                                                        <Button color="primary" variant="outlined" size="small" onClick={()=>{setSignup(true)}}>Get</Button>
                                                                                     </div>)}
                                                                                 </TableCell>
                                                                                 <TableCell scope="row" padding="none"><strong>User Id : </strong>{o.owner_id}</TableCell>
@@ -1142,10 +1215,10 @@ getCoordintes()
                                                                         return(
                                                                             <TableRow hover role="checkbox">
                                                                     <TableCell padding="checkbox">
-                                                                        {userId !== 0 ? (<div>
+                                                                        {DATAs ? (<div>
                                                                             <Button color="primary" variant="outlined" >Contact Number : {o.contactNumber}</Button>
                                                                         </div>) : (<div>
-                                                                            <Button color="primary" variant="outlined" size="small">Get</Button>
+                                                                            <Button color="primary" variant="outlined" size="small" onClick={()=>{setSignup(true)}}>Get</Button>
                                                                         </div>)}
                                                                     </TableCell>
                                                                     <TableCell scope="row" padding="none"><strong>User Id : </strong>{o.owner_id}</TableCell>
@@ -1168,10 +1241,10 @@ getCoordintes()
                                                                         return(
                                                                             <TableRow hover role="checkbox">
                                                                     <TableCell padding="checkbox">
-                                                                        {userId !== 0 ? (<div>
+                                                                        {DATAs ? (<div>
                                                                             <Button color="primary" variant="outlined" >Contact Number : {o.contactNumber}</Button>
                                                                         </div>) : (<div>
-                                                                            <Button color="primary" variant="outlined" size="small">Get</Button>
+                                                                            <Button color="primary" variant="outlined" size="small" onClick={()=>{setSignup(true)}}>Get</Button>
                                                                         </div>)}
                                                                     </TableCell>
                                                                     <TableCell scope="row" padding="none"><strong>User Id : </strong>{o.owner_id}</TableCell>
@@ -1194,10 +1267,10 @@ getCoordintes()
                                                                         return(
                                                                             <TableRow hover role="checkbox">
                                                                     <TableCell padding="checkbox">
-                                                                        {userId !== 0 ? (<div>
+                                                                        {DATAs ? (<div>
                                                                             <Button color="primary" variant="outlined" >Contact Number : {o.contactNumber}</Button>
                                                                         </div>) : (<div>
-                                                                            <Button color="primary" variant="outlined" size="small">Get</Button>
+                                                                            <Button color="primary" variant="outlined" size="small" onClick={()=>{setSignup(true)}}>Get</Button>
                                                                         </div>)}
                                                                     </TableCell>
                                                                     <TableCell scope="row" padding="none"><strong>User Id : </strong>{o.owner_id}</TableCell>

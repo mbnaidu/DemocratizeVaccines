@@ -8,6 +8,7 @@ import profilepic from '../../Img/volunteerlogin.webp'
 import signuppic from '../../Img/volunteersignup.jpg'
 import { NavLink } from 'react-router-dom';
 import { green } from '@material-ui/core/colors';
+import axios from 'axios';
 
 
 const GreenRadio = withStyles({
@@ -73,6 +74,8 @@ function VolunteerRequirements() {
             }
         }
     const [longLatt,setLongLatt] = useState('');
+    const [lat,setLat] = useState('');
+    const [lng,setLng] = useState('');
     const [volunteerAddress,setVolunteerAddress] = useState('')
         useEffect(() => {
             const getCoordintes = ()=> {
@@ -86,6 +89,7 @@ function VolunteerRequirements() {
             var lat = crd.latitude.toString();
             var lng = crd.longitude.toString();
             var coordinates = [lat, lng];
+            setLat(lat);setLng(lng);
             setLongLatt(`Latitude: ${lat}, Longitude: ${lng}`)
             getCity(coordinates);
             return;
@@ -118,6 +122,42 @@ function VolunteerRequirements() {
     }
     getCoordintes()
         }, []);
+        const [username,setUsername] = useState('');
+        const [password,setPassword] = useState('');
+    const sendSignUpDetails = () =>{
+        const data = {
+            "username":userId,
+            "password":pass,
+            "latitude":lat,
+            "longitude":lng,
+            "email":email,
+            "address":volunteerAddress,
+            "contact":contactNumber,
+            "isPatient": true,
+        }
+        axios.post('http://localhost:3010/volunteersignup', {data}).then(
+            function(res) {
+                if(res.data) {
+                }
+            }
+        )
+    }
+    const sendLoginDetails = () => {
+        const data = {
+            "username":username,
+            "password":password,
+        }
+        axios.post('http://localhost:3010/volunteerlogin', {data}).then(
+            function(res) {
+                if(res.data.msg) {
+                    alert(res.data.msg);
+                } else {
+                    alert("successfully logged in");
+                    setSelect(true);
+                }
+            }
+        )
+    }
     const [type,setType] = useState('');
     return (
         <div>
@@ -191,7 +231,7 @@ function VolunteerRequirements() {
                                                 <AccountCircle />
                                             </Grid>
                                             <Grid item>
-                                                <TextField id="input-with-icon-grid" label="UserID" value={userId} onChange={event => setUserId(event.target.value)}/>
+                                                <TextField id="input-with-icon-grid" label="UserID" value={username} onChange={event => setUsername(event.target.value)}/>
                                             </Grid>
                                         </Grid>
                                         <Grid container spacing={1} alignItems="flex-end">
@@ -199,12 +239,12 @@ function VolunteerRequirements() {
                                             <VpnKeyIcon />
                                         </Grid>
                                         <Grid item>
-                                            <TextField id="input-with-icon-grid" label="Password" type="password" value={pass} onChange={event => setPass(event.target.value)}/>
+                                            <TextField id="input-with-icon-grid" label="Password" type="password" value={password} onChange={event => setPassword(event.target.value)}/>
                                         </Grid>
                                     </Grid>
                                     <br/><br/>
                                     <CardActions>
-                                        <Button color="primary" variant="outlined"  className={classes.button} onClick={()=>{setSelect(true)}}>Login</Button>{' '}
+                                        <Button color="primary" variant="outlined"  className={classes.button} onClick={()=>{sendLoginDetails()}}>Login</Button>{' '}
                                         <Button color="secondary" variant="contained"  className={classes.button} onClick={()=>{setFlip(false);}}>Sign Up</Button>
                                     </CardActions>
                                 </div>
@@ -246,7 +286,7 @@ function VolunteerRequirements() {
                                         </Grid>
                                     </Grid><br/><br/>
                                     <CardActions>
-                                        <Button color="secondary" variant="contained"  className={classes.button} onClick={()=>{setFlip(true);}} size="large">Sign Up</Button>
+                                        <Button color="secondary" variant="contained"  className={classes.button} onClick={()=>{sendSignUpDetails()}} size="large">Sign Up</Button>
                                     </CardActions>
                                     <CardActions>
                                         <Button color="primary" variant="outlined"  className={classes.button} onClick={()=>{setFlip(true);}}>Back to login</Button>{' '}

@@ -1,9 +1,9 @@
-import { Button,Card,Grid, Icon, Input, TextField } from '@material-ui/core'
+import { Accordion, AccordionDetails, AccordionSummary, Button,Card,Grid, Icon, Input, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@material-ui/core'
 import { AccountCircle } from '@material-ui/icons'
 import React, { useEffect, useState } from 'react'
 import { NavLink} from 'react-router-dom'
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
-import {Menu,Segment,Sidebar} from 'semantic-ui-react';
+import {AccordionContent, Menu,Segment,Sidebar} from 'semantic-ui-react';
 import HomeIcon from '@material-ui/icons/Home';
 import PersonIcon from '@material-ui/icons/Person';
 import {  CardBody, CardFooter, Collapse} from 'reactstrap';
@@ -104,6 +104,7 @@ function DonorRequirements() {
             const [ambulanceAvailability,setAmbulanceAvailability] = useState('');
             const [ambulanceVerifiedOn,setAmbulanceVerifiedOn] = useState('');
             const [ambulanceVerifiedBy,setAmbulanceVerifiedBy] = useState('');
+            const [ambulancePrice,setAmbulancePrice] = useState('');
         // Private
             const [privateTransportAvailability,setPrivateTransportAvailability] = useState('');
             const [privateTransportVerifiedOn,setPrivateTransportVerifiedOn] = useState('');
@@ -243,9 +244,14 @@ function DonorRequirements() {
                 "latitude1":lat1,
                 "longitude1":lng1,
                 "address1": donorAddress1,
-                "has":d,
-                "price":p,
+                "datas":d,
             }
+            axios.post('http://localhost:3010/update/'+donorId, data).then(
+                function(res) {
+                    if(res.data) {
+                    }
+                }
+            )
             axios.post('http://localhost:3010/adddonordata', {data}).then(
                 function(res) {
                     if(res.data) {
@@ -253,15 +259,11 @@ function DonorRequirements() {
                 }
             )
     }
-    const deleteData = () => {
-        const id= '60a51074bfc48d4ef02fef53';
-        axios.delete('http://localhost:3010/'+id)
-            .then(response => { console.log(response.data)});
-    }
+    const [userData,setUserData] = useState([]);
     const getData = () => {
         axios.get('http://localhost:3010/'+donorId)
             .then(response => {
-                console.log(response.data)
+                setUserData(response.data.datas)
                 setdonorAddress(response.data.address);
                 setDonorNumber(response.data.contact)
             })
@@ -368,6 +370,10 @@ function DonorRequirements() {
             )}
         </GoogleMap>
         );
+        const [expanded, setExpanded] = React.useState(false);
+    const handleChange = (panel) => (event, isExpanded) => {
+        setExpanded(isExpanded ? panel : false);
+    };
     return (
         <div>
             {signup ? (<div>
@@ -417,7 +423,7 @@ function DonorRequirements() {
                     {dispatch({ type: 'CHANGE_ANIMATION', animation: 'scale down' });getData()}}>
                     <MenuIcon />
                 </Button>
-                <Sidebar.Pushable  as={Segment} style={{ overflow: 'hidden',width:"350px",height:"900px" }} >
+                <Sidebar.Pushable  as={Segment} style={{ overflow: 'auto',width:"350px",height:"900px" }} >
                     {!vertical && (
                         <VerticalSidebar
                             animation={animation}
@@ -442,19 +448,41 @@ function DonorRequirements() {
                                     <CardFooter>
                                     </CardFooter>
                                 </Card>
-                                <Card>
-                                    <CardFooter>
-                                        <Button color="primary" variant="contained" size="large"><bold>User Data</bold></Button>
-                                    </CardFooter>
-                                    <CardBody>
-                                        <strong>User ID : </strong>{donorId}<br/>
-                                        <strong>UserName : </strong>{username}<br/>
-                                        <strong>Permanent Address </strong>{donorAddress}<br/>
-                                        <strong>Contact Number : </strong>{donorNumber}<br/>
-                                    </CardBody>
-                                    <CardFooter>
-                                    </CardFooter>
-                                </Card>
+                                {userData.map((u)=>{
+                                    return(
+                                        <div>
+                                            <Accordion expanded={expanded === u.date} onChange={handleChange(u.date)}>
+                                                <AccordionSummary>{u.type}</AccordionSummary>
+                                                <AccordionDetails>
+                                                    <TableContainer>
+                                                        <Table>
+                                                            <TableHead>
+                                                                <TableCell>Username</TableCell>
+                                                                <TableCell>Type</TableCell>
+                                                                <TableCell>Uploaded Date</TableCell>
+                                                                <TableCell>Quantity</TableCell>
+                                                                <TableCell>Price</TableCell>
+                                                                <TableCell>Verifications</TableCell>
+                                                                <TableCell>Permanent Address</TableCell>
+                                                                <TableCell>New Address</TableCell>
+                                                            </TableHead>
+                                                            <TableBody>
+                                                                <TableCell>{u.UserName}</TableCell>
+                                                                <TableCell>{u.type}</TableCell>
+                                                                <TableCell>{u.date}</TableCell>
+                                                                <TableCell>{u.quantity}</TableCell>
+                                                                <TableCell>{u.price}</TableCell>
+                                                                <TableCell>Verifications</TableCell>
+                                                                <TableCell>{u.address}</TableCell>
+                                                                <TableCell>{u.address1}</TableCell>
+                                                            </TableBody>
+                                                        </Table>
+                                                    </TableContainer>
+                                                </AccordionDetails>
+                                            </Accordion>
+                                        </div>
+                                    )
+                                })}
                         </Collapse>
                         <Collapse isOpen={oxygenOpen}>
                             {oxygenMap ? (<div>
@@ -528,7 +556,7 @@ function DonorRequirements() {
                                     </div>
                                     
                                     <Button color="secondary" variant="contained" onClick={()=>setOxygenMap(true)}>Change Address</Button>
-                                    <Button color="primary" variant="contained" onClick={()=>{sendDetails('Oxygen Cylinders',oxygenPrice)}}>Submit</Button>
+                                    <Button color="primary" variant="contained" onClick={()=>{sendDetails({UserName:username,date:tempDate.getFullYear() + '-' + (tempDate.getMonth()+1) + '-' + tempDate.getDate() +' '+ tempDate.getHours()+':'+ tempDate.getMinutes()+':'+ tempDate.getSeconds(),type:"Oxygen Cylinders",price:oxygenPrice,quantity:oxygenAvailability,address:donorAddress,address1:donorAddress1})}}>Submit</Button>
                                 </div>
                                 </div>
                             </div>)}
@@ -607,7 +635,7 @@ function DonorRequirements() {
                                     </div>
                                     
                                     <Button color="secondary" variant="contained" onClick={()=>setICUMap(true)}>Change Address</Button>
-                                    <Button color="primary" variant="contained" onClick={()=>{sendDetails('ICU Beds',bedPrice)}}>Submit</Button>
+                                    <Button color="primary" variant="contained" onClick={()=>{sendDetails({UserName:username,date:tempDate.getFullYear() + '-' + (tempDate.getMonth()+1) + '-' + tempDate.getDate() +' '+ tempDate.getHours()+':'+ tempDate.getMinutes()+':'+ tempDate.getSeconds(),type:"ICU BEDS",price:bedPrice,quantity:bedAvailability,address:donorAddress,address1:donorAddress1})}}>Submit</Button>
                                 </div>
                                 </div>
                             </div>)}
@@ -671,10 +699,22 @@ function DonorRequirements() {
                                                 </Grid>
                                             </Grid>
                                         </div>
+                                        <div className="column">
+                                            <Grid container spacing={1} alignItems="flex-end">
+                                                <Grid item>
+                                                    <TextField id="input-with-icon-grid" 
+                                                        label={'Cost Per Km'} 
+                                                        type="text" 
+                                                        value={ambulancePrice} 
+                                                        onChange={event => setAmbulancePrice(event.target.value)}
+                                                    />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
                                     </div>
                                     
                                     <Button color="secondary" variant="contained" onClick={()=>setAmbulanceMap(true)}>Change Address</Button>
-                                    <Button color="primary" variant="contained" onClick={()=>{sendDetails('Ambulance',"free")}}>Submit</Button>
+                                    <Button color="primary" variant="contained" onClick={()=>{sendDetails({UserName:username,date:tempDate.getFullYear() + '-' + (tempDate.getMonth()+1) + '-' + tempDate.getDate() +' '+ tempDate.getHours()+':'+ tempDate.getMinutes()+':'+ tempDate.getSeconds(),type:"AMBULANCE",price:ambulancePrice,quantity:ambulanceAvailability,address:donorAddress,address1:donorAddress1})}}>Submit</Button>
                                 </div>
                                 </div>
                             </div>)}
@@ -753,7 +793,7 @@ function DonorRequirements() {
                                     </div>
                                     
                                     <Button color="secondary" variant="contained" onClick={()=>setPrivateMap(true)}>Change Address</Button>
-                                    <Button color="primary" variant="contained" onClick={()=>{sendDetails('Private Transport',privateTransportCostPerKm)}}>Submit</Button>
+                                    <Button color="primary" variant="contained" onClick={()=>{sendDetails({UserName:username,date:tempDate.getFullYear() + '-' + (tempDate.getMonth()+1) + '-' + tempDate.getDate() +' '+ tempDate.getHours()+':'+ tempDate.getMinutes()+':'+ tempDate.getSeconds(),type:"PRIVATE TRANSPORT",price:privateTransportCostPerKm,quantity:privateTransportAvailability,address:donorAddress,address1:donorAddress1})}}>Submit</Button>
                                 </div>
                                 </div>
                             </div>)}
@@ -832,7 +872,7 @@ function DonorRequirements() {
                                     </div>
                                     
                                     <Button color="secondary" variant="contained" onClick={()=>setPlasmaMap(true)}>Change Address</Button>
-                                    <Button color="primary" variant="contained" onClick={()=>{sendDetails('Plasma', bloodPrice)}}>Submit</Button>
+                                    <Button color="primary" variant="contained" onClick={()=>{sendDetails({UserName:username,date:tempDate.getFullYear() + '-' + (tempDate.getMonth()+1) + '-' + tempDate.getDate() +' '+ tempDate.getHours()+':'+ tempDate.getMinutes()+':'+ tempDate.getSeconds(),type:"BLOOD",price:bloodPrice,quantity:bloodAvailability,address:donorAddress,address1:donorAddress1})}}>Submit</Button>
                                 </div>
                                 </div>
                             </div>)}
@@ -911,7 +951,7 @@ function DonorRequirements() {
                                     </div>
                                     
                                     <Button color="secondary" variant="contained" onClick={()=>setVaccineMap(true)}>Change Address</Button>
-                                    <Button color="primary" variant="contained" onClick={()=>{sendDetails('Vaccine',vaccinePrice)}}>Submit</Button>
+                                    <Button color="primary" variant="contained" onClick={()=>{sendDetails({UserName:username,date:tempDate.getFullYear() + '-' + (tempDate.getMonth()+1) + '-' + tempDate.getDate() +' '+ tempDate.getHours()+':'+ tempDate.getMinutes()+':'+ tempDate.getSeconds(),type:"VACCINE",price:vaccinePrice,quantity:vaccineAvailability,address:donorAddress,address1:donorAddress1})}}>Submit</Button>
                                 </div>
                                 </div>
                             </div>)}
