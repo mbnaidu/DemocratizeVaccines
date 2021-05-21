@@ -1,4 +1,4 @@
-import { Accordion, AccordionDetails, AccordionSummary, Button,Card,Grid, Icon, Input, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@material-ui/core'
+import { Accordion, AccordionDetails, AccordionSummary, Button,Card,Grid, Icon, Input, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow, TextField, Typography } from '@material-ui/core'
 import { AccountCircle } from '@material-ui/icons'
 import React, { useEffect, useState } from 'react'
 import { NavLink} from 'react-router-dom'
@@ -205,7 +205,7 @@ function DonorRequirements() {
     const [donorNumber,setDonorNumber] = useState('');
     const sendSignUpDetails = () =>{
         const data = {
-            "username":'a',
+            "username":'b',
             "password":'a',
             "latitude":lat,
             "longitude":lng,
@@ -245,13 +245,14 @@ function DonorRequirements() {
                 "longitude1":lng1,
                 "address1": donorAddress1,
                 "datas":d,
+                "donorId":donorId,
             }
-            axios.post('http://localhost:3010/update/'+donorId, data).then(
-                function(res) {
-                    if(res.data) {
-                    }
-                }
-            )
+            // axios.post('http://localhost:3010/update/'+donorId, data).then(
+            //     function(res) {
+            //         if(res.data) {
+            //         }
+            //     }
+            // )
             axios.post('http://localhost:3010/adddonordata', {data}).then(
                 function(res) {
                     if(res.data) {
@@ -270,6 +271,19 @@ function DonorRequirements() {
             .catch(function (error) {
                 console.log(error);
             })
+    }
+    const deleteData = (id,datas) =>{
+        const data = {
+            "datas":datas,
+            "donorId":donorId
+        }
+        axios.delete('http://localhost:3010/'+id,{data})
+            .then(response => { console.log(response.data)});
+    }
+    const deleteDonor = ()=>{
+        {userData.length === 0 ? axios.delete('http://localhost:3010/deletedonor/'+donorId)
+            .then(response => { console.log(response.data)}) : alert('Please delete below data')}
+        
     }
     const [lat1,setLat1] = useState('');
     const [donorAddress1,setdonorAddress1] = useState('')
@@ -437,7 +451,7 @@ function DonorRequirements() {
                         <Collapse isOpen={setUp}>
                                 <Card>
                                     <CardFooter>
-                                        <Button color="primary" variant="contained" size="large"><bold>User Details</bold></Button>
+                                        <Button color="primary" variant="contained" size="large" onClick={()=>{deleteDonor()}}><bold>Delete This Account</bold></Button>
                                     </CardFooter>
                                     <CardBody>
                                         <strong>User ID : </strong>{donorId}<br/>
@@ -448,7 +462,10 @@ function DonorRequirements() {
                                     <CardFooter>
                                     </CardFooter>
                                 </Card>
-                                {userData.map((u)=>{
+                                {userData.map((m)=>{
+                                    return(
+                                        <div>
+                                            {m.datas.map((u)=>{
                                     return(
                                         <div>
                                             <Accordion expanded={expanded === u.date} onChange={handleChange(u.date)}>
@@ -476,6 +493,9 @@ function DonorRequirements() {
                                                                 <TableCell>{u.address}</TableCell>
                                                                 <TableCell>{u.address1}</TableCell>
                                                             </TableBody>
+                                                            <TableFooter>
+                                                                <Button color="primary" variant="contained" onClick={()=>{deleteData(m._id,m)}}>DELETE</Button>
+                                                            </TableFooter>
                                                         </Table>
                                                     </TableContainer>
                                                 </AccordionDetails>
@@ -483,6 +503,10 @@ function DonorRequirements() {
                                         </div>
                                     )
                                 })}
+                                        </div>
+                                    )
+                                })}
+                                
                         </Collapse>
                         <Collapse isOpen={oxygenOpen}>
                             {oxygenMap ? (<div>
