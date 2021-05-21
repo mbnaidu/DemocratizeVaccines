@@ -99,11 +99,11 @@ const MapWithAMarkerClusterer = compose(
 		})}
 				</div>
 			) : (<div></div>)}
-			<Marker
+			{/* <Marker
 				icon={patient}
 				title="Your Location"
 				position={{ lat: parseFloat(props.lat), lng: parseFloat(props.lng) }}
-			/>
+			/> */}
 			{/* parseInt(haversine({ lat: parseFloat(props.lat), lng: parseFloat(props.lon)}, { lat: marker.latitude, lng: marker.longitude})/1000) */}
 			{props.type === 'patient' ? (<div>
 				{props.details.donors.map((marker,i)=>{
@@ -171,60 +171,47 @@ const MapWithAMarkerClusterer = compose(
 			})}
 			</div>) : (<div>
 				{props.details.length === undefined ? (<div>
-					<Marker
-					icon={
-						props.details.type === 'Oxygen Cylinders' ? cylinder : 
-						props.details.type === 'ICU Beds' ? beds : 
-						props.details.type === 'Private Transport' ? transport : 
-						props.details.type === 'Ambulance' ? ambulance : 
-						props.details.type === 'Plasma' ? blood : 
-						props.details.type === 'Vaccine' ? vaccine : 
-					''}
-					key={props.details.owner_id}
-					position={{ lat: props.details.latitude, lng: props.details.longitude }}
-					onClick={() => props.onToggleOpen(props.details.owner_id)}	
-				>
-					<Polyline
-						path={[
-							{ lat: parseFloat(props.lat), lng: parseFloat(props.lng) },
-							{ lat:  props.details.latitude, lng: props.details.longitude }
-						]}
-						geodesic={true}
-						options={{
-							strokeColor: "#ff2527",
-							strokeOpacity: 0.75,
-							strokeWeight: 2,
-							icons: [
-								{
-									icon: vaccine,
-									offset: "0",
-									repeat: "20px"
-								}
-							]
-						}}
-					/>
-					{props.isOpen[props.details.owner_id] && (
-						<InfoWindow onCloseClick={props.onToggleOpen}>
+					{props.details.datas.map((m)=>{
+						return(
 							<div>
-								<strong>DonorID : </strong>{props.details.owner_id}
-								<br/>
-								<strong>Name : </strong>{props.details.owner_name}
-								<br/>
-								<strong>Type : </strong>{props.details.type}
-								<br/>
-								<strong>UploadDate : </strong>{props.details.upload_date}
-								<br/>
-								<strong>Verifications : </strong>{props.details.Verifications.map((v)=>{return(<div>{v}</div>)})}
-								<strong>DonorAddress : </strong>{props.details.owner_address}
-								<br/>
-								<strong>Distance : </strong>{parseInt(haversine({ lat: parseFloat(props.lat), lng: parseFloat(props.lng)}, { lat: props.details.latitude, lng: props.details.longitude})/1000)}<strong> KM</strong>
-								<br/>
-								<strong>ContactNumber : </strong>{props.details.contactNumber}
-								<br/>
-							</div>
-						</InfoWindow>
-					)}
-				</Marker>
+								<Marker
+								icon={
+									m.type === 'Oxygen Cylinders' ? cylinder : 
+									m.type === 'ICU BEDS' ? beds : 
+									m.type === 'PRIVATE TRANSPORT' ? transport : 
+									m.type === 'AMBULANCE' ? ambulance : 
+									m.type === 'BLOOD' ? blood : 
+									m.type === 'VACCINE' ? vaccine : 
+								''}
+								key={props.details._id}
+								position={{ lat: props.details.latitude1, lng: props.details.longitude1 }}
+								onClick={() => props.onToggleOpen(props.details._id)}	
+							>
+								{props.isOpen[props.details._id] && (
+									<InfoWindow onCloseClick={props.onToggleOpen}>
+										<div>
+											<strong>Name : </strong>{m.username}
+											<br/>
+											<strong>Type : </strong>{m.type}
+											<br/>
+											<strong>Quantity : </strong>{m.quantity}
+											<br/>
+											<strong>Price : </strong>{m.price}
+											<br/>
+											<strong>UploadDate : </strong>{m.date}
+											<br/>
+											<strong>Verifications : </strong>{m.verifications.map((v)=>{return(<div>{v}</div>)})}
+											<strong>DonorAddress : </strong>{m.address1.length >0 ? m.address1 : m.address}
+											<br/>
+											<strong>Distance : </strong>{parseInt(haversine({ lat: parseFloat(props.lat), lng: parseFloat(props.lng)}, { lat: props.details.latitude, lng: props.details.longitude})/1000)}<strong> KM</strong>
+											<br/>
+										</div>
+									</InfoWindow>
+								)}
+							</Marker>
+						</div>
+						)
+					})}
 				</div>) : (<div>
 					{props.details.map((marker,i)=>{
 						console.log(marker)

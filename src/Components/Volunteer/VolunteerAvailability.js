@@ -1,9 +1,9 @@
-import { Accordion, AccordionDetails, AccordionSummary, Button, makeStyles, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@material-ui/core';
-import React, { useState } from 'react'
+import { Accordion, AccordionDetails, AccordionSummary, Button, makeStyles, Table, TableBody, TableCell, TableContainer, TableHead, Typography } from '@material-ui/core';
+import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router';
 import VolunteerMap from '../Maps/VolunteerMap';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { NavLink } from 'react-router-dom';
+import axios from 'axios';
 
 
 
@@ -13,7 +13,7 @@ import { NavLink } from 'react-router-dom';
         },
         heading: {
             fontSize: theme.typography.pxToRem(15),
-            flexBasis: '15.33%',
+            flexBasis: '55.33%',
             flexShrink: 0,
         },
         secondaryHeading: {
@@ -23,6 +23,7 @@ import { NavLink } from 'react-router-dom';
     }));
 function VolunteerAvailability() {
     const location = useLocation();
+    const [detailsData,setDetailsData] = useState([])
     const [type,setType] = useState(location.state.type);
     const [range,setRange] = useState(location.state.range);
     const [volunteerOption,setVolunteerOption] = useState(location.state.finallist);
@@ -67,15 +68,108 @@ function VolunteerAvailability() {
         const handleChange = (panel) => (event, isExpanded) => {
             setExpanded(isExpanded ? panel : false);
         };
-        const [showMap,setShowMap] = useState(false); 
+        const [email,setEmail] = useState(location.state.email);
+        const [show,setShow] = useState(false); 
         const [showVerifiedMap,setShowVerifiedMap] = useState(false); 
         const [details,setDetails] = useState([]);
         const [lat,setLat] = useState('');
         const [lng,setLng] = useState('');
         const [types,setTypes] = useState('');
+        const [verifiedData,setVerifiedData] = useState([]);
+        const [notVerifiedData,setNotVerifiedData] = useState([]);
+        var tempDate = new Date();
+        useEffect(() => {
+            axios.post('http://localhost:3010/getallrequirements').then(
+                function(res) {
+                    if(res.data) {
+                        {res.data.map((r)=>{
+                            {r.datas.map((m)=>{
+                                if(m.verifications.length === 0){
+                                    notVerifiedData.push(r)
+                                    if(location.state.type === 'notverified'){setDetailsData(notVerifiedData)}
+                                }
+                                else{
+                                    verifiedData.push(r)
+                                    if(location.state.type === 'verified'){setDetailsData(verifiedData)}
+                                }
+                            })}
+                        })}
+                    } 
+                }
+            )
+        },[])
+        const updateDonorData = (w,d) =>{
+            d.verifications.push(email+tempDate.getFullYear() + '-' + (tempDate.getMonth()+1) + '-' + tempDate.getDate() +' '+ tempDate.getHours()+':'+ tempDate.getMinutes()+':'+ tempDate.getSeconds())
+            const data = {
+                datas : [
+                    {
+                        "username":'d.UserName',
+                        "date":d.date,
+                        "type":d.type,
+                        "price":d.price,
+                        "quantity":d.quantity,
+                        "address":d.address,
+                        "address1":d.address1,
+                        "verifications":d.verifications
+                    }
+                ],
+            }
+            axios.post('http://localhost:3010/update/' + w._id, {data})
+                .then(res => console.log(res.data));
+        }
     return (
         <div style={{margin:"10px",width:"300px"}}>
-                {
+            {showVerifiedMap ? (<div>
+                <VolunteerMap details={details}/>
+            </div>) : (<div>
+                        {detailsData.map((d)=>{
+                            return(
+                                <div>
+                                    {d.datas.map((p)=>{
+                                        return(
+                                            <div>
+                                                <Accordion expanded={expanded === p.date} onChange={handleChange(p.date)}>
+                                                    <AccordionSummary>
+                                                        <Typography className={classes.heading}>{p.type}</Typography>
+                                                        <Typography className={classes.secondaryHeading}>{p.date}</Typography>
+                                                    </AccordionSummary>
+                                                    <AccordionDetails>
+                                                        <TableContainer>
+                                                        <Table>
+                                                            <TableHead>
+                                                                <TableCell>OnMap</TableCell>
+                                                                <TableCell>Username</TableCell>
+                                                                <TableCell>Type</TableCell>
+                                                                <TableCell>Quantity</TableCell>
+                                                                <TableCell>Price</TableCell>
+                                                                <TableCell>UploadDate</TableCell>
+                                                                <TableCell>Verifications</TableCell>
+                                                                <TableCell>Address</TableCell>
+                                                                <TableCell>Verify</TableCell>
+                                                            </TableHead>
+                                                            <TableBody>
+                                                                <TableCell><Button color="primary" variant="contained" onClick={()=>{setShowVerifiedMap(true);setDetails(d)}}>Show</Button></TableCell>
+                                                                <TableCell>{p.UserName}</TableCell>
+                                                                <TableCell>{p.type}</TableCell>
+                                                                <TableCell>{p.quantity}</TableCell>
+                                                                <TableCell>{p.price}</TableCell>
+                                                                <TableCell>{p.date}</TableCell>
+                                                                <TableCell>{p.verifications.map((v, i) =>{return(<div>{v}</div>)})}</TableCell>
+                                                                <TableCell>{p.address1.length === 0 ? p.address : p.address1}</TableCell>
+                                                                <TableCell><Button color="primary" variant="contained" onClick={()=>{updateDonorData(d,p)}}>Verify</Button></TableCell>
+                                                                </TableBody>
+                                                            </Table>
+                                                        </TableContainer>
+                                                    </AccordionDetails>
+                                                </Accordion>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            )
+                        })}
+            </div>)}
+                {/* {
                     type === 'patient' ? (<div>
                         {volunteerOption === 'volunteers' ? (<div>
                             {showMap ? (<div>
@@ -480,7 +574,7 @@ function VolunteerAvailability() {
                     volunteerOption === 'volunteers' ? (<div>
                         <VolunteerMap details={details} lat={parseFloat(lat)} lng={parseFloat(lng)} volunteers={volunteers} types={types}/>
                     </div>) :
-                (<div></div>)}
+                (<div></div>)} */}
                 <NavLink to="/volunteer-requirements"><Button color="primary" variant="contained">Home</Button></NavLink>
             </div>
     )

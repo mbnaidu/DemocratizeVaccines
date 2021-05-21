@@ -46,6 +46,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function VolunteerRequirements() {
+    const [verifiedData,setVerifiedData] = useState([]);
+    const [notVerifiedData,setNotVerifiedData] = useState([]);
     const classes = useStyles();
     const [userId,setUserId] = useState('');
     const [pass,setPass] = useState('');
@@ -152,13 +154,33 @@ function VolunteerRequirements() {
                 if(res.data.msg) {
                     alert(res.data.msg);
                 } else {
-                    alert("successfully logged in");
+                    // console.log(res.data)
+                    // alert("successfully logged in");
                     setSelect(true);
                 }
             }
         )
     }
+    useEffect(() => {
+        axios.post('http://localhost:3010/getallrequirements').then(
+            function(res) {
+                if(res.data) {
+                    {res.data.map((r)=>{
+                        {r.datas.map((m)=>{
+                            if(m.verifications.length === 0){
+                                notVerifiedData.push(r)
+                            }
+                            else{
+                                verifiedData.push(r)
+                            }
+                        })}
+                    })}
+                } 
+            }
+        )
+    },[])
     const [type,setType] = useState('');
+    const [details,setDetails] = useState([]);
     return (
         <div>
             <div>
@@ -180,8 +202,8 @@ function VolunteerRequirements() {
                                         />
                                     </div>
                                     <RadioGroup aria-label="quiz" name="quiz">
-                                        <FormControlLabel value="verified" control={<GreenRadio />} label="Show Verified Profiles" onChange={()=>setType('verified')}/>
-                                        <FormControlLabel value="notverified" control={<GreenRadio />} label="Show UnVerified Profiles"  onChange={()=>setType('notverified')}/>
+                                        <FormControlLabel value="verified" control={<GreenRadio />} label="Show Verified Profiles" onChange={()=>{setType('verified');setDetails(verifiedData)}}/>
+                                        <FormControlLabel value="notverified" control={<GreenRadio />} label="Show UnVerified Profiles"  onChange={()=>{setType('notverified');setDetails(notVerifiedData)}}/>
                                         <FormControlLabel value="patient" control={<GreenRadio />} label="Show My Requests" onChange={()=>setType('patient')}/>
                                     </RadioGroup>
                                     <FormControlLabel value="volunteers" control={<Checkbox />} label="Check Other Volunteers" onChange={()=>handleInput('volunteers')}/>
@@ -212,7 +234,9 @@ function VolunteerRequirements() {
                                                 location:longLatt,
                                                 finallist:finalList,
                                                 type:type,
-                                                range:range
+                                                range:range,
+                                                details:details,
+                                                email:email,
                                             } 
                                         }}
                                         exact

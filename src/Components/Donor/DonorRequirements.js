@@ -600,7 +600,7 @@ function DonorRequirements() {
                                     </div>
                                     
                                     <Button color="secondary" variant="contained" onClick={()=>setOxygenMap(true)}>Change Address</Button>
-                                    <Button color="primary" variant="contained" onClick={()=>{sendDetails({UserName:username,date:tempDate.getFullYear() + '-' + (tempDate.getMonth()+1) + '-' + tempDate.getDate() +' '+ tempDate.getHours()+':'+ tempDate.getMinutes()+':'+ tempDate.getSeconds(),type:"Oxygen Cylinders",price:oxygenPrice,quantity:oxygenAvailability,address:donorAddress,address1:donorAddress1})}}>Submit</Button>
+                                    <Button color="primary" variant="contained" onClick={()=>{sendDetails({UserName:username,date:tempDate.getFullYear() + '-' + (tempDate.getMonth()+1) + '-' + tempDate.getDate() +' '+ tempDate.getHours()+':'+ tempDate.getMinutes()+':'+ tempDate.getSeconds(),type:"Oxygen Cylinders",price:oxygenPrice,quantity:oxygenAvailability,address:donorAddress,address1:donorAddress1,verifications:[]})}}>Submit</Button>
                                 </div>
                                 </div>
                             </div>)}
@@ -679,7 +679,7 @@ function DonorRequirements() {
                                     </div>
                                     
                                     <Button color="secondary" variant="contained" onClick={()=>setICUMap(true)}>Change Address</Button>
-                                    <Button color="primary" variant="contained" onClick={()=>{sendDetails({UserName:username,date:tempDate.getFullYear() + '-' + (tempDate.getMonth()+1) + '-' + tempDate.getDate() +' '+ tempDate.getHours()+':'+ tempDate.getMinutes()+':'+ tempDate.getSeconds(),type:"ICU BEDS",price:bedPrice,quantity:bedAvailability,address:donorAddress,address1:donorAddress1})}}>Submit</Button>
+                                    <Button color="primary" variant="contained" onClick={()=>{sendDetails({UserName:username,date:tempDate.getFullYear() + '-' + (tempDate.getMonth()+1) + '-' + tempDate.getDate() +' '+ tempDate.getHours()+':'+ tempDate.getMinutes()+':'+ tempDate.getSeconds(),type:"ICU BEDS",price:bedPrice,quantity:bedAvailability,address:donorAddress,address1:donorAddress1,verifications:['18pa1a1213@gmail.com - 02/03/2020']})}}>Submit</Button>
                                 </div>
                                 </div>
                             </div>)}
@@ -758,7 +758,7 @@ function DonorRequirements() {
                                     </div>
                                     
                                     <Button color="secondary" variant="contained" onClick={()=>setAmbulanceMap(true)}>Change Address</Button>
-                                    <Button color="primary" variant="contained" onClick={()=>{sendDetails({UserName:username,date:tempDate.getFullYear() + '-' + (tempDate.getMonth()+1) + '-' + tempDate.getDate() +' '+ tempDate.getHours()+':'+ tempDate.getMinutes()+':'+ tempDate.getSeconds(),type:"AMBULANCE",price:ambulancePrice,quantity:ambulanceAvailability,address:donorAddress,address1:donorAddress1})}}>Submit</Button>
+                                    <Button color="primary" variant="contained" onClick={()=>{sendDetails({UserName:username,date:tempDate.getFullYear() + '-' + (tempDate.getMonth()+1) + '-' + tempDate.getDate() +' '+ tempDate.getHours()+':'+ tempDate.getMinutes()+':'+ tempDate.getSeconds(),type:"AMBULANCE",price:ambulancePrice,quantity:ambulanceAvailability,address:donorAddress,address1:donorAddress1,verifications:[]})}}>Submit</Button>
                                 </div>
                                 </div>
                             </div>)}
@@ -837,7 +837,7 @@ function DonorRequirements() {
                                     </div>
                                     
                                     <Button color="secondary" variant="contained" onClick={()=>setPrivateMap(true)}>Change Address</Button>
-                                    <Button color="primary" variant="contained" onClick={()=>{sendDetails({UserName:username,date:tempDate.getFullYear() + '-' + (tempDate.getMonth()+1) + '-' + tempDate.getDate() +' '+ tempDate.getHours()+':'+ tempDate.getMinutes()+':'+ tempDate.getSeconds(),type:"PRIVATE TRANSPORT",price:privateTransportCostPerKm,quantity:privateTransportAvailability,address:donorAddress,address1:donorAddress1})}}>Submit</Button>
+                                    <Button color="primary" variant="contained" onClick={()=>{sendDetails({UserName:username,date:tempDate.getFullYear() + '-' + (tempDate.getMonth()+1) + '-' + tempDate.getDate() +' '+ tempDate.getHours()+':'+ tempDate.getMinutes()+':'+ tempDate.getSeconds(),type:"PRIVATE TRANSPORT",price:privateTransportCostPerKm,quantity:privateTransportAvailability,address:donorAddress,address1:donorAddress1,verifications:[]})}}>Submit</Button>
                                 </div>
                                 </div>
                             </div>)}
@@ -916,7 +916,7 @@ function DonorRequirements() {
                                     </div>
                                     
                                     <Button color="secondary" variant="contained" onClick={()=>setPlasmaMap(true)}>Change Address</Button>
-                                    <Button color="primary" variant="contained" onClick={()=>{sendDetails({UserName:username,date:tempDate.getFullYear() + '-' + (tempDate.getMonth()+1) + '-' + tempDate.getDate() +' '+ tempDate.getHours()+':'+ tempDate.getMinutes()+':'+ tempDate.getSeconds(),type:"BLOOD",price:bloodPrice,quantity:bloodAvailability,address:donorAddress,address1:donorAddress1})}}>Submit</Button>
+                                    <Button color="primary" variant="contained" onClick={()=>{sendDetails({UserName:username,date:tempDate.getFullYear() + '-' + (tempDate.getMonth()+1) + '-' + tempDate.getDate() +' '+ tempDate.getHours()+':'+ tempDate.getMinutes()+':'+ tempDate.getSeconds(),type:"BLOOD",price:bloodPrice,quantity:bloodAvailability,address:donorAddress,address1:donorAddress1,verifications:[]})}}>Submit</Button>
                                 </div>
                                 </div>
                             </div>)}
@@ -995,7 +995,7 @@ function DonorRequirements() {
                                     </div>
                                     
                                     <Button color="secondary" variant="contained" onClick={()=>setVaccineMap(true)}>Change Address</Button>
-                                    <Button color="primary" variant="contained" onClick={()=>{sendDetails({UserName:username,date:tempDate.getFullYear() + '-' + (tempDate.getMonth()+1) + '-' + tempDate.getDate() +' '+ tempDate.getHours()+':'+ tempDate.getMinutes()+':'+ tempDate.getSeconds(),type:"VACCINE",price:vaccinePrice,quantity:vaccineAvailability,address:donorAddress,address1:donorAddress1})}}>Submit</Button>
+                                    <Button color="primary" variant="contained" onClick={()=>{sendDetails({UserName:username,date:tempDate.getFullYear() + '-' + (tempDate.getMonth()+1) + '-' + tempDate.getDate() +' '+ tempDate.getHours()+':'+ tempDate.getMinutes()+':'+ tempDate.getSeconds(),type:"VACCINE",price:vaccinePrice,quantity:vaccineAvailability,address:donorAddress,address1:donorAddress1,verifications:[]})}}>Submit</Button>
                                 </div>
                                 </div>
                             </div>)}
