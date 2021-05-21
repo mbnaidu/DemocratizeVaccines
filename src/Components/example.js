@@ -24,7 +24,7 @@ export default class Example extends Component {
             <Badge badgeContent={"Users : "+5674} color="primary" anchorOrigin={{vertical: 'top',horizontal: 'left',}}>
                 <div className="our-team">
                     <div className="picture">
-                    <img className="img-fluid" src={user}/>
+                    <img className="img-fluid" src={user} alt="image"/>
                     </div>
                     <div className="team-content">
                     <h3 className="name">Patient</h3>

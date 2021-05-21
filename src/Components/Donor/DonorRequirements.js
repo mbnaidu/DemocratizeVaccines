@@ -1,9 +1,9 @@
-import { Accordion, AccordionDetails, AccordionSummary, Button,Card,Grid, Icon, Input, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow, TextField, Typography } from '@material-ui/core'
+import { Accordion, AccordionDetails, AccordionSummary, Button,Card,Grid,Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TextField } from '@material-ui/core'
 import { AccountCircle, PhotoTwoTone } from '@material-ui/icons'
 import React, { useEffect, useState } from 'react'
 import { NavLink} from 'react-router-dom'
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
-import {AccordionContent, Menu,Segment,Sidebar} from 'semantic-ui-react';
+import {Menu,Segment,Sidebar} from 'semantic-ui-react';
 import HomeIcon from '@material-ui/icons/Home';
 import PersonIcon from '@material-ui/icons/Person';
 import {  CardBody, CardFooter, Collapse} from 'reactstrap';
@@ -15,10 +15,9 @@ import vaccineImage from '../../Img/vaccine.png';
 import bloodImage from '../../Img/blood.png';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import MenuIcon from '@material-ui/icons/Menu';
-import DonorMap from '../Maps/DonorMap';
 import axios from 'axios';
 import {SearchBox} from 'react-google-maps/lib/components/places/SearchBox'
-import {Marker,GoogleMap,withScriptjs,withGoogleMap,InfoWindow,Polyline} from 'react-google-maps'
+import {Marker,GoogleMap,withScriptjs,withGoogleMap} from 'react-google-maps'
 import { compose, lifecycle, withProps } from 'recompose';
 const _ = require("lodash");
 
@@ -87,51 +86,34 @@ function DonorRequirements() {
     // VARIABLES
             var tempDate = new Date();
             var date = tempDate.getFullYear() + '-' + (tempDate.getMonth()+1) + '-' + tempDate.getDate() +' '+ tempDate.getHours()+':'+ tempDate.getMinutes()+':'+ tempDate.getSeconds();
-            const [userID,setUserID] = useState('');
-            const [userName,setUserName] = useState('');
             const [uploadDate,setUploadDate] = useState(date);
     // Oxygen
             const [oxygenAvailability,setOxygenAvailability] = useState('');
-            const [oxygenVerifiedOn,setOxygenVerifiedOn] = useState('');
-            const [oxygenVerifiedBy,setOxygenVerifiedBy] = useState('');
             const [oxygenPrice,setOxygenPrice] = useState('');
         // ICU
             const [bedAvailability,setBedAvailability] = useState('');
-            const [bedVerifiedOn,setBedVerifiedOn] = useState('');
-            const [bedVerifiedBy,setBedVerifiedBy] = useState('');
             const [bedPrice,setBedPrice] = useState('');
         // Ambulance
             const [ambulanceAvailability,setAmbulanceAvailability] = useState('');
-            const [ambulanceVerifiedOn,setAmbulanceVerifiedOn] = useState('');
-            const [ambulanceVerifiedBy,setAmbulanceVerifiedBy] = useState('');
             const [ambulancePrice,setAmbulancePrice] = useState('');
         // Private
             const [privateTransportAvailability,setPrivateTransportAvailability] = useState('');
-            const [privateTransportVerifiedOn,setPrivateTransportVerifiedOn] = useState('');
-            const [privateTransportVerifiedBy,setPrivateTransportVerifiedBy] = useState('');
             const [privateTransportCostPerKm,setPrivateTransportCostPerKm] = useState('');
         // Vaccine
             const [vaccineAvailability,setVaccineAvailability] = useState('');
-            const [vaccineVerifiedOn,setVaccineVerifiedOn] = useState('');
-            const [vaccineVerifiedBy,setVaccineVerifiedBy] = useState('');
             const [vaccinePrice,setVaccinePrice] = useState('');            
         // Blood
             const [bloodAvailability,setBloodAvailability] = useState('');
-            const [bloodVerifiedOn,setBloodVerifiedOn] = useState('');
-            const [bloodVerifiedBy,setBloodVerifiedBy] = useState('');
             const [bloodPrice,setBloodPrice] = useState('');    
     const [setUp,setSetUP] = useState(false);
     // getting donor long,lati and address
     const [login,setLogin] = useState(true);
     const [signup,setSignup] = useState(false);
-    const [generate,setGenerate] = useState("Generate");
     const [username,setUsername] = useState('');
     const [password,setPassword] = useState('');
     const [userId,setUserId] = useState('');
     const [pass,setPass] = useState('');
     const [phoneNumber,setPhoneNumber] = useState('');
-    const [code,setCode] = useState('');
-
     const [state, dispatch] = React.useReducer(exampleReducer, {
         animation: 'overlay',
         visible: false,

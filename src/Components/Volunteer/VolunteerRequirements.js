@@ -115,7 +115,7 @@ function VolunteerRequirements() {
         xhr.addEventListener("readystatechange", processRequest, false);
 
         function processRequest(e) {
-            if (xhr.readyState == 4 && xhr.status == 200) {
+            if (xhr.readyState === 4 && xhr.status === 200) {
                 var response = JSON.parse(xhr.responseText);
                 setVolunteerAddress(response.display_name)
                 return;
@@ -178,7 +178,7 @@ function VolunteerRequirements() {
                 } 
             }
         )
-    },[])
+    },[]);
     const [type,setType] = useState('');
     const [details,setDetails] = useState([]);
     return (
@@ -249,7 +249,7 @@ function VolunteerRequirements() {
                 </div>) : (flip ? (<div>
                             <Card className={classes.login}>
                                 <div className="center"> 
-                                <img src={profilepic} className="profilepic" />
+                                <img src={profilepic} className="profilepic" alt="profile pic"/>
                                         <Grid container spacing={1} alignItems="flex-end">
                                             <Grid item>
                                                 <AccountCircle />
@@ -275,7 +275,7 @@ function VolunteerRequirements() {
                             </Card>
                 </div>) : (<div>
                             <Card className={classes.signup}>
-                                <img src={signuppic} className="profilepic" />
+                                <img src={signuppic} className="profilepic" alt="profile pic"/>
                                 <div className="center"> 
                                     <Grid container spacing={1} alignItems="flex-end" >
                                         <Grid item>
