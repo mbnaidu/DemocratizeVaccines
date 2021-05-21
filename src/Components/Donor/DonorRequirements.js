@@ -1,5 +1,5 @@
 import { Accordion, AccordionDetails, AccordionSummary, Button,Card,Grid, Icon, Input, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow, TextField, Typography } from '@material-ui/core'
-import { AccountCircle } from '@material-ui/icons'
+import { AccountCircle, PhotoTwoTone } from '@material-ui/icons'
 import React, { useEffect, useState } from 'react'
 import { NavLink} from 'react-router-dom'
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
@@ -126,6 +126,8 @@ function DonorRequirements() {
     const [signup,setSignup] = useState(false);
     const [generate,setGenerate] = useState("Generate");
     const [username,setUsername] = useState('');
+    const [password,setPassword] = useState('');
+    const [userId,setUserId] = useState('');
     const [pass,setPass] = useState('');
     const [phoneNumber,setPhoneNumber] = useState('');
     const [code,setCode] = useState('');
@@ -204,21 +206,27 @@ function DonorRequirements() {
     const [donorId,setDonorId] = useState('');
     const [donorNumber,setDonorNumber] = useState('');
     const sendSignUpDetails = () =>{
-        const data = {
-            "username":'b',
-            "password":'a',
-            "latitude":lat,
-            "longitude":lng,
-            "address":donorAddress,
-            "contact":'7081960932',
-            "isDonor": true,
-        }
-        axios.post('http://localhost:3010/donorsignup', {data}).then(
-            function(res) {
-                if(res.data) {
-                }
+        if(userId !== '' && pass !== '' && phoneNumber !== ''){
+            const data = {
+                "username":userId,
+                "password":pass,
+                "latitude":lat,
+                "longitude":lng,
+                "address":donorAddress,
+                "contact":phoneNumber,
+                "isDonor": true,
             }
-        )
+            axios.post('http://localhost:3010/donorsignup', {data}).then(
+                function(res) {
+                    if(res.data) {
+                    }
+                }
+            )
+            setSignup(false)
+        }
+        else{
+            alert('Please Fill All the details')
+        }
     }
     const sendLoginDetails = () => {
         const data = {
@@ -391,23 +399,35 @@ function DonorRequirements() {
     return (
         <div>
             {signup ? (<div>
-                {generate === "Generate" ? (
-							<div>
-                                <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-								<Input placeholder="10-digit-phone-number" type="number" value={phoneNumber} onChange={event => setPhoneNumber(event.target.value)}/>{' '}
-								<Button variant="contained" color="primary" endIcon={<Icon>send</Icon>} onClick={()=>{phoneNumber.length === 10 ? setGenerate('Submit') : alert("Enter valid Number");}}>
-									{generate}
-								</Button>
-							</div>
-						) : (
-							<div>
-                                <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-								<Input placeholder="6-digit-code" value={code} onChange={event => setCode(event.target.value)}/>{' '}
-                                <Button variant="contained" color="primary" endIcon={<Icon>send</Icon>} onClick={()=>{setSignup(false);setLogin(true)}}>
-									{generate}
-								</Button>
-							</div>
-						)}
+                <div className="center"> 
+                    <Grid container spacing={1} alignItems="flex-end">
+                        <Grid item>
+                            <AccountCircle />
+                        </Grid>
+                        <Grid item>
+                            <TextField id="input-with-icon-grid" label="Username" value={userId} onChange={event => setUserId(event.target.value)}/>
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={1} alignItems="flex-end">
+                        <Grid item>
+                            <VpnKeyIcon />
+                        </Grid>
+                        <Grid item>
+                            <TextField id="input-with-icon-grid" label="Password" type="password" value={pass} onChange={event => setPass(event.target.value)}/>
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={1} alignItems="flex-end">
+                        <Grid item>
+                            <PhotoTwoTone />
+                        </Grid>
+                        <Grid item>
+                            <TextField id="input-with-icon-grid" label="Contact Number" type="number" value={phoneNumber} onChange={event => setPhoneNumber(event.target.value)}/>
+                        </Grid>
+                    </Grid>
+                    <br/><br/>
+                    <Button color="primary" variant="outlined" onClick={()=>{setSignup(false)}}>Back to Login</Button>{' '}
+                    <Button color="secondary" variant="contained" onClick={()=>{sendSignUpDetails()}}>Sign Up</Button>
+                </div>
             </div>) : ( login ? (<div>
                             <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
                                 <div className="center"> 
@@ -424,11 +444,11 @@ function DonorRequirements() {
                                             <VpnKeyIcon />
                                         </Grid>
                                         <Grid item>
-                                            <TextField id="input-with-icon-grid" label="Password" type="password" value={pass} onChange={event => setPass(event.target.value)}/>
+                                            <TextField id="input-with-icon-grid" label="Password" type="password" value={password} onChange={event => setPassword(event.target.value)}/>
                                         </Grid>
                                     </Grid><br/><br/>
                                     <Button color="primary" variant="outlined" onClick={()=>{sendLoginDetails()}}>Login</Button>{' '}
-                                    <Button color="secondary" variant="contained" onClick={()=>{setSignup(true);sendSignUpDetails();}}>Sign Up</Button>
+                                    <Button color="secondary" variant="contained" onClick={()=>{setSignup(true);}}>Sign Up</Button>
                                 </div>
             </div>) : (<div>
                     <div className="sideBar_pusher">
