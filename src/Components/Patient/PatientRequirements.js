@@ -100,6 +100,7 @@ function PatientRequirements() {
     const [lng,setLng] = useState([]);
     const [lat,setLat] = useState([]);
     const [DATAs,setDATAs] = useState(false);
+    const [donorData,setDonorData] = useState([]);
     const sendSignUpDetails = () =>{
         const data = {
             "username":username,
@@ -477,23 +478,59 @@ getCoordintes()
     const [code,setCode] = useState('');
 
     useEffect(() => {
-        {DATA.map((m)=>{
-            return(
-                <div>
-                    {
-                        m.type === 'Oxygen Cylinders' && m.Verifications.length > 0 ? oxygenVerified.push(m) : m.type === 'Oxygen Cylinders' && m.Verifications.length === 0 ? oxygenNotVerified.push(m) : 
-                        m.type === 'ICU Beds' && m.Verifications.length > 0 ? ICUbedsVerified.push(m) : m.type === 'ICU Beds' && m.Verifications.length === 0 ? ICUbedsNotVerified.push(m) :    
-                        m.type === 'Private Transport' && m.Verifications.length > 0 ? privatesVerified.push(m) : m.type === 'Private Transport' && m.Verifications.length === 0 ? privatesNotVerified.push(m) : 
-                        m.type === 'Ambulance' && m.Verifications.length > 0 ? ambulancesVerified.push(m) : m.type === 'Ambulance' && m.Verifications.length === 0 ? ambulancesNotVerified.push(m) :
-                        m.type === 'Plasma' && m.Verifications.length > 0 ? plasmasVerified.push(m) : m.type === 'Plasma' && m.Verifications.length === 0 ? plasmaNotsVerified.push(m) : 
-                        m.type === 'Vaccine' && m.Verifications.length > 0 ? vaccinesVerified.push(m) : m.type === 'Vaccine' && m.Verifications.length === 0 ? vaccinesNotVerified.push(m) :
+        axios.post('http://localhost:3010/getallrequirements').then(
+            function(res) {
+                if(res.data) {
+                    setDonorData(res.data)
+                } 
+            }
+        )
+        // {DATA.map((m)=>{
+        //     return(
+        //         <div>
+        //             {
+        //                 m.type === 'Oxygen Cylinders' && m.Verifications.length > 0 ? oxygenVerified.push(m) : m.type === 'Oxygen Cylinders' && m.Verifications.length === 0 ? oxygenNotVerified.push(m) : 
+        //                 m.type === 'ICU BEDS' && m.Verifications.length > 0 ? ICUbedsVerified.push(m) : m.type === 'ICU BEDS' && m.Verifications.length === 0 ? ICUbedsNotVerified.push(m) :    
+        //                 m.type === 'Private Transport' && m.Verifications.length > 0 ? privatesVerified.push(m) : m.type === 'Private Transport' && m.Verifications.length === 0 ? privatesNotVerified.push(m) : 
+        //                 m.type === 'Ambulance' && m.Verifications.length > 0 ? ambulancesVerified.push(m) : m.type === 'Ambulance' && m.Verifications.length === 0 ? ambulancesNotVerified.push(m) :
+        //                 m.type === 'Plasma' && m.Verifications.length > 0 ? plasmasVerified.push(m) : m.type === 'Plasma' && m.Verifications.length === 0 ? plasmaNotsVerified.push(m) : 
+        //                 m.type === 'Vaccine' && m.Verifications.length > 0 ? vaccinesVerified.push(m) : m.type === 'Vaccine' && m.Verifications.length === 0 ? vaccinesNotVerified.push(m) :
 
-                    ''}
-                    {m.type === 'Oxygen Cylinders' ? (oxygen.push(m)) : m.type === 'ICU Beds' ? (ICUbeds.push(m)) : m.type === 'Private Transport' ? (privates.push(m)) : m.type === 'Ambulance' ? (ambulances.push(m)) : m.type === 'Plasma' ? (plasmas.push(m)) : m.type === '' ? (vaccines.push(m)) :  ''}
-                </div>
-            )
-        })}
+        //             ''}
+        //             {m.type === 'Oxygen Cylinders' ? (oxygen.push(m)) : m.type === 'ICU BEDS' ? (ICUbeds.push(m)) : m.type === 'Private Transport' ? (privates.push(m)) : m.type === 'Ambulance' ? (ambulances.push(m)) : m.type === 'Plasma' ? (plasmas.push(m)) : m.type === '' ? (vaccines.push(m)) :  ''}
+        //         </div>
+        //     )
+        // })}
     }, []);
+    const setData = () =>{
+        return(
+            <div>
+                {donorData.map((d)=>{
+                    console.log(d)
+                    return(
+                        <div>
+                            {d.datas.map((m)=>{
+                                return(
+                                    <div>
+                                        {
+                                            m.type === 'Oxygen Cylinders' && m.verifications.length > 0 ? oxygenVerified.push(m) : m.type === 'Oxygen Cylinders' && m.verifications.length === 0 ? oxygenNotVerified.push(m) : 
+                                            m.type === 'ICU BEDS' && m.verifications.length > 0 ? ICUbedsVerified.push(m) : m.type === 'ICU BEDS' && m.verifications.length === 0 ? ICUbedsNotVerified.push(m) :    
+                                            m.type === 'PRIVATE TRANSPORT' && m.verifications.length > 0 ? privatesVerified.push(m) : m.type === 'PRIVATE TRANSPORT' && m.verifications.length === 0 ? privatesNotVerified.push(m) : 
+                                            m.type === 'AMBULANCE' && m.verifications.length > 0 ? ambulancesVerified.push(m) : m.type === 'AMBULANCE' && m.verifications.length === 0 ? ambulancesNotVerified.push(m) :
+                                            m.type === 'BLOOD' && m.verifications.length > 0 ? plasmasVerified.push(m) : m.type === 'BLOOD' && m.verifications.length === 0 ? plasmaNotsVerified.push(m) : 
+                                            m.type === 'VACCINE' && m.verifications.length > 0 ? vaccinesVerified.push(m) : m.type === 'VACCINE' && m.verifications.length === 0 ? vaccinesNotVerified.push(m) :
+                                        ''}
+                                        {
+                                            m.type === 'Oxygen Cylinders' ? (oxygen.push(m)) : m.type === 'ICU BEDS' ? (ICUbeds.push(m)) : m.type === 'PRIVATE TRANSPORT' ? (privates.push(m)) : m.type === 'AMBULANCE' ? (ambulances.push(m)) : m.type === 'BLOOD' ? (plasmas.push(m)) : m.type === 'VACCINE' ? (vaccines.push(m)) :  ''}
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    )
+                })}
+            </div>
+        )
+    }
     const [kms,setkms] = useState([
         {value:10,label:'10 Kms'},
         {value: 50,label: '50 Kms'},
@@ -517,7 +554,7 @@ getCoordintes()
             <div className="sideBar_pusher">
                 <Button color="primary" variant="outlined" size="large"
                     onClick={() =>
-                    dispatch({ type: 'CHANGE_ANIMATION', animation: 'scale down' })}>
+                    {dispatch({ type: 'CHANGE_ANIMATION', animation: 'scale down' });setData()}}>
                     <MenuIcon />
                 </Button>
                 <Sidebar.Pushable  as={Segment} style={{ overflow: 'hidden',width:"350px",height:"900px" }} >
@@ -635,7 +672,7 @@ getCoordintes()
                                             <Table aria-labelledby="tableTitle" size='medium' aria-label="enhanced table">
                                                 <TableHead></TableHead>
                                                 <TableBody >
-                                                    {oxygen.map((o)=>{
+                                                    {/* {oxygen.map((o)=>{
                                                         if(o.Verifications.length > 0 && type === 'Showing Verified'){
                                                             return(
                                                                 <TableRow hover role="checkbox">
@@ -714,7 +751,8 @@ getCoordintes()
                                                                 </TableRow>
                                                             )
                                                         }
-                                                    })}
+                                                    })} */}
+                                                    {console.log(oxygenNotVerified)}
                                                 </TableBody>
                                             </Table>
                                         </TableContainer>
@@ -722,7 +760,7 @@ getCoordintes()
                             </Accordion>
                             </div>)}
                         </Collapse>
-                        <Collapse isOpen={ICUBeds}>
+                        {/* <Collapse isOpen={ICUBeds}>
                             {ICUMap ? (<div>
                                 <Map volunteers={volunteers} details={details}/>
                                 <br/>
@@ -1296,7 +1334,7 @@ getCoordintes()
                                                 </AccordionDetails>
                                             </Accordion>
                             </div>)}
-                        </Collapse>
+                        </Collapse> */}
                     </div>
                     </Segment>
                 </Sidebar.Pusher>
