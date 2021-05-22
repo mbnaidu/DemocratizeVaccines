@@ -502,11 +502,16 @@ getCoordintes()
         //     )
         // })}
     }, []);
+    const [oxygenmap,setoxygenmap] = useState([]);
+    const [icumap,seticumap] = useState([]);
+    const [vaccinemap,setvaccinemap] = useState([]);
+    const [ambulancemap,setambulancemap] = useState([]);
+    const [bloodmap,setbloodmap] = useState([]);
+    const [privatemap,setprivatemap] = useState([]);
     const setData = () =>{
         return(
             <div>
                 {donorData.map((d)=>{
-                    console.log(d)
                     return(
                         <div>
                             {d.datas.map((m)=>{
@@ -521,7 +526,11 @@ getCoordintes()
                                             m.type === 'VACCINE' && m.verifications.length > 0 ? vaccinesVerified.push(m) : m.type === 'VACCINE' && m.verifications.length === 0 ? vaccinesNotVerified.push(m) :
                                         ''}
                                         {
-                                            m.type === 'Oxygen Cylinders' ? (oxygen.push(m)) : m.type === 'ICU BEDS' ? (ICUbeds.push(m)) : m.type === 'PRIVATE TRANSPORT' ? (privates.push(m)) : m.type === 'AMBULANCE' ? (ambulances.push(m)) : m.type === 'BLOOD' ? (plasmas.push(m)) : m.type === 'VACCINE' ? (vaccines.push(m)) :  ''}
+                                            m.type === 'Oxygen Cylinders' ? (oxygen.push(m)) : m.type === 'ICU BEDS' ? (ICUbeds.push(m)) : m.type === 'PRIVATE TRANSPORT' ? (privates.push(m)) : m.type === 'AMBULANCE' ? (ambulances.push(m)) : m.type === 'BLOOD' ? (plasmas.push(m)) : m.type === 'VACCINE' ? (vaccines.push(m)) :  ''
+                                        }
+                                        {
+                                            m.type === 'Oxygen Cylinders' ? (oxygenmap.push(d)) : m.type === 'ICU BEDS' ? (icumap.push(d)) : m.type === 'PRIVATE TRANSPORT' ? (privatemap.push(d)) : m.type === 'AMBULANCE' ? (ambulancemap.push(d)) : m.type === 'BLOOD' ? (bloodmap.push(d)) : m.type === 'VACCINE' ? (vaccinemap.push(d)) :  ''
+                                        }
                                     </div>
                                 )
                             })}
@@ -654,13 +663,12 @@ getCoordintes()
                         </Collapse>
                         <Collapse isOpen={oxygenOpen}>
                             {oxygenMap ? (<div>
-                                <Map volunteers={volunteers} details={details}/>
+                                <Map volunteers={volunteers} details={oxygenmap}/>
                                 <br/>
                                 <Button color="primary" variant="contained" onClick={()=>{setOxygenMap(false)}}>Close</Button>
                             </div>) : (<div>
                                 <div className="wrappers">
-                                    <Button variant="contained" color="primary" endIcon={<Group />} onClick={()=>{calling('oxygencylinders')}}>{type}</Button>{' '}
-                                    <Button variant="contained" color="primary" endIcon={<LocationOnIcon />} onClick={()=>{setOxygenMap(true)}}>Show On</Button>
+                                    <Button variant="contained" color="primary" endIcon={<LocationOnIcon />} onClick={()=>{setOxygenMap(true);setDetails(oxygen)}}>Show On</Button>
                                     <br/>
                                 </div>
                                 <Accordion expanded={expanded === 'oxygencylinders'} onChange={handleAccordionChange('oxygencylinders')}  className="patientable accordian">
@@ -672,87 +680,100 @@ getCoordintes()
                                             <Table aria-labelledby="tableTitle" size='medium' aria-label="enhanced table">
                                                 <TableHead></TableHead>
                                                 <TableBody >
-                                                    {/* {oxygen.map((o)=>{
-                                                        if(o.Verifications.length > 0 && type === 'Showing Verified'){
-                                                            return(
-                                                                <TableRow hover role="checkbox">
-                                                                    <TableCell padding="checkbox">
-                                                                        {DATAs ? (<div>
-                                                                            <Button color="primary" variant="outlined" >Contact Number : {o.contactNumber}</Button>
-                                                                        </div>) : (<div>
-                                                                            <Button color="primary" variant="outlined" size="small" onClick={()=>{setSignup(true)}}>Get</Button>
-                                                                        </div>)}
-                                                                    </TableCell>
-                                                                    <TableCell scope="row" padding="none"><strong>User Id : </strong>{o.owner_id}</TableCell>
-                                                                    <TableCell align="right"><strong>UserName : </strong>{o.owner_name}</TableCell>
-                                                                    <TableCell align="right"><strong>Type : </strong>{o.type}</TableCell>
-                                                                    <TableCell align="right"><strong>Upload Date : </strong>{o.upload_date}</TableCell>
-                                                                    <TableCell align="right"><strong>Verifications : </strong>
-                                                                        {o.Verifications.map((v)=>{
-                                                                            return(
-                                                                                <div>{v}</div>
-                                                                            )
-                                                                        })}
-                                                                    </TableCell>
-                                                                    <TableCell align="right"><strong>Price : </strong>{o.price}</TableCell>
-                                                                    <TableCell align="right"><strong>Address : </strong>{o.owner_address}</TableCell>
+                                                    {oxygen.map((v)=>{
+                                                        return(
+                                                            <div>
+                                                                <TableRow>
+                                                                    <TableCell><strong>Username : </strong>{v.UserName}</TableCell>
+                                                                    <TableCell><strong>Type : </strong>{v.type}</TableCell>
+                                                                    <TableCell><strong>Quantity : </strong>{v.quantity}</TableCell>
+                                                                    <TableCell><strong>Price : </strong>{v.price}</TableCell>
+                                                                    <TableCell><strong>UploadDate : </strong>{v.date}</TableCell>
+                                                                    <TableCell><strong>Verifications : </strong>{v.verifications.map((m)=>{
+                                                                        return(
+                                                                            <div>
+                                                                                {m}
+                                                                            </div>
+                                                                        )
+                                                                    })}</TableCell>
+                                                                    <TableCell><strong>Permanent Address : </strong>{v.address}</TableCell>
+                                                                    <TableCell><strong>Available Address : </strong>{v.address1}</TableCell>
                                                                 </TableRow>
-                                                            )
-                                                        }
-                                                        else if(o.Verifications.length === 0 && type === 'Showing Not Verified'){
-                                                            return(
-                                                                <TableRow hover role="checkbox">
-                                                                    <TableCell padding="checkbox">
-                                                                        {DATAs ? (<div>
-                                                                            <Button color="primary" variant="outlined" >Contact Number : {o.contactNumber}</Button>
-                                                                        </div>) : (<div>
-                                                                            <Button color="primary" variant="outlined" size="small" onClick={()=>{setSignup(true)}}>Get</Button>
-                                                                        </div>)}
-                                                                    </TableCell>
-                                                                    <TableCell scope="row" padding="none"><strong>User Id : </strong>{o.owner_id}</TableCell>
-                                                                    <TableCell align="right"><strong>UserName : </strong>{o.owner_name}</TableCell>
-                                                                    <TableCell align="right"><strong>Type : </strong>{o.type}</TableCell>
-                                                                    <TableCell align="right"><strong>Upload Date : </strong>{o.upload_date}</TableCell>
-                                                                    <TableCell align="right"><strong>Verifications : </strong>
-                                                                        {o.Verifications.map((v)=>{
-                                                                            return(
-                                                                                <div>{v}</div>
-                                                                            )
-                                                                        })}
-                                                                    </TableCell>
-                                                                    <TableCell align="right"><strong>Price : </strong>{o.price}</TableCell>
-                                                                    <TableCell align="right"><strong>Address : </strong>{o.owner_address}</TableCell>
+                                                            </div>
+                                                        )
+                                                    })}
+                                                </TableBody>
+                                            </Table>
+                                        </TableContainer>
+                                    </AccordionDetails>
+                            </Accordion>
+                            <Accordion expanded={expanded === 'oxygencylindersverified'} onChange={handleAccordionChange('oxygencylindersverified')}  className="patientable accordian">
+                                <AccordionSummary expandIcon={'🔋'} id={'oxygencylinders'}>
+                                    <Typography>Oxygen Cylinders Verified</Typography>
+                                </AccordionSummary>
+                                    <AccordionDetails >
+                                        <TableContainer >
+                                            <Table aria-labelledby="tableTitle" size='medium' aria-label="enhanced table">
+                                                <TableHead></TableHead>
+                                                <TableBody >
+                                                    {oxygenVerified.map((v)=>{
+                                                        return(
+                                                            <div>
+                                                                <TableRow>
+                                                                    <TableCell><strong>Username : </strong>{v.UserName}</TableCell>
+                                                                    <TableCell><strong>Type : </strong>{v.type}</TableCell>
+                                                                    <TableCell><strong>Quantity : </strong>{v.quantity}</TableCell>
+                                                                    <TableCell><strong>Price : </strong>{v.price}</TableCell>
+                                                                    <TableCell><strong>UploadDate : </strong>{v.date}</TableCell>
+                                                                    <TableCell><strong>Verifications : </strong>{v.verifications.map((m)=>{
+                                                                        return(
+                                                                            <div>
+                                                                                {m}
+                                                                            </div>
+                                                                        )
+                                                                    })}</TableCell>
+                                                                    <TableCell><strong>Permanent Address : </strong>{v.address}</TableCell>
+                                                                    <TableCell><strong>Available Address : </strong>{v.address1}</TableCell>
                                                                 </TableRow>
-                                                            )
-                                                        }
-                                                        else if(o.Verifications.length >= 0 && type === 'Showing All'){
-                                                            return(
-                                                                <TableRow hover role="checkbox">
-                                                                    <TableCell padding="checkbox">
-                                                                        {DATAs ? (<div>
-                                                                            <Button color="primary" variant="outlined" >Contact Number : {o.contactNumber}</Button>
-                                                                        </div>) : (<div>
-                                                                            <Button color="primary" variant="outlined" size="small" onClick={()=>{setSignup(true)}}>Get</Button>
-                                                                        </div>)}
-                                                                    </TableCell>
-                                                                    <TableCell scope="row" padding="none"><strong>User Id : </strong>{o.owner_id}</TableCell>
-                                                                    <TableCell align="right"><strong>UserName : </strong>{o.owner_name}</TableCell>
-                                                                    <TableCell align="right"><strong>Type : </strong>{o.type}</TableCell>
-                                                                    <TableCell align="right"><strong>Upload Date : </strong>{o.upload_date}</TableCell>
-                                                                    <TableCell align="right"><strong>Verifications : </strong>
-                                                                        {o.Verifications.map((v)=>{
-                                                                            return(
-                                                                                <div>{v}</div>
-                                                                            )
-                                                                        })}
-                                                                    </TableCell>
-                                                                    <TableCell align="right"><strong>Price : </strong>{o.price}</TableCell>
-                                                                    <TableCell align="right"><strong>Address : </strong>{o.owner_address}</TableCell>
+                                                            </div>
+                                                        )
+                                                    })}
+                                                </TableBody>
+                                            </Table>
+                                        </TableContainer>
+                                    </AccordionDetails>
+                            </Accordion>
+                            <Accordion expanded={expanded === 'oxygencylindersnotverifed'} onChange={handleAccordionChange('oxygencylindersnotverifed')}  className="patientable accordian">
+                                <AccordionSummary expandIcon={'🔋'} id={'oxygencylinders'}>
+                                    <Typography>Oxygen Cylinders Not Verified</Typography>
+                                </AccordionSummary>
+                                    <AccordionDetails >
+                                        <TableContainer >
+                                            <Table aria-labelledby="tableTitle" size='medium' aria-label="enhanced table">
+                                                <TableHead></TableHead>
+                                                <TableBody >
+                                                    {oxygenNotVerified.map((v)=>{
+                                                        return(
+                                                            <div>
+                                                                <TableRow>
+                                                                    <TableCell><strong>Username : </strong>{v.UserName}</TableCell>
+                                                                    <TableCell><strong>Type : </strong>{v.type}</TableCell>
+                                                                    <TableCell><strong>Quantity : </strong>{v.quantity}</TableCell>
+                                                                    <TableCell><strong>Price : </strong>{v.price}</TableCell>
+                                                                    <TableCell><strong>UploadDate : </strong>{v.date}</TableCell>
+                                                                    <TableCell><strong>Verifications : </strong>{v.verifications.map((m)=>{
+                                                                        return(
+                                                                            <div>
+                                                                                {m}
+                                                                            </div>
+                                                                        )
+                                                                    })}</TableCell>
+                                                                    <TableCell><strong>Permanent Address : </strong>{v.address}</TableCell>
+                                                                    <TableCell><strong>Available Address : </strong>{v.address1}</TableCell>
                                                                 </TableRow>
-                                                            )
-                                                        }
-                                                    })} */}
-                                                    {console.log(oxygenNotVerified)}
+                                                            </div>
+                                                        )
+                                                    })}
                                                 </TableBody>
                                             </Table>
                                         </TableContainer>

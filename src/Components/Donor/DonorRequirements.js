@@ -188,7 +188,7 @@ function DonorRequirements() {
     const [donorId,setDonorId] = useState('');
     const [donorNumber,setDonorNumber] = useState('');
     const sendSignUpDetails = () =>{
-        if(userId !== '' && pass !== '' && phoneNumber !== ''){
+        if(userId !== '' && pass !== '' && phoneNumber !== ''&& lat !== '' && lng !== ''){
             const data = {
                 "username":userId,
                 "password":pass,
@@ -236,6 +236,7 @@ function DonorRequirements() {
                 "address1": donorAddress1,
                 "datas":d,
                 "donorId":donorId,
+                "contact":'7981960932',
             }
             // axios.post('http://localhost:3010/update/'+donorId, data).then(
             //     function(res) {
