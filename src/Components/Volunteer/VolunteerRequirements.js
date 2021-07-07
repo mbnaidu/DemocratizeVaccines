@@ -22,16 +22,18 @@ const GreenRadio = withStyles({
 })((props) => <Radio color="default" {...props} />);
 const useStyles = makeStyles((theme) => ({
     login: {
-        minWidth:'auto',
-        margin:30,
+        minWidth:380,
+        margin:10,
         borderRadius:30,
         marginTop:'40%',
         paddingTop:30,
         paddingBottom:30,
+        borderWidth:3,
+        borderColor:'#000000',
     },
     signup: {
-        minWidth:'auto',
-        margin:20,
+        minWidth:380,
+        margin:10,
         borderRadius:30,
         marginTop:'30%',
         paddingTop:30,
