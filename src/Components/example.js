@@ -11,12 +11,25 @@ import { NavLink } from "react-router-dom";
 
 export default class Example extends Component {
     state = {
+        windowWidth: window.innerWidth,
+        windowHeight: window.innerHeight,
         goToSlide: 0,
         offsetRadius: 2,
         showNavigation: true,
         config: config.gentle
     };
-
+    handleResize = (e) => {
+        this.setState({ 
+            windowWidth: window.innerWidth, 
+            windowHeight: window.innerHeight
+        });
+    };
+    componentDidMount() {
+        window.addEventListener("resize", this.handleResize);
+    }
+    componentWillMount() {
+        window.addEventListener("resize", this.handleResize);
+    } 
     slides = [
         {
             key: 1,
@@ -83,10 +96,12 @@ export default class Example extends Component {
     };
 
     render() {
+        const { windowWidth } = this.state;
+        const {windowHeight} = this.state; 
         return (
-            <div>
-                <img src={logo} alt="logo" height="100px" style={{marginLeft:"140px"}}/>
-                <div style={{ width: "160%", height: "280px", marginTop: "80%" }}>
+            <div style={{marginLeft:(windowWidth/2)-90}}>
+                <img src={logo} alt="logo" height="100px"/>
+                <div style={{ width: "160%", height: "280px"}}>
                     <Carousel
                     slides={this.slides}
                     goToSlide={this.state.goToSlide}
